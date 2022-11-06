@@ -24,7 +24,7 @@ class Main extends Component {
             <div>
                 <Header />
                 <TransitionGroup>
-                    <CSSTransition key={this.props.location.key} classNames="page" timeout={300}>
+                    <CSSTransition classNames="page" timeout={300}>
                         <Switch>
                             <Route path="/home" component={() => <Home/>} />
                             <Redirect to="/home" />
@@ -37,4 +37,5 @@ class Main extends Component {
     }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
+// export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
+export default Main;
