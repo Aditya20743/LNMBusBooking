@@ -5,24 +5,25 @@ import Footer from "./FooterComponent";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { loginUser, googleLogin } from '../redux/ActionCreators';
 
 const mapStateToProps = (state) => {
   return {
-    // auth: state.auth
+    auth: state.auth
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  // loginUser: (creds) => dispatch(loginUser(creds)),
-  // logoutUser: () => dispatch(logoutUser()),
-  // googleLogin: () => dispatch(googleLogin())
+  loginUser: (creds) => dispatch(loginUser(creds)),
+  logoutUser: () => dispatch(logoutUser()),
+  googleLogin: () => dispatch(googleLogin())
 });
 
 class Main extends Component {
   render() {
     return (
       <div>
-        <Header isAuthenticated={"true"} user={"student"} />
+        <Header />
         <TransitionGroup>
           <CSSTransition classNames="page" timeout={300}>
             <Switch>
@@ -38,4 +39,3 @@ class Main extends Component {
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
-export default Main;
