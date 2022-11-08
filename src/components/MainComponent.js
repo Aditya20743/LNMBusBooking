@@ -5,7 +5,7 @@ import Footer from "./FooterComponent";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { loginUser, googleLogin } from '../redux/ActionCreators';
+import { loginUser, googleLogin, logoutUser } from '../redux/ActionCreators';
 
 const mapStateToProps = (state) => {
   return {
@@ -23,7 +23,7 @@ class Main extends Component {
   render() {
     return (
       <div>
-        <Header />
+        <Header auth={this.props.auth} loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} logoutUser={this.props.logoutUser}/>
         <TransitionGroup>
           <CSSTransition classNames="page" timeout={300}>
             <Switch>

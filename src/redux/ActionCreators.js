@@ -27,29 +27,19 @@ export const loginUser = (creds) => (dispatch) => {
         .then(() => {
             var user = auth.currentUser;
 
-
             var userData = firestore.collection('User').where('email', '==', user.email)
                 .get()
                 .then(snapshot => {
                     let userData = {};
                     snapshot.forEach(doc => {
-                        userData = doc.data();
-
+                        userData =  doc.data();
                     })
-                    console.log(userData);
-
                     return userData;
-
-
-
                 });
-
-
-
+            
+            console.log(userData.role);
 
             localStorage.setItem('user', JSON.stringify(user));
-            // Dispatch the success action
-            //dispatch(fetchFavorites());
             dispatch(receiveLogin(userData));
         })
         .catch(error => dispatch(loginError(error.message)))
@@ -74,28 +64,27 @@ export const logoutUser = () => (dispatch) => {
     }).catch((error) => {
         // An error happened.
     });
+
     localStorage.removeItem('user');
-    // dispatch(favoritesFailed("Error 401: Unauthorized"));
     dispatch(receiveLogout());
 }
+
 export const googleLogin = () => (dispatch) => {
     const provider = new fireauth.GoogleAuthProvider();
-
-
 
     auth.signInWithPopup(provider)
         .then((result) => {
             var user = result.user;
             localStorage.setItem('user', JSON.stringify(user));
 
-           if( user.email.includes("@lnmiit.ac.in")===false)
-           {
-           dispatch(logoutUser());
-            //     dispatch(loginError("Error 401: Unauthorized"))
-            console.log("Errorr");
-           }  
+            if (user.email.includes("@lnmiit.ac.in") === false) {
+                dispatch(logoutUser());
+                //     dispatch(loginError("Error 401: Unauthorized"))
+                console.log("Errorr");
+            }
+            else {
                 dispatch(receiveLogin(user));
-            
+            }
         })
         .catch((error) => {
             dispatch(loginError(error.message));
