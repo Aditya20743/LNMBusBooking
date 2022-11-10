@@ -1,5 +1,8 @@
 import * as ActionTypes from './ActionTypes';
 import { auth, firestore, fireauth, firebasestore } from '../firebase/firebase';
+import { getDatabase, ref, set } from "firebase/database";
+import { doc, getDoc } from "firebase/firestore";
+
 
 export const requestLogin = () => {
     return {
@@ -32,11 +35,11 @@ export const loginUser = (creds) => (dispatch) => {
                 .then(snapshot => {
                     let userData = {};
                     snapshot.forEach(doc => {
-                        userData =  doc.data();
+                        userData = doc.data();
                     })
                     return userData;
                 });
-            
+
             console.log(userData.role);
 
             localStorage.setItem('user', JSON.stringify(user));
@@ -69,6 +72,83 @@ export const logoutUser = () => (dispatch) => {
     dispatch(receiveLogout());
 }
 
+
+
+
+
+export  const fetchUser = (user) =>    async (dispatch) => {
+
+    const db = getDatabase();
+    // Detection Phase
+    const uid = user.uid;
+    const displayName = user.displayName;
+    const email = user.email;
+    const photoURL = user.photoURL;
+    var rnum = user.email.substring(0, 8);
+    const userRef = firestore.doc(`User/${uid}`)
+
+    
+
+    // const docRef = doc(db, "User",uid);
+    const docSnap = await getDoc(userRef);
+
+   // if (!docSnap.exists()) {
+        if (email[0] >= '0' && email[0] <= '9') {
+
+
+
+            await userRef.set({
+
+                name: displayName,
+                email: email,
+                image: photoURL,
+                hostelName: "",
+                contactNo: "",
+                role: "student",
+                rollNum: rnum,
+                uid: uid
+
+            }, {merge: true}
+            )
+                .then(() => {
+                    console.log("Student successfully written!" );
+                })
+                .catch((error) => {
+                    console.error("Error writing Student in document:  ", error);
+                });
+        }
+        else {
+
+            await userRef.set({
+
+                name: displayName,
+                email: email,
+                image: photoURL,
+                contactNo: "",
+                role: "faculty",
+               
+            },{merge:true})
+                .then(() => {
+                    console.log("Faculty successfully written!");
+                })
+                .catch((error) => {
+                    console.error("Error writing Faculty in document:  ", error);
+                });
+
+        }
+    // }
+    // else {
+    //     console.log('Exists');
+    // }
+
+    const docUser = await getDoc(userRef);
+    console.log(docUser.data());
+
+    dispatch(receiveLogin(docUser));
+
+}
+
+
 export const googleLogin = () => (dispatch) => {
     const provider = new fireauth.GoogleAuthProvider();
 
@@ -79,11 +159,20 @@ export const googleLogin = () => (dispatch) => {
 
             if (user.email.includes("@lnmiit.ac.in") === false) {
                 dispatch(logoutUser());
-                //     dispatch(loginError("Error 401: Unauthorized"))
-                console.log("Errorr");
+                dispatch(loginError("Error 401: Unauthorized"))
+
             }
             else {
-                dispatch(receiveLogin(user));
+
+
+                // user = 
+               
+                    dispatch(fetchUser(user));
+               
+                
+
+            
+                
             }
         })
         .catch((error) => {
