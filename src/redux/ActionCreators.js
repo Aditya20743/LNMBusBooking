@@ -1,7 +1,7 @@
 import * as ActionTypes from './ActionTypes';
 import { auth, firestore, fireauth, firebasestore } from '../firebase/firebase';
 import { getDatabase, ref, set } from "firebase/database";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, Firestore, getDoc } from "firebase/firestore";
 
 
 export const requestLogin = () => {
@@ -29,21 +29,42 @@ export const loginUser = (creds) => (dispatch) => {
     return auth.signInWithEmailAndPassword(creds.username, creds.password)
         .then(() => {
             var user = auth.currentUser;
+            var userInfo = {};
+            var userInfo2 = {};
 
-            var userData = firestore.collection('User').where('email', '==', user.email)
-                .get()
-                .then(snapshot => {
-                    let userData = {};
-                    snapshot.forEach(doc => {
-                        userData = doc.data();
-                    })
-                    return userData;
-                });
+            // var userData = firestore.collection('User').where('email', '==', user.email)
+            // .get()
+            //  .then(snapshot => {
+            //         snapshot.forEach(doc => {
+            //                 //console.log(doc.data());
+            //             //if(doc.data().email==user.email)
+            //                 userInfo= doc.data();
+            //             //console.log(userInfo);
+            //             // userInfo2= userInfo;
+            //         })
+            //         return userData;
 
-            console.log(userData.role);
+            //     });
 
             localStorage.setItem('user', JSON.stringify(user));
-            dispatch(receiveLogin(userData));
+
+            var userRef =firestore.collection("User");
+
+var query = userRef.where('email', '==', user.email);
+        
+               query.get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    // doc.data() is never undefined for query doc snapshots
+                    console.log(doc.id, " => ", doc.data());
+            dispatch(receiveLogin(doc.data()));
+
+                });
+            })
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
+            });
+        
+
         })
         .catch(error => dispatch(loginError(error.message)))
 };
@@ -102,8 +123,6 @@ export  const fetchUser = (user) =>    async (dispatch) => {
                 name: displayName,
                 email: email,
                 image: photoURL,
-                hostelName: "",
-                contactNo: "",
                 role: "student",
                 rollNum: rnum,
                 uid: uid
@@ -124,7 +143,6 @@ export  const fetchUser = (user) =>    async (dispatch) => {
                 name: displayName,
                 email: email,
                 image: photoURL,
-                contactNo: "",
                 role: "faculty",
                
             },{merge:true})
@@ -136,21 +154,18 @@ export  const fetchUser = (user) =>    async (dispatch) => {
                 });
 
         }
-    // }
-    // else {
-    //     console.log('Exists');
-    // }
 
     const docUser = await getDoc(userRef);
     console.log(docUser.data());
 
-    dispatch(receiveLogin(docUser));
+    dispatch(receiveLogin(docUser.data()));
 
 }
 
 
 export const googleLogin = () => (dispatch) => {
     const provider = new fireauth.GoogleAuthProvider();
+
 
     auth.signInWithPopup(provider)
         .then((result) => {
