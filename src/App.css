@@ -1,7 +1,74 @@
-.nav-link{
-    font-size: calc(0.7rem + 0.6vw);
-}
-footer {
-    background-color: #0b467b;
+.nav-link {
+  font-size: calc(0.7rem + 0.6vw);
 }
 
+.nav-item>a{
+  color: black;
+}
+
+.navbar{
+  color: black;
+  position: fixed;
+  background: #d9faffcc;
+  overflow: visible;
+  text-decoration: none;
+  z-index: 100;
+}
+
+.up-row{
+  margin-top: 110px;
+}
+
+footer {
+  background-color: #0b467b;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 4px 4px 20px 2px rgba(0, 0, 0, 0.25);
+  border-radius: 20px;
+}
+
+.cardBtn {
+  background: #2371de;
+  /* Shadow/ Primary/ Button */
+  box-shadow: 0px 10px 35px rgba(111, 126, 201, 0.25);
+  border-radius: 15px;
+}
+
+.home-btn-icon {
+  left: 81.2%;
+  right: 8.65%;
+  top: 24.5%;
+  bottom: 24.02%;
+}
+
+.home-bg {
+  background-image: url(../public/assests/images/HomeBackground.png);
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.admin-home {
+  background-image: url(../public/assests/images/admin-home-bg.png);
+  background-size: 100% 100%;
+}
+.caretaker-home {
+  background-image: url(../public/assests/images/Caretaker-homepage.png);
+  background-size: 100% 100%;
+}
+
+.token-count-circle {
+  box-sizing: border-box;
+  height: 16vh;
+  width: 16vh;
+
+  background: #4b91f1;
+  border: 1px solid #ffffff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 50%;
+
+  color: white;
+  /* justify-content: center;
+  align-items: center; */
+}
