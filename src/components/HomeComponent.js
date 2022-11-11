@@ -1,18 +1,30 @@
 import React, { Component } from "react";
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
-// import HorizontalRuleIcon from '@mui/icons-material/HorizontalRule';
-// import caretakerHomePage from "../../public/assests/images/Caretaker-homepage.png";
+import Login from "./LoginComponent";
 
 class Home extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      isModalOpen: false
+    };
+    this.handleLogout = this.handleLogout.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
+  }
+
+  handleLogout() {
+    this.props.logoutUser();
+  }
+
+  toggleModal() {
+    this.setState({
+        isModalOpen: !this.state.isModalOpen
+    });
   }
 
   render() {
-    // if admin, if caretaker, else
-    // if(this.props.auth.user.role === "admin")
-    // if(!this.auth.user.role === "admin" ){
-    if (0) {
+    if (this.props.auth.isAuthenticated && this.props.auth.user.role === "admin") {
       return (
         //ADMIN HOME PAGE
         <div className="container pt-5">
@@ -78,7 +90,7 @@ class Home extends Component {
           </div>
         </div>
       );
-    } else if (0) {
+    } else if (this.props.auth.isAuthenticated && this.props.auth.user.role === "caretaker") {
       return (
         // CARETAKER HOME PAGE
         <div className="container pt-5">
@@ -118,22 +130,41 @@ class Home extends Component {
           <div className="row pb-4 pt-5 mt-5">
             <div className="card col-8 mt-5 col-sm-6 col-md-4 col-lg-3 offset-2 offset-sm-3 offset-md-6 offset-lg-7">
               <div className="card-body align-self-center p-3">
-                <div className="row">
-                  <div className="d-flex col-flex justify-content-center token-count-circle offset-2">
-                   <div className="align-self-center"><h1>16</h1> Tokens</div>
-                  </div>
-                </div>
-                <div className="row mt-3">
-                  <button
-                    type="button"
-                    class="cardBtn btn-primary btn> d-flex p-2 mb-3 btn-block justify-content-center nav-link"
-                  >
-                    Purchase Tokens
-                    <div className="home-btn-icon ml-2">
-                      <ArrowCircleRightOutlinedIcon />
+                
+                {this.props.auth.isAuthenticated ?
+                  <>
+                    <div className="row">
+                      <div className="d-flex col-flex justify-content-center token-count-circle offset-2">
+                        <div className="align-self-center"><h1>16</h1> Tokens</div>
+                      </div>
+                      </div>
+                      <div className="row mt-3">
+                        <button
+                          type="button"
+                          class="cardBtn btn-primary btn d-flex p-2 mb-3 btn-block justify-content-center nav-link"
+                        >
+                          Purchase Tokens
+                          <div className="home-btn-icon ml-2">
+                            <ArrowCircleRightOutlinedIcon />
+                          </div>
+                        </button>
                     </div>
-                  </button>
-                </div>
+                    </>
+                :
+                  <div className="row mt-3">
+                    <button
+                      type="button"
+                      class="cardBtn btn-primary btn d-flex p-2 mb-3 btn-block justify-content-center nav-link"
+                      onClick={this.toggleModal}
+                    >
+                      Login
+                      <div className="home-btn-icon ml-2">
+                        <ArrowCircleRightOutlinedIcon />
+                      </div>
+                    </button>
+                  </div>
+                }
+                  
                 <hr color="black" />
 
                 <div className="row-flex">
@@ -182,11 +213,16 @@ class Home extends Component {
               </div>
             </div>
           </div>
+
+          {this.state.isModalOpen ?
+          <Login loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} /> : null}
         </div>
       );
     }
   }
 }
+
+export default Home;
+
 //integrate wallet tokens
 //integrate view trips
-export default Home;

@@ -29,35 +29,17 @@ export const loginUser = (creds) => (dispatch) => {
     return auth.signInWithEmailAndPassword(creds.username, creds.password)
         .then(() => {
             var user = auth.currentUser;
-            var userInfo = {};
-            var userInfo2 = {};
-
-            // var userData = firestore.collection('User').where('email', '==', user.email)
-            // .get()
-            //  .then(snapshot => {
-            //         snapshot.forEach(doc => {
-            //                 //console.log(doc.data());
-            //             //if(doc.data().email==user.email)
-            //                 userInfo= doc.data();
-            //             //console.log(userInfo);
-            //             // userInfo2= userInfo;
-            //         })
-            //         return userData;
-
-            //     });
 
             localStorage.setItem('user', JSON.stringify(user));
 
             var userRef =firestore.collection("User");
-
-var query = userRef.where('email', '==', user.email);
+            var query = userRef.where('email', '==', user.email);
         
-               query.get().then((querySnapshot) => {
+            query.get().then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     // doc.data() is never undefined for query doc snapshots
                     console.log(doc.id, " => ", doc.data());
-            dispatch(receiveLogin(doc.data()));
-
+                    dispatch(receiveLogin(doc.data()));
                 });
             })
             .catch((error) => {
@@ -93,10 +75,6 @@ export const logoutUser = () => (dispatch) => {
     dispatch(receiveLogout());
 }
 
-
-
-
-
 export  const fetchUser = (user) =>    async (dispatch) => {
 
     const db = getDatabase();
@@ -108,25 +86,18 @@ export  const fetchUser = (user) =>    async (dispatch) => {
     var rnum = user.email.substring(0, 8);
     const userRef = firestore.doc(`User/${uid}`)
 
-    
-
     // const docRef = doc(db, "User",uid);
     const docSnap = await getDoc(userRef);
 
    // if (!docSnap.exists()) {
         if (email[0] >= '0' && email[0] <= '9') {
-
-
-
             await userRef.set({
-
                 name: displayName,
                 email: email,
                 image: photoURL,
                 role: "student",
                 rollNum: rnum,
                 uid: uid
-
             }, {merge: true}
             )
                 .then(() => {
@@ -137,14 +108,11 @@ export  const fetchUser = (user) =>    async (dispatch) => {
                 });
         }
         else {
-
             await userRef.set({
-
                 name: displayName,
                 email: email,
                 image: photoURL,
                 role: "faculty",
-               
             },{merge:true})
                 .then(() => {
                     console.log("Faculty successfully written!");
@@ -152,20 +120,17 @@ export  const fetchUser = (user) =>    async (dispatch) => {
                 .catch((error) => {
                     console.error("Error writing Faculty in document:  ", error);
                 });
-
         }
 
     const docUser = await getDoc(userRef);
     console.log(docUser.data());
 
     dispatch(receiveLogin(docUser.data()));
-
 }
 
 
 export const googleLogin = () => (dispatch) => {
     const provider = new fireauth.GoogleAuthProvider();
-
 
     auth.signInWithPopup(provider)
         .then((result) => {
@@ -175,19 +140,9 @@ export const googleLogin = () => (dispatch) => {
             if (user.email.includes("@lnmiit.ac.in") === false) {
                 dispatch(logoutUser());
                 dispatch(loginError("Error 401: Unauthorized"))
-
             }
             else {
-
-
-                // user = 
-               
-                    dispatch(fetchUser(user));
-               
-                
-
-            
-                
+                dispatch(fetchUser(user));
             }
         })
         .catch((error) => {

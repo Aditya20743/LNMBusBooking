@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Home from "./HomeComponent";
 import Header from "./HeaderComponent";
 import Footer from "./FooterComponent";
+import RequestSpecialBusComponent from "./RequestSpecialBusComponent";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
@@ -27,7 +28,8 @@ class Main extends Component {
         <TransitionGroup>
           <CSSTransition classNames="page" timeout={300}>
             <Switch>
-              <Route path="/home" component={() => <Home />} />
+              <Route path="/home" component={() => <Home auth={this.props.auth} loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} />} />
+              <Route path="/requestSpecialBus" component={() => <RequestSpecialBusComponent/>} />
               <Redirect to="/home" />
             </Switch>
           </CSSTransition>

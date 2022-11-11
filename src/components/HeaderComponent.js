@@ -29,7 +29,7 @@ class Header extends Component {
   render() {
     return (
       <React.Fragment>
-        <nav className="navbar navbar-expand-lg navbar-light ">
+        <nav className="navbar navbar-expand-lg navbar-light">
           <div className="container-fluid">
             <div className="row">
               <div className="col-xl-2 col-md-3 col-sm-4 col-5 pl-3">
