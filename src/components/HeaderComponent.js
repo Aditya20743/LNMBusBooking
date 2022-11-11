@@ -29,7 +29,7 @@ class Header extends Component {
   render() {
     return (
       <React.Fragment>
-        <nav className="navbar navbar-expand-lg navbar-light bg-light ">
+        <nav className="navbar navbar-expand-lg navbar-light ">
           <div className="container-fluid">
             <div className="row">
               <div className="col-xl-2 col-md-3 col-sm-4 col-5 pl-3">
@@ -37,8 +37,8 @@ class Header extends Component {
                   <img
                     src="assests/images/logo.png"
                     alt="LNMBus"
-                    height="90%"
-                    width="90%"
+                    height="80%"
+                    width="80%"
                     className=" align-self-center"
                   />
                 </a>
@@ -124,7 +124,7 @@ class Header extends Component {
                       <li className="nav-item pt-2">
                         <button
                           type="button"
-                          className="btn btn-outline-secondary btn-lg pb-0 pt-0 mt-2 mx-2"
+                          className="btn btn-outline-dark btn-lg pb-0 pt-0 mt-2 mx-2"
                           onClick={this.toggleModal}
                         >
                           Login
@@ -133,7 +133,7 @@ class Header extends Component {
                     ) : (
                       <li className="nav-item dropdown">
                         <div
-                          className="nav-link dropdown-toggle"
+                          className="nav-link dropdown-toggle "
                           id="navbarDropdown"
                           data-toggle="dropdown"
                         >
