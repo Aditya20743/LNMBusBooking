@@ -3,6 +3,8 @@ import Home from "./HomeComponent";
 import Header from "./HeaderComponent";
 import Footer from "./FooterComponent";
 import RequestSpecialBusComponent from "./RequestSpecialBusComponent";
+import RequestOutpassComponent from "./RequestOutpassComponent";
+
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
@@ -30,6 +32,7 @@ class Main extends Component {
             <Switch>
               <Route path="/home" component={() => <Home auth={this.props.auth} loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} />} />
               <Route path="/requestSpecialBus" component={() => <RequestSpecialBusComponent/>} />
+              <Route path="/requestOutpass" component={() => <RequestOutpassComponent/>} />
               <Redirect to="/home" />
             </Switch>
           </CSSTransition>

@@ -8,21 +8,21 @@ class Header extends Component {
 
   constructor(props) {
     super(props);
-    
+
     this.state = {
       isModalOpen: false
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
   }
-  
+
   handleLogout() {
     this.props.logoutUser();
   }
 
   toggleModal() {
     this.setState({
-        isModalOpen: !this.state.isModalOpen
+      isModalOpen: !this.state.isModalOpen
     });
   }
 
@@ -74,12 +74,12 @@ class Header extends Component {
 
                     {!this.props.auth.user ||
                       !(this.props.auth.user.role === "admin" ||
-                      this.props.auth.user.role === "caretaker" ||
-                      this.props.auth.user.role === "conductor"
-                    ) ? (
+                        this.props.auth.user.role === "caretaker" ||
+                        this.props.auth.user.role === "conductor"
+                      ) ? (
                       <>
                         <li className="nav-item pt-2">
-                          <a className="nav-link" href="/">
+                          <a className="nav-link" href="/requestSpecialBus">
                             Request Bus <span className="sr-only">(current)</span>
                           </a>
                         </li>
@@ -144,7 +144,7 @@ class Header extends Component {
                               <span className="sr-only">(current)</span>
                             </>
                           ) : (
-                            
+
                             <img src={this.props.auth.user.image} className=" mb-1 rounded-circle img-thumbnail" height="60rem" width="60rem" alt="userlogo" />
                           )}
                         </div>
@@ -155,7 +155,7 @@ class Header extends Component {
                           <a className="dropdown-item" href="/">
                             Profile
                           </a>
-                          <button className="dropdown-item" onClick = {this.handleLogout}>
+                          <button className="dropdown-item" onClick={this.handleLogout}>
                             Log Out
                           </button>
                         </div>
@@ -167,7 +167,7 @@ class Header extends Component {
             </div>
           </div>
         </nav>
-        
+
         {this.state.isModalOpen ?
           <Login loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} /> : null}
       </React.Fragment>
