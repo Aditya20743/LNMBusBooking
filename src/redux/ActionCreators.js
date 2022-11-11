@@ -194,3 +194,117 @@ export const googleLogin = () => (dispatch) => {
             dispatch(loginError(error.message));
         });
 }
+
+//bus.js
+export const requestBus = () => {
+    return {
+        type: ActionTypes.BUS_REQUEST
+    }
+}
+export const receiveBus = (bus) => {
+    return {
+        type: ActionTypes.BUS_SUCCESS,
+        bus
+    }
+}
+export const busError = (message) => {
+    return {
+        type: ActionTypes.BUS_FAILURE,
+        message
+    }
+}
+
+//outpass.js
+export const requestOutpass = () => {
+    return {
+        type: ActionTypes.OUTPASS_REQUEST
+    }
+}
+export const receiveOutpass = (outpass) => {
+    return {
+        type: ActionTypes.OUTPASS_SUCCESS,
+        outpass
+    }
+}
+export const outpassError = (message) => {
+    return {
+        type: ActionTypes.OUTPASS_FAILURE,
+        message
+    }
+}
+
+//schedule.js
+export const requestUpdateSchedule = () => {
+    return {
+        type: ActionTypes.UPDATESCHEDULE_REQUEST
+    }
+}
+export const receiveUpdateSchedule = (schedule) => {
+    return {
+        type: ActionTypes.UPDATESCHEDULE_SUCCESS,
+        schedule
+    }
+}
+export const updateScheduleError = (message) => {
+    return {
+        type: ActionTypes.UPDATESCHEDULE_FAILURE,
+        message
+    }
+}
+
+//store.js
+export const requestStore = () => {
+    return {
+        type: ActionTypes.STORE_REQUEST
+    }
+}
+export const receiveStore = (store) => {
+    return {
+        type: ActionTypes.STORE_SUCCESS,
+        store
+    }
+}
+export const storeError = (message) => {
+    return {
+        type: ActionTypes.STORE_FAILURE,
+        message
+    }
+}
+
+//ticket.js
+export const requestTicket = () => {
+    return {
+        type: ActionTypes.ADDTICKET_REQUEST
+    }
+}
+export const receiveTicket = (ticket) => {
+    return {
+        type: ActionTypes.ADDTICKET_SUCCESS,
+        ticket
+    }
+}
+export const ticketError = (message) => {
+    return {
+        type: ActionTypes.ADDTICKET_FAILURE,
+        message
+    }
+}
+
+//wallet.js
+export const requestWallet = () => {
+    return {
+        type: ActionTypes.WALLET_REQUEST
+    }
+}
+export const receiveWallet = (wallet) => {
+    return {
+        type: ActionTypes.WALLET_SUCCESS,
+        wallet
+    }
+}
+export const walletError = (message) => {
+    return {
+        type: ActionTypes.WALLET_FAILURE,
+        message
+    }
+}

@@ -1,41 +1,26 @@
 import * as ActionTypes from './ActionTypes';
 
-export const Ticket = (state = {
+export const ticket = (state = {
         isLoading: false,
         ticket: null,
         errMess: null
     }, action) => {
     switch (action.type) {
-        case ActionTypes.BOOKTICKET_REQUEST:
+        case ActionTypes.ADDTICKET_REQUEST:
             return {...state,
                 isLoading: true
             };
-        case ActionTypes.BOOKTICKET_SUCCESS:
+        case ActionTypes.ADDTICKET_SUCCESS:
             return {...state,
                 isLoading: false,
                 ticket: action.ticket,
                 errMess: ''
             };
-        case ActionTypes.BOOKTICKET_FAILURE:
+        case ActionTypes.ADDTICKET_FAILURE:
             return {...state,
                 isLoading: false,
                 errMess: action.message
             };
-            case ActionTypes.CANCELTICKET_REQUEST:
-            return {...state,
-                isLoading: true
-            };
-            case ActionTypes.CANCELTICKET_SUCCESS:
-                return {...state,
-                    isLoading: false,
-                    ticket: action.ticket,
-                    errMess: ''
-                };
-            case ActionTypes.CANCELTICKET_FAILURE:
-                return {...state,
-                    isLoading: false,
-                    errMess: action.message
-                };
         default:
             return state
     }

@@ -1,6 +1,6 @@
 import * as ActionTypes from './ActionTypes';
 
-export const Wallet = (state = {
+export const wallet = (state = {
         isLoading: false,
         wallet: null,
         errMess: null
