@@ -7,7 +7,7 @@ class Home extends Component {
     super(props);
 
     this.state = {
-      isModalOpen: false
+      isModalOpen: false,
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
@@ -19,12 +19,15 @@ class Home extends Component {
 
   toggleModal() {
     this.setState({
-        isModalOpen: !this.state.isModalOpen
+      isModalOpen: !this.state.isModalOpen,
     });
   }
 
   render() {
-    if (this.props.auth.isAuthenticated && this.props.auth.user.role === "admin") {
+    if (
+      this.props.auth.isAuthenticated &&
+      this.props.auth.user.role === "admin"
+    ) {
       return (
         //ADMIN HOME PAGE
         <div className="container pt-5">
@@ -90,7 +93,10 @@ class Home extends Component {
           </div>
         </div>
       );
-    } else if (this.props.auth.isAuthenticated && this.props.auth.user.role === "caretaker") {
+    } else if (
+      this.props.auth.isAuthenticated &&
+      this.props.auth.user.role === "caretaker"
+    ) {
       return (
         // CARETAKER HOME PAGE
         <div className="container pt-5">
@@ -130,27 +136,28 @@ class Home extends Component {
           <div className="row pb-4 pt-5 mt-5">
             <div className="card col-8 mt-5 col-sm-6 col-md-4 col-lg-3 offset-2 offset-sm-3 offset-md-6 offset-lg-7">
               <div className="card-body align-self-center p-3">
-                
-                {this.props.auth.isAuthenticated ?
+                {this.props.auth.isAuthenticated ? (
                   <>
                     <div className="row">
                       <div className="d-flex col-flex justify-content-center token-count-circle offset-2">
-                        <div className="align-self-center"><h1>16</h1> Tokens</div>
+                        <div className="align-self-center">
+                          <h1>16</h1> Tokens
+                        </div>
                       </div>
-                      </div>
-                      <div className="row mt-3">
-                        <button
-                          type="button"
-                          class="cardBtn btn-primary btn d-flex p-2 mb-3 btn-block justify-content-center nav-link"
-                        >
-                          Purchase Tokens
-                          <div className="home-btn-icon ml-2">
-                            <ArrowCircleRightOutlinedIcon />
-                          </div>
-                        </button>
                     </div>
-                    </>
-                :
+                    <div className="row mt-3">
+                      <button
+                        type="button"
+                        class="cardBtn btn-primary btn d-flex p-2 mb-3 btn-block justify-content-center nav-link"
+                      >
+                        Purchase Tokens
+                        <div className="home-btn-icon ml-2">
+                          <ArrowCircleRightOutlinedIcon />
+                        </div>
+                      </button>
+                    </div>
+                  </>
+                ) : (
                   <div className="row mt-3">
                     <button
                       type="button"
@@ -163,12 +170,14 @@ class Home extends Component {
                       </div>
                     </button>
                   </div>
-                }
-                  
+                )}
+
                 <hr color="black" />
 
                 <div className="row-flex">
-                  <div className="col py-4 align-self-center">No Upcoming Trips</div>
+                  <div className="col py-4 align-self-center">
+                    No Upcoming Trips
+                  </div>
                 </div>
               </div>
             </div>
@@ -203,6 +212,7 @@ class Home extends Component {
                   <button
                     type="button"
                     class="cardBtn btn-primary btn> d-flex p-2 btn-block justify-content-center nav-link"
+                    href="/requestOutpass"
                   >
                     Outpass
                     <div className="home-btn-icon ml-2">
@@ -214,8 +224,12 @@ class Home extends Component {
             </div>
           </div>
 
-          {this.state.isModalOpen ?
-          <Login loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} /> : null}
+          {this.state.isModalOpen ? (
+            <Login
+              loginUser={this.props.loginUser}
+              googleLogin={this.props.googleLogin}
+            />
+          ) : null}
         </div>
       );
     }

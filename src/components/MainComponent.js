@@ -8,32 +8,43 @@ import RequestOutpassComponent from "./RequestOutpassComponent";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { loginUser, googleLogin, logoutUser } from '../redux/ActionCreators';
+import { loginUser, googleLogin, logoutUser } from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
   return {
-    auth: state.auth
+    auth: state.auth,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   loginUser: (creds) => dispatch(loginUser(creds)),
   logoutUser: () => dispatch(logoutUser()),
-  googleLogin: () => dispatch(googleLogin())
+  googleLogin: () => dispatch(googleLogin()),
 });
 
 class Main extends Component {
   render() {
     return (
       <div>
-        <Header auth={this.props.auth} loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} logoutUser={this.props.logoutUser}/>
+        <Header
+          auth={this.props.auth}
+          loginUser={this.props.loginUser}
+          googleLogin={this.props.googleLogin}
+          logoutUser={this.props.logoutUser}
+        />
         <TransitionGroup>
           <CSSTransition classNames="page" timeout={300}>
             <Switch>
-              <Route path="/home" component={() => <Home auth={this.props.auth} loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} />} />
-              <Route path="/requestSpecialBus" component={() => <RequestSpecialBusComponent/>} />
-              <Route path="/requestOutpass" component={() => <RequestOutpassComponent/>} />
-              <Redirect to="/home" />
+              {/* <Route path="/home" component={() => <Home auth={this.props.auth} loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} />} /> */}
+              <Route
+                path="/requestSpecialBus"
+                component={() => <RequestSpecialBusComponent />}
+              />
+              <Route
+                path="/requestOutpass"
+                component={() => <RequestOutpassComponent />}
+              />
+              <Redirect to="/requestOutpass" />
             </Switch>
           </CSSTransition>
         </TransitionGroup>

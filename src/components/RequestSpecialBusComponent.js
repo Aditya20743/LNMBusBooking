@@ -24,7 +24,7 @@ class RequestSpecialBusComponent extends Component {
                   </div>
                   <div class="form-group  ">
                     <input
-                      type="text"
+                      type="number"
                       class="form-control"
                       id="formGroupExampleInput"
                       placeholder="Destination Point"
@@ -57,18 +57,15 @@ class RequestSpecialBusComponent extends Component {
                       />
                     </Stack>
                   </div>
-                  <div class="form-group mt-4">
-                    
-                    <input
-                      type="textarea"
-                      rows="4"
-                      cols="24"
+                  <div class="form-group">
+                    <label for="exampleFormControlTextarea1"></label>
+                    <textarea
                       class="form-control"
-                      id="formGroupExampleInput"
+                      id="exampleFormControlTextarea1"
+                      rows="3"
                       placeholder="Purpose"
-                    />
+                    ></textarea>
                   </div>
-
                 </form>
                 <div className="row m-3 pt-2 pt-2 pd-2">
                   <button
