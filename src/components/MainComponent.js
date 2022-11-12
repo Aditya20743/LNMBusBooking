@@ -31,6 +31,7 @@ class Main extends Component {
               <Route path="/home" component={() => <Home auth={this.props.auth} loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} />} />
               <Route path="/requestSpecialBus" component={() => <RequestSpecialBusComponent/>} />
               <Redirect to="/home" />
+              requestforOutpass();
             </Switch>
           </CSSTransition>
         </TransitionGroup>

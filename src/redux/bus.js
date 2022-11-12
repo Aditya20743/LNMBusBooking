@@ -2,7 +2,7 @@ import * as ActionTypes from './ActionTypes';
 
 export const Bus = (state = {
     isLoading: false,
-    bus: null,
+    bus: [],
     errMess: null
 }, action) => {
     switch (action.type) {

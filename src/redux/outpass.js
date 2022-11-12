@@ -2,7 +2,7 @@ import * as ActionTypes from './ActionTypes';
 
 export const outpass = (state = {
         isLoading: false,
-        outpass: null,
+        outpass: [],
         errMess: null
     }, action) => {
     switch (action.type) {
