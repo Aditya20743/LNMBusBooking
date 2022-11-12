@@ -107,15 +107,17 @@ class Home extends Component {
             <div className="card col-10 col-sm-6 col-md-6 col-xl-4 offset-1 offset-sm-0 align-self-center">
               <div className="card-body align-self-center p-3">
                 <div className="row mt-3">
-                  <button
-                    type="button "
-                    class="cardBtn btn-primary btn> d-flex p-3 mb-3 btn-block justify-content-center nav-link"
-                  >
-                    Display Outpass Requests
-                    <div className="home-btn-icon ml-2">
-                      <ArrowCircleRightOutlinedIcon />
-                    </div>
-                  </button>
+                  <a href="/requestOutpass">
+                    <button
+                      type="button "
+                      class="cardBtn btn-primary btn> d-flex p-3 mb-3 btn-block justify-content-center nav-link"
+                    >
+                      Display Outpass Requests
+                      <div className="home-btn-icon ml-2">
+                        <ArrowCircleRightOutlinedIcon />
+                      </div>
+                    </button>
+                  </a>
                 </div>
               </div>
             </div>

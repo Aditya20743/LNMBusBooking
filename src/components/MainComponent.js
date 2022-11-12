@@ -35,16 +35,16 @@ class Main extends Component {
         <TransitionGroup>
           <CSSTransition classNames="page" timeout={300}>
             <Switch>
-              {/* <Route path="/home" component={() => <Home auth={this.props.auth} loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} />} /> */}
-              <Route
+              <Route path="/home" component={() => <Home auth={this.props.auth} loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} />} />
+              {/* <Route
                 path="/requestSpecialBus"
                 component={() => <RequestSpecialBusComponent />}
-              />
+              /> */}
               <Route
                 path="/requestOutpass"
                 component={() => <RequestOutpassComponent />}
               />
-              <Redirect to="/requestOutpass" />
+              <Redirect to="/home" />
             </Switch>
           </CSSTransition>
         </TransitionGroup>

@@ -11,7 +11,7 @@ class RequestSpecialBusComponent extends Component {
         </div>
         <div className="row-fluid mb-5 align-self-center mt-4">
           <div className="col">
-            <div className="card col-10 col-sm-6 col-md-6 col-xl-4 offset-auto offset-sm-4 align-self-center ">
+            <div className="card col-12 col-sm-10 col-md-8 col-xl-6 offset-xl-3 offset-md-2 offset-sm-1 align-self-center">
               <div className="card-body align-self-center p-4">
                 <form>
                   <div class="form-group pt-4">
