@@ -5,7 +5,7 @@ import Stack from "@mui/material/Stack";
 class RequestSpecialBusComponent extends Component {
   render() {
     return (
-      <div className="container pt-5">
+      <div className="container pt-5 c-width">
         <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
           <h2>Request Special Bus</h2>
         </div>

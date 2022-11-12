@@ -30,7 +30,7 @@ class Home extends Component {
     ) {
       return (
         //ADMIN HOME PAGE
-        <div className="container pt-5">
+        <div className="container pt-5 c-width">
           <div className="up-row row-fluid pt-5 mb-5 align-self-center ">
             <h1>Welcome Admin,</h1>
           </div>
@@ -99,7 +99,7 @@ class Home extends Component {
     ) {
       return (
         // CARETAKER HOME PAGE
-        <div className="container pt-5">
+        <div className="container pt-5 c-width">
           <div className="up-row row pt-5 align-self-center ">
             <h3>Welcome Caretaker,</h3>
           </div>
@@ -134,7 +134,7 @@ class Home extends Component {
     } else {
       //HOME PAGE FOR STUDENT, Others
       return (
-        <div className="container-fluid home-bg pt-5">
+        <div className="container-fluid home-bg pt-5 c-width">
           <div className="row pb-4 pt-5 mt-5">
             <div className="card col-8 mt-5 col-sm-6 col-md-4 col-lg-3 offset-2 offset-sm-3 offset-md-6 offset-lg-7">
               <div className="card-body align-self-center p-3">
