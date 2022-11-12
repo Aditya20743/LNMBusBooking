@@ -5,6 +5,7 @@ import { doc, Firestore, getDoc, getDocs, getFirestore } from "firebase/firestor
 import { collection, addDoc } from "firebase/firestore";
 import { setDoc } from "firebase/firestore";
 import { db } from '../firebase/firebase';
+
 export const requestLogin = () => {
     return {
         type: ActionTypes.LOGIN_REQUEST
@@ -24,15 +25,19 @@ export const loginError = (message) => {
 }
 
 // outpass functions
-const postoutpass = () => async (dispatch) => {
-    try{await addDoc(collection(db, 'outpass'), {
-        name: "kk",
-        age: 24
-    });
-}
-catch (error) {
-    dispatch(outpassError(error.message))
-}
+const postOutpass = (outpass) => async (dispatch) => {
+
+    dispatch(requestOutpass());
+
+    try {
+        await addDoc(collection(db, 'outpass'), outpass);
+
+        dispatch(receiveOutpass(outpass));
+
+    }
+    catch (error) {
+        dispatch(outpassError(error.message))
+    }
 };
 
 
@@ -42,11 +47,22 @@ const fetchOutpass = () => async (dispatch) => {
     try {
         const querySnapshot = await getDocs(collection(db, "outpass"));
         let outpassArr = [];
-        querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            //console.log("athae" + doc.data());
-            outpassArr.push(doc.data());
-        })
+        const user = auth.currentUser;
+        if (user.role === 'student') {
+            const userid = user.uid;
+            querySnapshot.forEach((doc) => {
+                if (doc.data().uid === userid)
+                    outpassArr.push(doc.data());
+            })
+        }
+        else {
+            const hostel = user.hostelName;
+
+            querySnapshot.forEach((doc) => {
+                if (doc.data().hostelName === hostel)
+                    outpassArr.push(doc.data());
+            })
+        }
         dispatch(receiveOutpass(outpassArr));
     }
     catch (error) {
@@ -55,16 +71,17 @@ const fetchOutpass = () => async (dispatch) => {
 }
 
 // Bus functions
-const postbus = () => async (dispatch) => {
-    try{
-        await addDoc(collection(db, 'bus'), {
-        name: "BUs1",
-        age: 89
-    });
-}
-catch (error) {
-    dispatch(busError(error.message))
-}
+const postBus = (bus) => async (dispatch) => {
+
+    dispatch(requestBus());
+
+    try {
+        await addDoc(collection(db, 'bus'), bus);
+        dispatch(receiveBus(bus));
+    }
+    catch (error) {
+        dispatch(busError(error.message))
+    }
 };
 
 const fetchBus = () => async (dispatch) => {
@@ -83,16 +100,15 @@ const fetchBus = () => async (dispatch) => {
     }
 }
 // Store functions
-const postStore = () => async (dispatch) => {
-    try{
-        await addDoc(collection(db, 'store'), {
-        name: "Tokentype1",
-        age: 66
-    });
-}
-catch (error) {
-    dispatch(storeError(error.message))
-}
+const postStore = (store) => async (dispatch) => {
+    dispatch(requestStore());
+    try {
+        await addDoc(collection(db, 'store'), store);
+        dispatch(receiveStore(store));
+    }
+    catch (error) {
+        dispatch(storeError(error.message))
+    }
 };
 
 const fetchStore = () => async (dispatch) => {
@@ -111,12 +127,11 @@ const fetchStore = () => async (dispatch) => {
     }
 }
 // Ticket functions
-const postTicket = () => async (dispatch) => {
+const postTicket = (ticket) => async (dispatch) => {
+    dispatch(requestTicket());
     try {
-        await addDoc(collection(db, 'ticket'), {
-            name: "Ticket1",
-            age: 66
-        });
+        await addDoc(collection(db, 'ticket'), ticket);
+        dispatch(receiveTicket(ticket));
     }
     catch (error) {
         dispatch(ticketError(error.message))
@@ -129,9 +144,19 @@ const fetchTicket = () => async (dispatch) => {
     try {
         const querySnapshot = await getDocs(collection(db, "ticket"));
         let ticketArr = [];
-        querySnapshot.forEach((doc) => {
-            ticketArr.push(doc.data());
-        })
+        const user = auth.currentUser;
+        if (user.role === 'student') {
+            const userid = user.uid;
+            querySnapshot.forEach((doc) => {
+                if (doc.data().uid === userid)
+                    ticketArr.push(doc.data());
+            })
+        }
+        else {
+            querySnapshot.forEach((doc) => {
+                    ticketArr.push(doc.data());
+            })
+        }
         dispatch(receiveTicket(ticketArr));
     }
     catch (error) {
@@ -139,13 +164,11 @@ const fetchTicket = () => async (dispatch) => {
     }
 }
 // Wallet functions
-const postWallet = () => async (dispatch) => {
+const postWallet = (wallet) => async (dispatch) => {
+    dispatch(requestWallet());
     try {
-        await addDoc(collection(db, 'wallet'), {
-            uid: '1',
-            name: "Wallet",
-            age: 66
-        });
+        await addDoc(collection(db, 'wallet'), wallet);
+        dispatch(receiveWallet(wallet));
     }
     catch (error) {
         dispatch(walletError(error.message))
@@ -161,7 +184,7 @@ const fetchWallet = () => async (dispatch) => {
         const querySnapshot = await getDocs(collection(db, "wallet"));
         querySnapshot.forEach((doc) => {
             if (doc.data().uid === userid)
-            dispatch(receiveWallet(doc.data()));
+                dispatch(receiveWallet(doc.data()));
         })
 
     }
@@ -169,6 +192,7 @@ const fetchWallet = () => async (dispatch) => {
         dispatch(walletError(error.message))
     }
 }
+
 ///////////////////////////////////////////////////////////////////////////////////
 
 export const loginUser = (creds) => (dispatch) => {
@@ -219,6 +243,7 @@ export const logoutUser = () => (dispatch) => {
     auth.signOut().then(() => {
         // Sign-out successful.
     }).catch((error) => {
+        
         // An error happened.
     });
 
