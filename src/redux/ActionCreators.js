@@ -1,8 +1,10 @@
 import * as ActionTypes from './ActionTypes';
 import { auth, firestore, fireauth, firebasestore } from '../firebase/firebase';
 import { getDatabase, ref, set } from "firebase/database";
-import { doc, Firestore, getDoc } from "firebase/firestore";
-
+import { doc, Firestore, getDoc, getDocs, getFirestore } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
+import { setDoc } from "firebase/firestore";
+import { db } from '../firebase/firebase';
 
 export const requestLogin = () => {
     return {
@@ -22,6 +24,177 @@ export const loginError = (message) => {
     }
 }
 
+// outpass functions
+const postOutpass = (outpass) => async (dispatch) => {
+
+    dispatch(requestOutpass());
+
+    try {
+        await addDoc(collection(db, 'outpass'), outpass);
+
+        dispatch(receiveOutpass(outpass));
+
+    }
+    catch (error) {
+        dispatch(outpassError(error.message))
+    }
+};
+
+
+const fetchOutpass = () => async (dispatch) => {
+
+    dispatch(requestOutpass());
+    try {
+        const querySnapshot = await getDocs(collection(db, "outpass"));
+        let outpassArr = [];
+        const user = auth.currentUser;
+        if (user.role === 'student') {
+            const userid = user.uid;
+            querySnapshot.forEach((doc) => {
+                if (doc.data().uid === userid)
+                    outpassArr.push(doc.data());
+            })
+        }
+        else {
+            const hostel = user.hostelName;
+
+            querySnapshot.forEach((doc) => {
+                if (doc.data().hostelName === hostel)
+                    outpassArr.push(doc.data());
+            })
+        }
+        dispatch(receiveOutpass(outpassArr));
+    }
+    catch (error) {
+        dispatch(outpassError(error.message))
+    }
+}
+
+// Bus functions
+const postBus = (bus) => async (dispatch) => {
+
+    dispatch(requestBus());
+
+    try {
+        await addDoc(collection(db, 'bus'), bus);
+        dispatch(receiveBus(bus));
+    }
+    catch (error) {
+        dispatch(busError(error.message))
+    }
+};
+
+const fetchBus = () => async (dispatch) => {
+
+    dispatch(requestBus());
+    try {
+        const querySnapshot = await getDocs(collection(db, "bus"));
+        let busArr = [];
+        querySnapshot.forEach((doc) => {
+            busArr.push(doc.data());
+        })
+        dispatch(receiveBus(busArr));
+    }
+    catch (error) {
+        dispatch(busError(error.message))
+    }
+}
+// Store functions
+const postStore = (store) => async (dispatch) => {
+    dispatch(requestStore());
+    try {
+        await addDoc(collection(db, 'store'), store);
+        dispatch(receiveStore(store));
+    }
+    catch (error) {
+        dispatch(storeError(error.message))
+    }
+};
+
+const fetchStore = () => async (dispatch) => {
+
+    dispatch(requestStore());
+    try {
+        const querySnapshot = await getDocs(collection(db, "store"));
+        let storeArr = [];
+        querySnapshot.forEach((doc) => {
+            storeArr.push(doc.data());
+        })
+        dispatch(receiveStore(storeArr));
+    }
+    catch (error) {
+        dispatch(storeError(error.message))
+    }
+}
+// Ticket functions
+const postTicket = (ticket) => async (dispatch) => {
+    dispatch(requestTicket());
+    try {
+        await addDoc(collection(db, 'ticket'), ticket);
+        dispatch(receiveTicket(ticket));
+    }
+    catch (error) {
+        dispatch(ticketError(error.message))
+    }
+};
+
+const fetchTicket = () => async (dispatch) => {
+
+    dispatch(requestTicket());
+    try {
+        const querySnapshot = await getDocs(collection(db, "ticket"));
+        let ticketArr = [];
+        const user = auth.currentUser;
+        if (user.role === 'student') {
+            const userid = user.uid;
+            querySnapshot.forEach((doc) => {
+                if (doc.data().uid === userid)
+                    ticketArr.push(doc.data());
+            })
+        }
+        else {
+            querySnapshot.forEach((doc) => {
+                    ticketArr.push(doc.data());
+            })
+        }
+        dispatch(receiveTicket(ticketArr));
+    }
+    catch (error) {
+        dispatch(ticketError(error.message))
+    }
+}
+// Wallet functions
+const postWallet = (wallet) => async (dispatch) => {
+    dispatch(requestWallet());
+    try {
+        await addDoc(collection(db, 'wallet'), wallet);
+        dispatch(receiveWallet(wallet));
+    }
+    catch (error) {
+        dispatch(walletError(error.message))
+    }
+};
+
+const fetchWallet = () => async (dispatch) => {
+
+    dispatch(requestWallet());
+    try {
+        const user = auth.currentUser;
+        const userid = user.uid;
+        const querySnapshot = await getDocs(collection(db, "wallet"));
+        querySnapshot.forEach((doc) => {
+            if (doc.data().uid === userid)
+                dispatch(receiveWallet(doc.data()));
+        })
+
+    }
+    catch (error) {
+        dispatch(walletError(error.message))
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////
+
 export const loginUser = (creds) => (dispatch) => {
     // We dispatch requestLogin to kickoff the call to the API
     dispatch(requestLogin(creds))
@@ -32,9 +205,9 @@ export const loginUser = (creds) => (dispatch) => {
 
             localStorage.setItem('user', JSON.stringify(user));
 
-            var userRef =firestore.collection("User");
+            var userRef = firestore.collection("User");
             var query = userRef.where('email', '==', user.email);
-        
+
             query.get().then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     // doc.data() is never undefined for query doc snapshots
@@ -42,14 +215,16 @@ export const loginUser = (creds) => (dispatch) => {
                     dispatch(receiveLogin(doc.data()));
                 });
             })
-            .catch((error) => {
-                console.log("Error getting documents: ", error);
-            });
-        
+                .catch((error) => {
+                    console.log("Error getting documents: ", error);
+                });
+
 
         })
         .catch(error => dispatch(loginError(error.message)))
 };
+
+
 
 export const requestLogout = () => {
     return {
@@ -68,6 +243,7 @@ export const logoutUser = () => (dispatch) => {
     auth.signOut().then(() => {
         // Sign-out successful.
     }).catch((error) => {
+        
         // An error happened.
     });
 
@@ -75,7 +251,7 @@ export const logoutUser = () => (dispatch) => {
     dispatch(receiveLogout());
 }
 
-export  const fetchUser = (user) =>    async (dispatch) => {
+export const fetchUser = (user) => async (dispatch) => {
 
     const db = getDatabase();
     // Detection Phase
@@ -89,38 +265,38 @@ export  const fetchUser = (user) =>    async (dispatch) => {
     // const docRef = doc(db, "User",uid);
     const docSnap = await getDoc(userRef);
 
-   // if (!docSnap.exists()) {
-        if (email[0] >= '0' && email[0] <= '9') {
-            await userRef.set({
-                name: displayName,
-                email: email,
-                image: photoURL,
-                role: "student",
-                rollNum: rnum,
-                uid: uid
-            }, {merge: true}
-            )
-                .then(() => {
-                    console.log("Student successfully written!" );
-                })
-                .catch((error) => {
-                    console.error("Error writing Student in document:  ", error);
-                });
-        }
-        else {
-            await userRef.set({
-                name: displayName,
-                email: email,
-                image: photoURL,
-                role: "faculty",
-            },{merge:true})
-                .then(() => {
-                    console.log("Faculty successfully written!");
-                })
-                .catch((error) => {
-                    console.error("Error writing Faculty in document:  ", error);
-                });
-        }
+    // if (!docSnap.exists()) {
+    if (email[0] >= '0' && email[0] <= '9') {
+        await userRef.set({
+            name: displayName,
+            email: email,
+            image: photoURL,
+            role: "student",
+            rollNum: rnum,
+            uid: uid
+        }, { merge: true }
+        )
+            .then(() => {
+                console.log("Student successfully written!");
+            })
+            .catch((error) => {
+                console.error("Error writing Student in document:  ", error);
+            });
+    }
+    else {
+        await userRef.set({
+            name: displayName,
+            email: email,
+            image: photoURL,
+            role: "faculty",
+        }, { merge: true })
+            .then(() => {
+                console.log("Faculty successfully written!");
+            })
+            .catch((error) => {
+                console.error("Error writing Faculty in document:  ", error);
+            });
+    }
 
     const docUser = await getDoc(userRef);
     console.log(docUser.data());
@@ -245,6 +421,7 @@ export const ticketError = (message) => {
     }
 }
 
+
 //wallet.js
 export const requestWallet = () => {
     return {
@@ -263,3 +440,4 @@ export const walletError = (message) => {
         message
     }
 }
+

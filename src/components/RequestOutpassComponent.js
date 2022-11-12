@@ -14,18 +14,18 @@ class RequestOutpassComponent extends Component {
             <div className="card col-12 col-sm-10 col-md-8 col-xl-6 offset-xl-3 offset-md-2 offset-sm-1 align-self-center ">
               <div className="card-body align-self-center p-4">
                 <form>
-                  <div class="form-group pt-4">
+                  <div className="form-group pt-4">
                     <input
                       type="text"
-                      class="form-control"
+                      className="form-control"
                       id="formGroupExampleInput"
                       placeholder="Guardian Name"
                     />
                   </div>
-                  <div class="form-group  ">
+                  <div className="form-group  ">
                     <input
                       type="number"
-                      class="form-control"
+                      className="form-control"
                       id="formGroupExampleInput"
                       placeholder="Guardian Contact No."
                     />
@@ -62,10 +62,10 @@ class RequestOutpassComponent extends Component {
                     </Stack>
                   </div>
 
-                  <div class="form-group">
+                  <div className="form-group">
                     <label for="exampleFormControlTextarea1"></label>
                     <textarea
-                      class="form-control"
+                      className="form-control"
                       id="exampleFormControlTextarea1"
                       rows="3"
                       placeholder="Purpose"
@@ -75,7 +75,7 @@ class RequestOutpassComponent extends Component {
                 <div className="row m-3 pt-2 pt-2 pd-2">
                   <button
                     type="button"
-                    class="cardBtn btn-primary btn d-flex  mb-3 btn-block justify-content-center nav-link"
+                    className="cardBtn btn-primary btn d-flex  mb-3 btn-block justify-content-center nav-link"
                   >
                     Submit
                   </button>
