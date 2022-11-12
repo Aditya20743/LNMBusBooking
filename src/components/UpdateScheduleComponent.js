@@ -89,16 +89,7 @@ class UpdateScheduleComponent extends Component {
                       />
                     </div>
                   </div>
-                  {/* <div className="col-3">
-                    <button type="button" class="btn btn-success">
-                      Approve Outpass
-                    </button>
-                  </div>
-                  <div className="col-3">
-                    <button type="button" class="btn btn-danger">
-                      Disapprove Outpass
-                    </button>
-                  </div> */}
+                  
                   <div className="col-6 col-md-9 ">
                     <div class="input-group justify-content-end  ">
                       <select class="form-select p-2" id="inputGroupSelect02">

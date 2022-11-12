@@ -14,29 +14,35 @@ class AddBusComponent extends Component {
             <div className="card col-12 col-sm-10 col-md-8 col-xl-6 offset-xl-3 offset-md-2 offset-sm-1 align-self-center ">
               <div className="card-body align-self-center p-4">
                 <form>
-                  <div class="form-group pt-4">
+                  <div className="form-group pt-4">
                     <input
                       type="text"
-                      class="form-control"
+                      className="form-control"
                       id="formGroupExampleInput"
                       placeholder="Source"
                     />
                   </div>
-                  <div class="form-group  ">
+                  <div className="form-group  ">
                     <input
                       type="text"
-                      class="form-control"
+                      className="form-control"
                       id="formGroupExampleInput"
                       placeholder="Destination"
                     />
                   </div>
 
-                  <div className="form-group pt-3  ">
+                  <div className="form-group pt-3">
                     <Stack component="form" noValidate spacing={3}>
-                      <div className="row">
-                        <div class="input-group col-4 mb-4 mr-3">
-                          <select class="form-select" id="inputGroupSelect02" style={{width: "70px"}}>
-                            <option selected>Select Day</option>
+                      <div className="row-flex d-flex">
+                        <div className="input-group align-self-left mb-4">
+                          <select
+                            className="form-select"
+                            id="inputGroupSelect02"
+                            style={{ width: "130px" }}
+                          >
+                            <option selected disabled>
+                              Select Day
+                            </option>
                             <option value="1">Monday</option>
                             <option value="2">Tuesday</option>
                             <option value="3">Wednesday</option>
@@ -47,13 +53,13 @@ class AddBusComponent extends Component {
                           </select>
                         </div>
 
-                        <div className="col-6  mb-4">
+                        <div className="align-self-right mb-4 ml-3">
                           <TextField
                             id="time"
                             label="Departure Time"
                             type="time"
                             defaultValue="06:00"
-                            sx={{ width: 220 }}
+                            sx={{}}
                             InputLabelProps={{
                               shrink: true,
                             }}
@@ -63,21 +69,26 @@ class AddBusComponent extends Component {
                     </Stack>
                   </div>
 
-                  <div className="form-group   ">
+                  <div className="form-group">
                     <Stack component="form" noValidate spacing={3}>
                       <div className="row">
-                        <div class="input-group  col-6 col-xl-4 mb-4">
-                          <select class="form-select" id="inputGroupSelect02">
-                            <option selected>Select Bus Type</option>
+                        <div className="input-group col-6 col-xl-4 mb-4">
+                          <select
+                            className="form-select"
+                            id="inputGroupSelect02"
+                          >
+                            <option selected disabled>
+                              Select Type
+                            </option>
                             <option value="1">Regular</option>
                             <option value="2">Special</option>
                           </select>
                         </div>
 
-                        <div class="form-group col-6 col-xl-8 mb-4 ">
+                        <div className="form-group col-6 col-xl-8 mb-4 ">
                           <input
                             type="number"
-                            class="form-control"
+                            className="form-control"
                             id="formGroupExampleInput"
                             placeholder="Total Seats"
                           />
@@ -86,20 +97,32 @@ class AddBusComponent extends Component {
                     </Stack>
                   </div>
 
-                  <div class="form-group ">
+                  <div className="form-group ">
                     <input
                       type="Number"
-                      class="form-control"
+                      className="form-control"
                       id="formGroupExampleInput"
                       placeholder="Enter Bus Number"
                     />
                   </div>
-                  
+
+                  <div className="input-group justify-content-center mt-4 mb-4">
+                    <select className="form-select p-2" id="inputGroupSelect02">
+                      <option selected disabled>
+                        Bus Driver Name
+                      </option>
+                      <option value="1">Ghanshyam</option>
+                      <option value="2">Suresh</option>
+                      <option value="3">Mohan</option>
+                      <option value="4">Mukesh</option>
+                      <option value="5">Radheshyam</option>
+                    </select>
+                  </div>
                 </form>
                 <div className="row m-3 pt-2 pt-2 pd-2">
                   <button
                     type="button"
-                    class="cardBtn btn-primary btn d-flex  mb-3 btn-block justify-content-center nav-link"
+                    className="cardBtn btn-primary btn d-flex  mb-3 btn-block justify-content-center nav-link"
                   >
                     Add Bus
                   </button>

@@ -5,12 +5,11 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Login from "./LoginComponent";
 
 class Header extends Component {
-
   constructor(props) {
     super(props);
 
     this.state = {
-      isModalOpen: false
+      isModalOpen: false,
     };
     this.handleLogout = this.handleLogout.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
@@ -22,7 +21,7 @@ class Header extends Component {
 
   toggleModal() {
     this.setState({
-      isModalOpen: !this.state.isModalOpen
+      isModalOpen: !this.state.isModalOpen,
     });
   }
 
@@ -73,14 +72,16 @@ class Header extends Component {
                     </li>
 
                     {!this.props.auth.user ||
-                      !(this.props.auth.user.role === "admin" ||
-                        this.props.auth.user.role === "caretaker" ||
-                        this.props.auth.user.role === "conductor"
-                      ) ? (
+                    !(
+                      this.props.auth.user.role === "admin" ||
+                      this.props.auth.user.role === "caretaker" ||
+                      this.props.auth.user.role === "conductor"
+                    ) ? (
                       <>
                         <li className="nav-item pt-2">
                           <a className="nav-link" href="/requestSpecialBus">
-                            Request Bus <span className="sr-only">(current)</span>
+                            Request Bus{" "}
+                            <span className="sr-only">(current)</span>
                           </a>
                         </li>
                         <li className="nav-item dropdown pt-2">
@@ -144,8 +145,13 @@ class Header extends Component {
                               <span className="sr-only">(current)</span>
                             </>
                           ) : (
-
-                            <img src={this.props.auth.user.image} className=" mb-1 rounded-circle img-thumbnail" height="60rem" width="60rem" alt="userlogo" />
+                            <img
+                              src={this.props.auth.user.image}
+                              className=" mb-1 rounded-circle img-thumbnail"
+                              height="60rem"
+                              width="60rem"
+                              alt="userlogo"
+                            />
                           )}
                         </div>
                         <div
@@ -155,7 +161,10 @@ class Header extends Component {
                           <a className="dropdown-item" href="/">
                             Profile
                           </a>
-                          <button className="dropdown-item" onClick={this.handleLogout}>
+                          <button
+                            className="dropdown-item"
+                            onClick={this.handleLogout}
+                          >
                             Log Out
                           </button>
                         </div>
@@ -168,8 +177,12 @@ class Header extends Component {
           </div>
         </nav>
 
-        {this.state.isModalOpen ?
-          <Login loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} /> : null}
+        {this.state.isModalOpen ? (
+          <Login
+            loginUser={this.props.loginUser}
+            googleLogin={this.props.googleLogin}
+          />
+        ) : null}
       </React.Fragment>
     );
   }
