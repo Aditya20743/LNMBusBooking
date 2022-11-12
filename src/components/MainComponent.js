@@ -39,8 +39,8 @@ class Main extends Component {
         <TransitionGroup>
           <CSSTransition classNames="page" timeout={300}>
             <Switch>
-              <Route path="/home" component={() => <Home auth={this.props.auth} loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} />} />
-              <Route
+              {/* <Route path="/home" component={() => <Home auth={this.props.auth} loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} />} /> */}
+              {/* <Route
                 path="/requestSpecialBus"
                 component={() => <RequestSpecialBusComponent />}
               /> 
@@ -55,7 +55,7 @@ class Main extends Component {
               <Route
                 path="/removeBus"
                 component={() => <RemoveBusComponent/>}
-              />
+              /> */}
               <Route
                 path="/updateSchedule"
                 component={() => <UpdateScheduleComponent/>}
@@ -64,7 +64,7 @@ class Main extends Component {
                 path="/Outpass"
                 component={() => <ApproveOutpassComponent/>}
               />
-              <Redirect to="/home" />
+              <Redirect to="updateSchedule" />
             </Switch>
           </CSSTransition>
         </TransitionGroup>
