@@ -65,6 +65,7 @@ class Main extends Component {
                 component={() => <ApproveOutpassComponent/>}
               />
               <Redirect to="/home" />
+              requestforOutpass();
             </Switch>
           </CSSTransition>
         </TransitionGroup>
