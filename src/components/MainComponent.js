@@ -6,6 +6,8 @@ import RequestSpecialBusComponent from "./RequestSpecialBusComponent";
 import RequestOutpassComponent from "./RequestOutpassComponent";
 import AddBusComponent from "./AddBusComponent";
 import RemoveBusComponent from "./RemoveBusComponent";
+import UpdateScheduleComponent from "./UpdateScheduleComponent";
+import ApproveOutpassComponent from "./ApproveOutpassComponent";
 
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -37,24 +39,32 @@ class Main extends Component {
         <TransitionGroup>
           <CSSTransition classNames="page" timeout={300}>
             <Switch>
-              {/* <Route path="/home" component={() => <Home auth={this.props.auth} loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} />} /> */}
-              {/* <Route
+              <Route path="/home" component={() => <Home auth={this.props.auth} loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} />} />
+              <Route
                 path="/requestSpecialBus"
                 component={() => <RequestSpecialBusComponent />}
               />
               <Route
                 path="/requestOutpass"
                 component={() => <RequestOutpassComponent />}
-              /> */}
-              {/* <Route
+              />
+              <Route
                 path="/addBus"
                 component={() => <AddBusComponent />}
-              /> */}
+              />
               <Route
                 path="/removeBus"
                 component={() => <RemoveBusComponent/>}
               />
-              <Redirect to="/removeBus" />
+              <Route
+                path="/updateSchedule"
+                component={() => <UpdateScheduleComponent/>}
+              />
+              <Route
+                path="/Outpass"
+                component={() => <ApproveOutpassComponent/>}
+              />
+              <Redirect to="/home" />
             </Switch>
           </CSSTransition>
         </TransitionGroup>
