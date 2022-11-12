@@ -61,7 +61,7 @@ class Main extends Component {
                 component={() => <UpdateScheduleComponent/>}
               />
               <Route
-                path="/Outpass"
+                path="/approveOutpass"
                 component={() => <ApproveOutpassComponent/>}
               />
               <Redirect to="/home" />

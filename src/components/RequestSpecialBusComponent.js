@@ -3,7 +3,19 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 
 class RequestSpecialBusComponent extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  handleSubmit(event) {
+      // console.log("Current State is: " + JSON.stringify(values));
+      // this.props.postFeedback(values);
+      // this.props.resetFeedbackForm();
+  }
+
   render() {
+    
     return (
       <div className="container pt-5 c-width">
         <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
@@ -13,29 +25,33 @@ class RequestSpecialBusComponent extends Component {
           <div className="col">
             <div className="card col-12 col-sm-10 col-md-8 col-xl-6 offset-xl-3 offset-md-2 offset-sm-1 align-self-center">
               <div className="card-body align-self-center p-4">
-                <form>
-                  <div class="form-group pt-4">
+                <form model="specialBusRequest" onSubmit={this.handleSubmit}>
+                  <div className="form-group pt-4">
                     <input
                       type="text"
-                      class="form-control"
-                      id="formGroupExampleInput"
+                      className="form-control"
+                      id="source"
                       placeholder="Boarding Point"
+                      model=".source"
                     />
                   </div>
-                  <div class="form-group  ">
+                  <div className="form-group">
                     <input
-                      type="number"
-                      class="form-control"
-                      id="formGroupExampleInput"
+                      type="text"
+                      className="form-control"
+                      id="destination"
                       placeholder="Destination Point"
+                      model=".destination"
                     />
                   </div>
-                  <div className="pt-3 ">
-                    <Stack component="form" noValidate spacing={3}>
+                  <div className="pt-3 form-group">
+                    <Stack component="form" className="" noValidate spacing={3}>
                       <TextField
                         id="date"
                         label="Select Date"
                         type="date"
+                        model=".date"
+                        className=""
                         defaultValue="2022-01-01"
                         sx={{ width: 220 }}
                         InputLabelProps={{
@@ -46,6 +62,8 @@ class RequestSpecialBusComponent extends Component {
                         id="time"
                         label="Select Time"
                         type="time"
+                        model=".time"
+                        className=""
                         defaultValue="06:00"
                         InputLabelProps={{
                           shrink: true,
@@ -57,24 +75,25 @@ class RequestSpecialBusComponent extends Component {
                       />
                     </Stack>
                   </div>
-                  <div class="form-group">
-                    <label for="exampleFormControlTextarea1"></label>
+                  <div className="form-group">
                     <textarea
-                      class="form-control"
-                      id="exampleFormControlTextarea1"
+                      model=".purpose"
+                      className="form-control"
+                      id="purpose"
                       rows="3"
                       placeholder="Purpose"
                     ></textarea>
                   </div>
-                </form>
-                <div className="row m-3 pt-2 pt-2 pd-2">
                   <button
-                    type="button"
-                    class="cardBtn btn-primary btn d-flex  mb-3 btn-block justify-content-center nav-link"
-                  >
-                    Submit
-                  </button>
-                </div>
+                      type="button"
+                      className="cardBtn btn-primary btn d-flex mb-3 btn-block justify-content-center nav-link"
+                    >
+                      Submit
+                    </button>
+                  <div className="form-group row m-3 pt-2 pt-2 pd-2">
+                    
+                  </div>
+                </form>
               </div>
             </div>
           </div>
