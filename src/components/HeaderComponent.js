@@ -3,6 +3,7 @@ import QrCodeScannerIcon from "@mui/icons-material/QrCodeScanner";
 import WalletOutlinedIcon from "@mui/icons-material/WalletOutlined";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import Login from "./LoginComponent";
+import { NavLink } from 'react-router-dom';
 
 class Header extends Component {
   constructor(props) {
@@ -32,7 +33,7 @@ class Header extends Component {
           <div className="container-fluid">
             <div className="row">
               <div className="col-xl-2 col-md-3 col-sm-4 col-5 pl-3">
-                <a className="navbar-brand" href="/">
+                <NavLink className="navbar-brand" to="/">
                   <img
                     src="assests/images/logo.png"
                     alt="LNMBus"
@@ -40,7 +41,7 @@ class Header extends Component {
                     width="80%"
                     className=" align-self-center"
                   />
-                </a>
+                </NavLink>
               </div>
               <div className="col-xl-10 col-md-8 col-sm-8 offset-md-1 offset-xl-0 offset-xxl-0 col-7 mt-2 pr-3">
                 <button
@@ -61,14 +62,14 @@ class Header extends Component {
                 >
                   <ul className="navbar-nav ml-auto ">
                     <li className="nav-item pt-2 ">
-                      <a className="nav-link" href="/home">
+                      <NavLink className="nav-link" to="/home">
                         Home <span className="sr-only">(current)</span>
-                      </a>
+                      </NavLink>
                     </li>
                     <li className="nav-item pt-2 ">
-                      <a className="nav-link" href="/">
+                      <NavLink className="nav-link" to="/">
                         View Schedule <span className="sr-only">(current)</span>
-                      </a>
+                      </NavLink>
                     </li>
 
                     {!this.props.auth.user ||
@@ -79,10 +80,10 @@ class Header extends Component {
                     ) ? (
                       <>
                         <li className="nav-item pt-2">
-                          <a className="nav-link" href="/requestSpecialBus">
-                            Request Bus{" "}
-                            <span className="sr-only">(current)</span>
-                          </a>
+
+                          <NavLink className="nav-link" to="/requestSpecialBus">
+                            Request Bus {" "}<span className="sr-only">(current)</span>
+                          </NavLink>
                         </li>
                         <li className="nav-item dropdown pt-2">
                           <div
@@ -95,29 +96,35 @@ class Header extends Component {
                           <div
                             className="dropdown-menu"
                             aria-labelledby="navbarDropdown"
-                          >
-                            <a className="dropdown-item" href="/">
-                              Book Ticket
-                            </a>
-                            <a className="dropdown-item" href="/">
-                              Cancel Ticket
-                            </a>
-                            <a className="dropdown-item" href="/">
-                              View Trips
-                            </a>
+                            >
+                            <NavLink to="/">
+                              <div className="dropdown-item" to="/">
+                                    Book Ticket
+                              </div>
+                            </NavLink>
+                            <NavLink to="/">
+                              <div className="dropdown-item" to="/">
+                                Cancel Ticket
+                              </div>
+                            </NavLink>  
+                            <NavLink to="/">
+                              <div className="dropdown-item" to="/">
+                                View Trips
+                              </div>
+                            </NavLink>
                           </div>
                         </li>
                         <li className="nav-item pt-2">
-                          <a className="nav-link" href="/">
+                          <NavLink className="nav-link" to="/">
                             <QrCodeScannerIcon /> QR-Code
                             <span className="sr-only">(current)</span>
-                          </a>
+                          </NavLink>
                         </li>
                         <li className="nav-item pt-2">
-                          <a className="nav-link" href="/">
+                          <NavLink className="nav-link" to="/">
                             <WalletOutlinedIcon /> Wallet
                             <span className="sr-only">(current)</span>
-                          </a>
+                          </NavLink>
                         </li>
                       </>
                     ) : null}
@@ -157,14 +164,13 @@ class Header extends Component {
                         <div
                           className="dropdown-menu"
                           aria-labelledby="navbarDropdown"
-                        >
-                          <a className="dropdown-item" href="/">
-                            Profile
-                          </a>
-                          <button
-                            className="dropdown-item"
-                            onClick={this.handleLogout}
                           >
+                          <NavLink to="/home">
+                            <div className="dropdown-item">
+                              Profile
+                            </div>
+                          </NavLink>
+                          <button className="dropdown-item" onClick={this.handleLogout}>
                             Log Out
                           </button>
                         </div>

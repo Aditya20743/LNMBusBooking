@@ -69,13 +69,12 @@ class Main extends Component {
                 component={() => <UpdateScheduleComponent />}
               />
               <Route
-                path="/Outpass"
-                component={() => <ApproveOutpassComponent />}
-              />
+                path="/approveOutpass"
+                component={() => <ApproveOutpassComponent/>}
               <Route
                 path="/selectBus"
                 component={() => <SelectBusComponent />}
-              />
+          
               <Redirect to="/home" />
 
             </Switch>

@@ -315,7 +315,7 @@ export const googleLogin = () => (dispatch) => {
 
             if (user.email.includes("@lnmiit.ac.in") === false) {
                 dispatch(logoutUser());
-                dispatch(loginError("Error 401: Unauthorized"))
+                dispatch(loginError("Error 401: Unauthorized"));
             }
             else {
                 dispatch(fetchUser(user));
