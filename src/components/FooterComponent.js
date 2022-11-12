@@ -7,7 +7,10 @@ class Footer extends Component {
         <div className="container-fluid p-2 pl-md-5 pl-sm-0 pl-3">
           <div className="row">
             <div className="col-10 col-sm-6 col-md-5 col-xl-3">
-              <a className="d-flex align-items-center link-dark text-decoration-none" href = "/">
+              <a
+                className="d-flex align-items-center link-dark text-decoration-none"
+                href="/"
+              >
                 <img
                   src="assests/images/footer-logo.png"
                   alt="LNMBus"

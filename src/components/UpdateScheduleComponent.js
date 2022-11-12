@@ -11,12 +11,14 @@ class UpdateScheduleComponent extends Component {
         </div>
         <div className="row-fluid mb-5 align-self-center mt-4">
           <div className="col">
-            <div className="card col-10 col-sm-6 col-md-6 col-xl-4 offset-auto offset-sm-4 align-self-center ">
+            <div className="card col-12 col-sm-10 col-md-8 col-xl-4 offset-xl-4 offset-md-2 offset-sm-1 align-self-center">
               <div className="card-body align-self-center p-4">
                 <form>
-                  <div class="input-group justify-content-center mt-4 mb-4 ">
-                    <select class="form-select " id="inputGroupSelect02">
-                      <option selected>Select the Day</option>
+                  <div className="input-group justify-content-center mt-4 mb-4 ">
+                    <select className="form-select p-2" id="inputGroupSelect02">
+                      <option selected disabled>
+                        Select the Day
+                      </option>
                       <option value="1">Monday</option>
                       <option value="2">Tuesday</option>
                       <option value="3">Wednesday</option>
@@ -27,10 +29,10 @@ class UpdateScheduleComponent extends Component {
                     </select>
                   </div>
                 </form>
-                <div className="row m-3 pt-2 pt-2 pd-2">
+                <div className="row m-3 pt-2 pd-2">
                   <button
                     type="button"
-                    class="cardBtn btn-primary btn d-flex  mb-3 btn-block justify-content-center nav-link"
+                    className="cardBtn btn-primary btn d-flex  mb-3 btn-block justify-content-center nav-link"
                   >
                     Update Schedule
                   </button>
