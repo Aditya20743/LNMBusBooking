@@ -3,33 +3,67 @@ import Home from "./HomeComponent";
 import Header from "./HeaderComponent";
 import Footer from "./FooterComponent";
 import RequestSpecialBusComponent from "./RequestSpecialBusComponent";
+import RequestOutpassComponent from "./RequestOutpassComponent";
+import AddBusComponent from "./AddBusComponent";
+import RemoveBusComponent from "./RemoveBusComponent";
+import UpdateScheduleComponent from "./UpdateScheduleComponent";
+import ApproveOutpassComponent from "./ApproveOutpassComponent";
+
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { loginUser, googleLogin, logoutUser } from '../redux/ActionCreators';
+import { loginUser, googleLogin, logoutUser } from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
   return {
-    auth: state.auth
+    auth: state.auth,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
   loginUser: (creds) => dispatch(loginUser(creds)),
   logoutUser: () => dispatch(logoutUser()),
-  googleLogin: () => dispatch(googleLogin())
+  googleLogin: () => dispatch(googleLogin()),
 });
 
 class Main extends Component {
   render() {
     return (
       <div>
-        <Header auth={this.props.auth} loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} logoutUser={this.props.logoutUser}/>
+        <Header
+          auth={this.props.auth}
+          loginUser={this.props.loginUser}
+          googleLogin={this.props.googleLogin}
+          logoutUser={this.props.logoutUser}
+        />
         <TransitionGroup>
           <CSSTransition classNames="page" timeout={300}>
             <Switch>
               <Route path="/home" component={() => <Home auth={this.props.auth} loginUser={this.props.loginUser} googleLogin={this.props.googleLogin} />} />
-              <Route path="/requestSpecialBus" component={() => <RequestSpecialBusComponent/>} />
+              <Route
+                path="/requestSpecialBus"
+                component={() => <RequestSpecialBusComponent />}
+              /> 
+              <Route
+                path="/requestOutpass"
+                component={() => <RequestOutpassComponent />}
+              />
+              <Route
+                path="/addBus"
+                component={() => <AddBusComponent />}
+              />
+              <Route
+                path="/removeBus"
+                component={() => <RemoveBusComponent/>}
+              />
+              <Route
+                path="/updateSchedule"
+                component={() => <UpdateScheduleComponent/>}
+              />
+              <Route
+                path="/Outpass"
+                component={() => <ApproveOutpassComponent/>}
+              />
               <Redirect to="/home" />
             </Switch>
           </CSSTransition>
