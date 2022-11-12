@@ -75,7 +75,8 @@ class Main extends Component {
                 path="/selectBus"
                 component={() => <SelectBusComponent />}
               />
-              <Redirect to="/selectBus" />
+              <Redirect to="/selectBus>
+              <Redirect to="/home" />
             </Switch>
           </CSSTransition>
         </TransitionGroup>
