@@ -3,7 +3,7 @@ import { auth, firestore, fireauth, firebasestore } from '../firebase/firebase';
 import { getDatabase, ref, set } from "firebase/database";
 import { doc, Firestore, getDoc, getDocs, getFirestore } from "firebase/firestore";
 import { collection, addDoc } from "firebase/firestore";
-import { setDoc } from "firebase/firestore";
+import { setDoc, deleteDoc } from "firebase/firestore";
 import { db } from '../firebase/firebase';
 
 export const requestLogin = () => {
@@ -25,6 +25,7 @@ export const loginError = (message) => {
 }
 
 // outpass functions
+
 const postOutpass = (outpass) => async (dispatch) => {
 
     dispatch(requestOutpass());
@@ -99,6 +100,26 @@ const fetchBus = () => async (dispatch) => {
         dispatch(busError(error.message))
     }
 }
+
+
+
+
+export const deleteBus = (bus) => async (dispatch) => {
+    {
+        dispatch(requestBus());
+        try {
+            const busRef = doc(db, "bus", bus.busId);
+            await deleteDoc(busRef);
+            dispatch(receiveBus(bus));
+
+        } catch (error) {
+            dispatch(busError(error.message));
+        }
+
+    };
+}
+
+
 // Store functions
 const postStore = (store) => async (dispatch) => {
     dispatch(requestStore());
@@ -154,7 +175,7 @@ const fetchTicket = () => async (dispatch) => {
         }
         else {
             querySnapshot.forEach((doc) => {
-                    ticketArr.push(doc.data());
+                ticketArr.push(doc.data());
             })
         }
         dispatch(receiveTicket(ticketArr));
@@ -243,7 +264,7 @@ export const logoutUser = () => (dispatch) => {
     auth.signOut().then(() => {
         // Sign-out successful.
     }).catch((error) => {
-        
+
         // An error happened.
     });
 
@@ -318,6 +339,12 @@ export const googleLogin = () => (dispatch) => {
                 dispatch(loginError("Error 401: Unauthorized"))
             }
             else {
+                const bb={
+                    busId : '2',
+                    // Name : 'delete',
+                    Id : '2'
+                }
+                dispatch(deleteBus(bb));
                 dispatch(fetchUser(user));
             }
         })
