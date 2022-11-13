@@ -151,8 +151,6 @@ class UpdateScheduleComponent extends Component {
                       sx={{ width: 150 }}
                     />
                   </div>
-                  {/* <div className="col-3">Purpose:</div>
-                  <div className="col-3">Purpose XYZ</div> */}
                 </div>
                 <div className="row pt-3">
                   <div className="col-sm col-md-3">

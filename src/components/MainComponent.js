@@ -9,6 +9,7 @@ import RemoveBusComponent from "./RemoveBusComponent";
 import UpdateScheduleComponent from "./UpdateScheduleComponent";
 import ApproveOutpassComponent from "./ApproveOutpassComponent";
 import SelectBusComponent from "./SelectBusComponent";
+import ViewTripsComponent from "./ViewTripsComponent";
 import ApproveBusReqComponent from "./ApproveBusReqComponent";
 
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
@@ -120,7 +121,11 @@ class Main extends Component {
               <Route
                 path="/selectBus"
                 component={() => <SelectBusComponent />}
-                />
+              />
+              <Route
+                path="/viewTrips"
+                component={() => <ViewTripsComponent />}
+              />
               <Route
                 path="/approveBus"
                 component={() => <ApproveBusReqComponent />}
