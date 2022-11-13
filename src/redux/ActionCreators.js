@@ -26,19 +26,16 @@ export const loginError = (message) => {
 
 // outpass functions
 
-export const postOutpass = (outpass) => async (dispatch) => {
-
-    const user = auth.currentUser;
+export const postOutpass = (user, outpass) => async (dispatch) => {
+    console.log(outpass);
+    console.log(user.uid);
     const userid = user.uid;
     outpass['uid'] = userid;
 
     dispatch(requestOutpass());
-
     try {
         await addDoc(collection(db, 'outpass'), outpass);
-
-        dispatch(receiveOutpass(outpass));
-
+        dispatch(fetchOutpass(user));
     }
     catch (error) {
         dispatch(outpassError(error.message))
@@ -46,23 +43,24 @@ export const postOutpass = (outpass) => async (dispatch) => {
 };
 
 
-export const fetchOutpass = () => async (dispatch) => {
+export const fetchOutpass = (user) => async (dispatch) => {
 
     dispatch(requestOutpass());
     try {
         const querySnapshot = await getDocs(collection(db, "outpass"));
         let outpassArr = [];
-        const user = auth.currentUser;
+
         if (user.role === 'student') {
             const userid = user.uid;
             querySnapshot.forEach((doc) => {
-                if (doc.data().uid === userid)
-                    outpassArr.push(doc.data());
+                if (doc.data().uid === userid) {
+                    const _id = doc.id;
+                    outpassArr.push({ _id, ...doc.data() });
+                }   
             })
         }
         else {
             const hostel = user.hostelName;
-
             querySnapshot.forEach((doc) => {
                 if (doc.data().hostelName === hostel)
                     outpassArr.push(doc.data());
@@ -75,24 +73,16 @@ export const fetchOutpass = () => async (dispatch) => {
     }
 }
 
-
 export const deleteOutpass = (outpass) => async (dispatch) => {
-    {
-        dispatch(requestOutpass());
-        try {
-            const outpassRef = doc(db, "outpass", outpass.uid);
-            await deleteDoc(outpassRef);
-            dispatch(receiveOutpass(outpass));
-
-        } catch (error) {
-            dispatch(outpassError(error.message));
-        }
-
-    };
+    dispatch(requestOutpass());
+    try {
+        const outpassRef = doc(db, "outpass", outpass.uid);
+        await deleteDoc(outpassRef);
+        dispatch(receiveOutpass(outpass));
+    } catch (error) {
+        dispatch(outpassError(error.message));
+    }
 }
-
-
-
 
 // Bus functions
 export const postBus = (bus) => async (dispatch) => {
@@ -123,9 +113,6 @@ export const fetchBus = () => async (dispatch) => {
         dispatch(busError(error.message))
     }
 }
-
-
-
 
 export const deleteBus = (bus) => async (dispatch) => {
     {
@@ -263,13 +250,12 @@ export const loginUser = (creds) => (dispatch) => {
                     // doc.data() is never undefined for query doc snapshots
                     console.log(doc.id, " => ", doc.data());
                     dispatch(receiveLogin(doc.data()));
+                    dispatch(fetchOutpass(user));
                 });
             })
-                .catch((error) => {
-                    console.log("Error getting documents: ", error);
-                });
-
-
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
+            });
         })
         .catch(error => dispatch(loginError(error.message)))
 };
@@ -368,9 +354,10 @@ export const googleLogin = () => (dispatch) => {
                 dispatch(loginError("Error 401: Unauthorized"));
             }
             else {
-
                 dispatch(fetchUser(user));
             }
+
+            dispatch(fetchOutpass(user));
         })
         .catch((error) => {
             dispatch(loginError(error.message));
@@ -481,20 +468,20 @@ export const outpassError = (message) => {
 }
 
 //schedule.js
-export const requestUpdateSchedule = () => {
+export const requestSchedule = () => {
     return {
-        type: ActionTypes.UPDATESCHEDULE_REQUEST
+        type: ActionTypes.SCHEDULE_REQUEST
     }
 }
-export const receiveUpdateSchedule = (schedule) => {
+export const receiveSchedule = (schedule) => {
     return {
-        type: ActionTypes.UPDATESCHEDULE_SUCCESS,
+        type: ActionTypes.SCHEDULE_SUCCESS,
         schedule
     }
 }
-export const updateScheduleError = (message) => {
+export const scheduleError = (message) => {
     return {
-        type: ActionTypes.UPDATESCHEDULE_FAILURE,
+        type: ActionTypes.SCHEDULE_FAILURE,
         message
     }
 }
