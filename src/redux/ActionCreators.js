@@ -27,10 +27,12 @@ export const loginError = (message) => {
 // outpass functions
 
 export const postOutpass = (user, outpass) => async (dispatch) => {
-    console.log(outpass);
-    console.log(user.uid);
-    const userid = user.uid;
-    outpass['uid'] = userid;
+     
+    
+    console.log(user);
+    outpass['uid'] = user.uid;
+     outpass['name']= user.name;
+     outpass['rollNum']= user.rollNum;
 
     dispatch(requestOutpass());
     try {
@@ -403,6 +405,8 @@ export const specialBusRequestError = (message) => {
 // Special Bus functions
 export const postSpecialBusRequest = (user, specialbusrequest) => async (dispatch) => {
     console.log(specialbusrequest);
+    specialbusrequest['uid'] = user.uid;
+    specialbusrequest['name']= user.name;
     dispatch(requestSpecialBusRequest());
     try {
         await addDoc(collection(db, 'specialBusRequest'), specialbusrequest);
