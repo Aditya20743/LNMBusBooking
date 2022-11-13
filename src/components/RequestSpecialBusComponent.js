@@ -18,7 +18,7 @@ class RequestSpecialBusComponent extends Component {
   }
   handleSubmit(event) {
     event.preventDefault();
-    // this.props.postFeedback(JSON.stringify(this.state));
+    this.props.postSpecialBusRequest(this.props.auth.user, {...this.state, status:"pending"});
     
     this.setState({ source: "", destination: "", date: "", time: "", purpose: "" });
   }

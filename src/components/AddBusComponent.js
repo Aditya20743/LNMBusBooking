@@ -20,17 +20,8 @@ class AddBusComponent extends Component {
   }
   handleSubmit(event) {
     event.preventDefault();
-    this.props.postBus(JSON.stringify(this.state));
-    this.setState({
-      source: "",
-      destination: "",
-      date: "",
-      time: "",
-      busType: "",
-      totalSeats: "",
-      busNumber: "",
-      driverName: "",
-    });
+    this.props.postBus(this.state);
+    this.setState({source: "",destination: "",date: "",time: "",busType: "",totalSeats: "",busNumber: "", driverName: ""});
   }
 
   handleInput(event) {
