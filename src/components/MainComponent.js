@@ -9,6 +9,7 @@ import RemoveBusComponent from "./RemoveBusComponent";
 import UpdateScheduleComponent from "./UpdateScheduleComponent";
 import ApproveOutpassComponent from "./ApproveOutpassComponent";
 import SelectBusComponent from "./SelectBusComponent";
+import ApproveBusReqComponent from "./ApproveBusReqComponent";
 
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -119,7 +120,11 @@ class Main extends Component {
               <Route
                 path="/selectBus"
                 component={() => <SelectBusComponent />}
-              />
+                />
+              <Route
+                path="/approveBus"
+                component={() => <ApproveBusReqComponent />}
+                />
               <Redirect to="/home" />
 
             </Switch>
