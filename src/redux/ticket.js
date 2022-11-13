@@ -1,6 +1,6 @@
 import * as ActionTypes from './ActionTypes';
 
-export const ticket = (state = {
+export const Ticket = (state = {
         isLoading: false,
         ticket: [],
         errMess: null

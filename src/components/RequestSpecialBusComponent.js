@@ -5,13 +5,29 @@ import Stack from "@mui/material/Stack";
 class RequestSpecialBusComponent extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      source: "",
+      destination: "",
+      date: "",
+      time: "",
+      purpose: ""
+    }
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleInput = this.handleInput.bind(this);
   }
   handleSubmit(event) {
-      // console.log("Current State is: " + JSON.stringify(values));
-      // this.props.postFeedback(values);
-      // this.props.resetFeedbackForm();
+    event.preventDefault();
+    // this.props.postFeedback(JSON.stringify(this.state));
+    
+    this.setState({ source: "", destination: "", date: "", time: "", purpose: "" });
+  }
+
+  handleInput(event) {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    this.setState({ ... this.state, [name]: value });
   }
 
   render() {
@@ -25,14 +41,16 @@ class RequestSpecialBusComponent extends Component {
           <div className="col">
             <div className="card col-12 col-sm-10 col-md-8 col-xl-6 offset-xl-3 offset-md-2 offset-sm-1 align-self-center">
               <div className="card-body align-self-center p-4">
-                <form model="specialBusRequest" onSubmit={this.handleSubmit}>
+                <form onSubmit={this.handleSubmit}>
                   <div className="form-group pt-4">
                     <input
                       type="text"
                       className="form-control"
                       id="source"
+                      name="source"
                       placeholder="Boarding Point"
-                      model=".source"
+                      onChange={this.handleInput}
+                      value = {this.state.source}
                     />
                   </div>
                   <div className="form-group">
@@ -40,19 +58,22 @@ class RequestSpecialBusComponent extends Component {
                       type="text"
                       className="form-control"
                       id="destination"
+                      name="destination"
+                      onChange={this.handleInput}
+                      value = {this.state.destination}
                       placeholder="Destination Point"
-                      model=".destination"
                     />
                   </div>
                   <div className="pt-3 form-group">
-                    <Stack component="form" className="" noValidate spacing={3}>
+                    <Stack component="form" noValidate spacing={3}>
                       <TextField
                         id="date"
                         label="Select Date"
                         type="date"
-                        model=".date"
-                        className=""
+                        name = "date"
                         defaultValue="2022-01-01"
+                        onChange={this.handleInput}
+                        value = {this.state.date}
                         sx={{ width: 220 }}
                         InputLabelProps={{
                           shrink: true,
@@ -60,11 +81,13 @@ class RequestSpecialBusComponent extends Component {
                       />
                       <TextField
                         id="time"
+                        name = "time"
                         label="Select Time"
                         type="time"
-                        model=".time"
                         className=""
                         defaultValue="06:00"
+                        onChange={this.handleInput}
+                        value = {this.state.time}
                         InputLabelProps={{
                           shrink: true,
                         }}
@@ -76,24 +99,22 @@ class RequestSpecialBusComponent extends Component {
                     </Stack>
                   </div>
                   <div className="form-group">
-
                     <textarea
-                      model=".purpose"
+                      name="purpose"
                       className="form-control"
                       id="purpose"
                       rows="3"
                       placeholder="Purpose"
+                      onChange={this.handleInput}
+                      value = {this.state.purpose}
                     ></textarea>
                   </div>
                   <button
-                      type="button"
+                      type="submit"
                       className="cardBtn btn-primary btn d-flex mb-3 btn-block justify-content-center nav-link"
                     >
-                      Submit
-                    </button>
-                  <div className="form-group row m-3 pt-2 pt-2 pd-2">
-             
-                  </div>
+                    Submit
+                  </button>
                 </form>
               </div>
             </div>
