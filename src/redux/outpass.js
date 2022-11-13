@@ -1,6 +1,6 @@
 import * as ActionTypes from './ActionTypes';
 
-export const outpass = (state = {
+export const Outpass = (state = {
         isLoading: false,
         outpass: [],
         errMess: null
