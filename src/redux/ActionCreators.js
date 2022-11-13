@@ -60,6 +60,7 @@ export const fetchOutpass = (user) => async (dispatch) => {
         }
         else {
             const hostel = user.hostelName;
+            console.log(user);
             querySnapshot.forEach((doc) => {
                 if (doc.data().hostelName === hostel)
                     outpassArr.push(doc.data());
@@ -249,7 +250,7 @@ export const loginUser = (creds) => (dispatch) => {
                     // doc.data() is never undefined for query doc snapshots
                     console.log(doc.id, " => ", doc.data());
                     dispatch(receiveLogin(doc.data()));
-                    dispatch(fetchOutpass(user));
+                    dispatch(fetchOutpass(doc.data()));
                 });
             })
             .catch((error) => {

@@ -116,7 +116,7 @@ class Main extends Component {
               />
               <Route
                 path="/approveOutpass"
-                component={() => <ApproveOutpassComponent/>}
+                component={() => <ApproveOutpassComponent outpass = {this.props.outpass}/>}
               />
               <Route
                 path="/selectBus"
