@@ -3,11 +3,14 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import { Auth } from "./auth";
 import { Bus } from "./bus";
+import { updateSchedule } from "./schedule";
 import { Store } from './store';
 import { Wallet } from "./wallet";
-import { Schedule } from "./schedule";
 import { Outpass } from "./outpass";
 import { Ticket } from "./ticket";
+import { Store } from "./store";
+import { Wallet } from "./wallet";
+import {specilBusRequest}  from "./specialBus"
 
 
 export const ConfigureStore = () => {
@@ -19,7 +22,8 @@ export const ConfigureStore = () => {
             store: Store,
             ticket: Ticket,
             wallet: Wallet,
-            schedule: Schedule
+            schedule: updateSchedule,
+            specialbus: specilBusRequest,
         }),
         applyMiddleware(thunk, logger)
     );
