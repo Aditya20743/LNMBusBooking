@@ -10,6 +10,11 @@ export const BUS_REQUEST = 'BUS_REQUEST';
 export const BUS_FAILURE = 'BUS_FAILURE';
 export const BUS_SUCCESS = 'BUS_SUCCESS';
 
+//Admin side bus facility
+export const SPECIALBUS_REQUEST = 'SPECIALBUS_REQUEST';
+export const SPECIALBUS_FAILURE = 'SPECIALBUS_FAILURE';
+export const SPECIALBUS_SUCCESS = 'SPECIALBUS_SUCCESS';
+
 //Ticket booking facility
 export const ADDTICKET_REQUEST = 'ADDTICKET_REQUEST';
 export const ADDTICKET_FAILURE = 'ADDTICKET_FAILURE';

@@ -143,6 +143,7 @@ export const deleteBus = (bus) => async (dispatch) => {
 }
 
 
+
 // Store functions
 export const postStore = (store) => async (dispatch) => {
     dispatch(requestStore());
@@ -393,6 +394,70 @@ export const busError = (message) => {
         type: ActionTypes.BUS_FAILURE,
         message
     }
+}
+
+//specialbus.js
+export const requestSpecialBus = () => {
+    return {
+        type: ActionTypes.SPECIALBUS_REQUEST
+    }
+}
+export const receiveSpecialBus = (specialBusRequest) => {
+    return {
+        type: ActionTypes.SPECIALBUS_SUCCESS,
+        specialBusRequest
+    }
+}
+export const specialBusError = (message) => {
+    return {
+        type: ActionTypes.SPECIALBUS_FAILURE,
+        message
+    }
+}
+// Special Bus functions
+export const postSpecialBus = (specialbusrequest) => async (dispatch) => {
+
+    dispatch(requestSpecialBus());
+
+    try {
+        await addDoc(collection(db, 'specialBusRequest'), specialbusrequest);
+        dispatch(receiveSpecialBus(specialbusrequest));
+    }
+    catch (error) {
+        dispatch(specialBusError(error.message))
+    }
+};
+
+export const fetchSpecialBus = () => async (dispatch) => {
+
+    dispatch(requestSpecialBus());
+    try {
+        const querySnapshot = await getDocs(collection(db, "specialBusRequest"));
+        let specialBusArr = [];
+        querySnapshot.forEach((doc) => {
+            specialBusArr.push(doc.data());
+        })
+        dispatch(receiveBus(specialBusArr));
+    }
+    catch (error) {
+        dispatch(specialBusError(error.message))
+    }
+}
+
+
+export const deleteSpecialBus = (specialbusrequest) => async (dispatch) => {
+    {
+        dispatch(requestSpecialBus());
+        try {
+            const specialBusRef = doc(db, "specialBusRequest", specialbusrequest.specialBusId);
+            await deleteDoc(specialBusRef);
+            dispatch(receiveBus(specialbusrequest));
+
+        } catch (error) {
+            dispatch(specialBusError(error.message));
+        }
+
+    };
 }
 
 //outpass.js

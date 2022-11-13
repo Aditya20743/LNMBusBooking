@@ -13,11 +13,13 @@ import SelectBusComponent from "./SelectBusComponent";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { loginUser, googleLogin, logoutUser ,postBus,postOutpass,postStore,postTicket,postWallet,fetchBus,fetchWallet,fetchOutpass,fetchStore,fetchTicket,deleteBus,deleteOutpass} from "../redux/ActionCreators";
+import { loginUser, googleLogin, logoutUser ,postBus,postOutpass,postStore,postTicket,postWallet,fetchBus,fetchWallet,fetchOutpass,fetchStore,fetchTicket,deleteBus,deleteOutpass,postSpecialBus,fetchSpecialBus,deleteSpecialBus} from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
+
+    specialbusrequest: state.specialBus
   };
 };
 
@@ -43,6 +45,12 @@ const mapDispatchToProps = (dispatch) => ({
 
   deleteBus: (bus)=> dispatch(deleteBus(bus)),
   deleteOutpass: (outpass)=>dispatch(deleteOutpass(outpass)),
+
+  postSpecialBus: (specilBusRequest) => dispatch(postSpecialBus(specilBusRequest)),
+  fetchSpecialBus: ()=> dispatch(fetchSpecialBus()),
+  deleteSpecialBus: (specilBusRequest)=> dispatch(fetch(deleteSpecialBus(specilBusRequest))),
+
+
 
   
 });
