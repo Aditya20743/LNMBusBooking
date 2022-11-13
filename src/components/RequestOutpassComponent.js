@@ -17,7 +17,7 @@ class RequestOutpassComponent extends Component {
   }
   handleSubmit(event) {
     event.preventDefault();
-    this.props.postOutpass(JSON.stringify(this.state));
+    this.props.postOutpass(this.props.auth.user, {...this.state, status:"pending"});
     this.setState({
       guardianName: "", guardianContactNo: "", departureDate: "", returnDate: "", purpose: ""
     });
@@ -42,7 +42,7 @@ class RequestOutpassComponent extends Component {
                     <input
                       type="text"
                       className="form-control"
-                      id="formGroupExampleInput"
+                      id="guardianName"
                       placeholder="Guardian Name"
                       name="guardianName"
                       onChange={this.handleInput}
@@ -53,7 +53,7 @@ class RequestOutpassComponent extends Component {
                     <input
                       type="number"
                       className="form-control"
-                      id="formGroupExampleInput"
+                      id="guardianContactNo"
                       placeholder="Guardian Contact No."
                       name="guardianContactNo"
                       onChange={this.handleInput}
@@ -66,7 +66,7 @@ class RequestOutpassComponent extends Component {
                       <div className="row">
                         <div className="col-12 col-xl-6 mb-4">
                           <TextField
-                            id="date"
+                            id="departureDate"
                             label="Departure Date"
                             type="date"
                             defaultValue="2022-01-01"
@@ -81,7 +81,7 @@ class RequestOutpassComponent extends Component {
                         </div>
                         <div className="col-12 col-xl-6">
                           <TextField
-                            id="date"
+                            id="returnDate"
                             label="Return Date"
                             name="returnDate"
                             onChange={this.handleInput}
@@ -99,10 +99,10 @@ class RequestOutpassComponent extends Component {
                   </div>
 
                   <div className="form-group">
-                    <label for="exampleFormControlTextarea1"></label>
+                    <label for="purpose"></label>
                     <textarea
                       className="form-control"
-                      id="exampleFormControlTextarea1"
+                      id="purpose"
                       rows="3"
                       name="purpose"
                       value={this.state.purpose}

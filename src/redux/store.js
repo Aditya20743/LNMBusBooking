@@ -1,6 +1,6 @@
 import * as ActionTypes from './ActionTypes';
 
-export const store = (state = {
+export const Store = (state = {
         isLoading: false,
         store: null,
         errMess: null

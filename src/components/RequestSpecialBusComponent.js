@@ -18,7 +18,7 @@ class RequestSpecialBusComponent extends Component {
   }
   handleSubmit(event) {
     event.preventDefault();
-    // this.props.postFeedback(JSON.stringify(this.state));
+    // this.props.postFeedback(this.state);
     
     this.setState({ source: "", destination: "", date: "", time: "", purpose: "" });
   }

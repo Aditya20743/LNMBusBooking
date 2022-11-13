@@ -1,23 +1,23 @@
 import * as ActionTypes from './ActionTypes';
 
-export const updateSchedule = (state = {
+export const Schedule = (state = {
         isLoading: false,
         schedule: null,
         errMess: null
     }, action) => {
     switch (action.type) {
-        case ActionTypes.UPDATESCHEDULE_REQUEST:
+        case ActionTypes.SCHEDULE_REQUEST:
             return {...state,
                 isLoading: true,
             
             };
-        case ActionTypes.UPDATESCHEDULE_SUCCESS:
+        case ActionTypes.SCHEDULE_SUCCESS:
             return {...state,
                 isLoading: false,
                 schedule: action.schedule,
                 errMess: ''
             };
-        case ActionTypes.UPDATESCHEDULE_FAILURE:
+        case ActionTypes.SCHEDULE_FAILURE:
             return {...state,
                 isLoading: false,
                 errMess: action.message
