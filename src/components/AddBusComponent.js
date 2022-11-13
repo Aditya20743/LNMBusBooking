@@ -13,7 +13,7 @@ class AddBusComponent extends Component {
       busType: "",
       totalSeats: "",
       busNumber: "",
-      driverName: ""
+      driverName: "",
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInput = this.handleInput.bind(this);
@@ -21,7 +21,16 @@ class AddBusComponent extends Component {
   handleSubmit(event) {
     event.preventDefault();
     this.props.postBus(JSON.stringify(this.state));
-    this.setState({source: "",destination: "",date: "",time: "",busType: "",totalSeats: "",busNumber: "",driverName: ""});
+    this.setState({
+      source: "",
+      destination: "",
+      date: "",
+      time: "",
+      busType: "",
+      totalSeats: "",
+      busNumber: "",
+      driverName: "",
+    });
   }
 
   handleInput(event) {
@@ -64,52 +73,50 @@ class AddBusComponent extends Component {
                   </div>
 
                   <div className="form-group pt-3">
-                    <Stack component="form" noValidate spacing={3}>
-                      <div className="row-flex d-flex">
-                        <div className="pt-3 form-group">
-                          <Stack
-                            component="form"
+                    <div className="row-flex d-flex">
+                      <div className="pt-3 form-group">
+                        <Stack
+                          component="form"
+                          className=""
+                          noValidate
+                          spacing={3}
+                        >
+                          <TextField
+                            id="date"
+                            label="Select Date"
+                            type="date"
+                            model=".date"
                             className=""
-                            noValidate
-                            spacing={3}
-                          >
-                            <TextField
-                              id="date"
-                              label="Select Date"
-                              type="date"
-                              model=".date"
-                              className=""
-                              defaultValue="2022-01-01"
-                              sx={{ width: 220 }}
-                              InputLabelProps={{
-                                shrink: true,
-                              }}
-                              name="date"
-                              onChange={this.handleInput}
-                              value={this.state.date}
-                            />
-                            <TextField
-                              id="time"
-                              label="Select Time"
-                              type="time"
-                              model=".time"
-                              className=""
-                              defaultValue="06:00"
-                              InputLabelProps={{
-                                shrink: true,
-                              }}
-                              inputProps={{
-                                step: 300, // 5 mins
-                              }}
-                              name="time"
-                              onChange={this.handleInput}
-                              value={this.state.time}
-                              sx={{ width: 220 }}
-                            />
-                          </Stack>
-                        </div>
+                            defaultValue="2022-01-01"
+                            sx={{ width: 220 }}
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                            name="date"
+                            onChange={this.handleInput}
+                            value={this.state.date}
+                          />
+                          <TextField
+                            id="time"
+                            label="Select Time"
+                            type="time"
+                            model=".time"
+                            className=""
+                            defaultValue="06:00"
+                            InputLabelProps={{
+                              shrink: true,
+                            }}
+                            inputProps={{
+                              step: 300, // 5 mins
+                            }}
+                            name="time"
+                            onChange={this.handleInput}
+                            value={this.state.time}
+                            sx={{ width: 220 }}
+                          />
+                        </Stack>
                       </div>
-                    </Stack>
+                    </div>
                   </div>
 
                   <div className="form-group">
@@ -193,4 +200,3 @@ class AddBusComponent extends Component {
 }
 
 export default AddBusComponent;
-

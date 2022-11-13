@@ -11,16 +11,16 @@ class RequestOutpassComponent extends Component {
       departureDate: "",
       returnDate: "",
       purpose: "",
+      hostelName: "",
+      roomNumber: "",
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInput = this.handleInput.bind(this);
   }
   handleSubmit(event) {
     event.preventDefault();
-    this.props.postOutpass(JSON.stringify(this.state));
-    this.setState({
-      guardianName: "", guardianContactNo: "", departureDate: "", returnDate: "", purpose: ""
-    });
+    this.props.postOutpass(this.state);
+    this.setState({guardianName: "",guardianContactNo: "",departureDate: "",returnDate: "",purpose: "",hostelName: "",roomNumber: "",});
   }
   handleInput(event) {
     const name = event.target.name;
@@ -64,7 +64,7 @@ class RequestOutpassComponent extends Component {
                   <div className="form-group pt-3 ">
                     <Stack component="form" noValidate spacing={3}>
                       <div className="row">
-                        <div className="col-12 col-xl-6 mb-4">
+                        <div className="col-12 col-lg-6 mb-2">
                           <TextField
                             id="date"
                             label="Departure Date"
@@ -79,7 +79,7 @@ class RequestOutpassComponent extends Component {
                             }}
                           />
                         </div>
-                        <div className="col-12 col-xl-6">
+                        <div className="col-12 col-lg-6">
                           <TextField
                             id="date"
                             label="Return Date"
@@ -97,7 +97,42 @@ class RequestOutpassComponent extends Component {
                       </div>
                     </Stack>
                   </div>
-
+                  <div className="row">
+                    <div className="col-6">
+                      <div className="input-group mt-2 ">
+                        <select
+                          className="form-select p-2"
+                          id="inputGroupSelect02"
+                          placeholder="Hostel Name"
+                          name="hostelName"
+                          onChange={this.handleInput}
+                          value={this.state.hostelName}
+                        >
+                          <option selected disabled>
+                            Hostel Name
+                          </option>
+                          <option value="GH-1">GH-1</option>
+                          <option value="BH-1">BH-1</option>
+                          <option value="BH-2">BH-2</option>
+                          <option value="BH-3">BH-3</option>
+                          <option value="BH-4">BH-4</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="col-6 mt-2">
+                      <div className="form-group  ">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="formGroupExampleInput"
+                          placeholder="Room No."
+                          name="roomNumber"
+                          onChange={this.handleInput}
+                          value={this.state.roomNumber}
+                        />
+                      </div>
+                    </div>
+                  </div>
                   <div className="form-group">
                     <label for="exampleFormControlTextarea1"></label>
                     <textarea

@@ -98,17 +98,17 @@ class Header extends Component {
                             aria-labelledby="navbarDropdown"
                             >
                             <NavLink to="/">
-                              <div className="dropdown-item" to="/">
+                              <div className="dropdown-item">
                                     Book Ticket
                               </div>
                             </NavLink>
-                            <NavLink to="/">
-                              <div className="dropdown-item" to="/">
+                            <NavLink to="/viewTrips">
+                              <div className="dropdown-item">
                                 Cancel Ticket
                               </div>
                             </NavLink>  
-                            <NavLink to="/">
-                              <div className="dropdown-item" to="/">
+                            <NavLink to="/viewTrips">
+                              <div className="dropdown-item">
                                 View Trips
                               </div>
                             </NavLink>
