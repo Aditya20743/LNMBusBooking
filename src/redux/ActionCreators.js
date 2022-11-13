@@ -3,7 +3,7 @@ import { auth, firestore, fireauth, firebasestore } from '../firebase/firebase';
 import { getDatabase, ref, set } from "firebase/database";
 import { doc, Firestore, getDoc, getDocs, getFirestore } from "firebase/firestore";
 import { collection, addDoc } from "firebase/firestore";
-import { setDoc } from "firebase/firestore";
+import { setDoc, deleteDoc } from "firebase/firestore";
 import { db } from '../firebase/firebase';
 
 export const requestLogin = () => {
@@ -25,39 +25,41 @@ export const loginError = (message) => {
 }
 
 // outpass functions
-const postOutpass = (outpass) => async (dispatch) => {
+
+export const postOutpass = (user, outpass) => async (dispatch) => {
+    console.log(outpass);
+    console.log(user.uid);
+    const userid = user.uid;
+    outpass['uid'] = userid;
 
     dispatch(requestOutpass());
-
     try {
         await addDoc(collection(db, 'outpass'), outpass);
-
-        dispatch(receiveOutpass(outpass));
-
+        dispatch(fetchOutpass(user));
     }
     catch (error) {
         dispatch(outpassError(error.message))
     }
 };
 
-
-const fetchOutpass = () => async (dispatch) => {
+export const fetchOutpass = (user) => async (dispatch) => {
 
     dispatch(requestOutpass());
     try {
         const querySnapshot = await getDocs(collection(db, "outpass"));
         let outpassArr = [];
-        const user = auth.currentUser;
+
         if (user.role === 'student') {
             const userid = user.uid;
             querySnapshot.forEach((doc) => {
-                if (doc.data().uid === userid)
-                    outpassArr.push(doc.data());
+                if (doc.data().uid === userid) {
+                    const _id = doc.id;
+                    outpassArr.push({ _id, ...doc.data() });
+                }   
             })
         }
         else {
             const hostel = user.hostelName;
-
             querySnapshot.forEach((doc) => {
                 if (doc.data().hostelName === hostel)
                     outpassArr.push(doc.data());
@@ -70,8 +72,19 @@ const fetchOutpass = () => async (dispatch) => {
     }
 }
 
+export const deleteOutpass = (outpass) => async (dispatch) => {
+    dispatch(requestOutpass());
+    try {
+        const outpassRef = doc(db, "outpass", outpass.uid);
+        await deleteDoc(outpassRef);
+        dispatch(receiveOutpass(outpass));
+    } catch (error) {
+        dispatch(outpassError(error.message));
+    }
+}
+
 // Bus functions
-const postBus = (bus) => async (dispatch) => {
+export const postBus = (bus) => async (dispatch) => {
 
     dispatch(requestBus());
 
@@ -84,7 +97,7 @@ const postBus = (bus) => async (dispatch) => {
     }
 };
 
-const fetchBus = () => async (dispatch) => {
+export const fetchBus = () => async (dispatch) => {
 
     dispatch(requestBus());
     try {
@@ -99,8 +112,26 @@ const fetchBus = () => async (dispatch) => {
         dispatch(busError(error.message))
     }
 }
+
+export const deleteBus = (bus) => async (dispatch) => {
+    {
+        dispatch(requestBus());
+        try {
+            const busRef = doc(db, "bus", bus.busId);
+            await deleteDoc(busRef);
+            dispatch(receiveBus(bus));
+
+        } catch (error) {
+            dispatch(busError(error.message));
+        }
+
+    };
+}
+
+
+
 // Store functions
-const postStore = (store) => async (dispatch) => {
+export const postStore = (store) => async (dispatch) => {
     dispatch(requestStore());
     try {
         await addDoc(collection(db, 'store'), store);
@@ -111,7 +142,7 @@ const postStore = (store) => async (dispatch) => {
     }
 };
 
-const fetchStore = () => async (dispatch) => {
+export const fetchStore = () => async (dispatch) => {
 
     dispatch(requestStore());
     try {
@@ -127,7 +158,12 @@ const fetchStore = () => async (dispatch) => {
     }
 }
 // Ticket functions
-const postTicket = (ticket) => async (dispatch) => {
+export const postTicket = (ticket) => async (dispatch) => {
+
+    const user = auth.currentUser;
+    const userid = user.uid;
+    ticket['uid'] = userid;
+
     dispatch(requestTicket());
     try {
         await addDoc(collection(db, 'ticket'), ticket);
@@ -138,7 +174,7 @@ const postTicket = (ticket) => async (dispatch) => {
     }
 };
 
-const fetchTicket = () => async (dispatch) => {
+export const fetchTicket = () => async (dispatch) => {
 
     dispatch(requestTicket());
     try {
@@ -154,7 +190,7 @@ const fetchTicket = () => async (dispatch) => {
         }
         else {
             querySnapshot.forEach((doc) => {
-                    ticketArr.push(doc.data());
+                ticketArr.push(doc.data());
             })
         }
         dispatch(receiveTicket(ticketArr));
@@ -164,7 +200,7 @@ const fetchTicket = () => async (dispatch) => {
     }
 }
 // Wallet functions
-const postWallet = (wallet) => async (dispatch) => {
+export const postWallet = (wallet) => async (dispatch) => {
     dispatch(requestWallet());
     try {
         await addDoc(collection(db, 'wallet'), wallet);
@@ -175,7 +211,7 @@ const postWallet = (wallet) => async (dispatch) => {
     }
 };
 
-const fetchWallet = () => async (dispatch) => {
+export const fetchWallet = () => async (dispatch) => {
 
     dispatch(requestWallet());
     try {
@@ -213,13 +249,12 @@ export const loginUser = (creds) => (dispatch) => {
                     // doc.data() is never undefined for query doc snapshots
                     console.log(doc.id, " => ", doc.data());
                     dispatch(receiveLogin(doc.data()));
+                    dispatch(fetchOutpass(user));
                 });
             })
-                .catch((error) => {
-                    console.log("Error getting documents: ", error);
-                });
-
-
+            .catch((error) => {
+                console.log("Error getting documents: ", error);
+            });
         })
         .catch(error => dispatch(loginError(error.message)))
 };
@@ -243,7 +278,7 @@ export const logoutUser = () => (dispatch) => {
     auth.signOut().then(() => {
         // Sign-out successful.
     }).catch((error) => {
-        
+
         // An error happened.
     });
 
@@ -320,6 +355,8 @@ export const googleLogin = () => (dispatch) => {
             else {
                 dispatch(fetchUser(user));
             }
+
+            dispatch(fetchOutpass(user));
         })
         .catch((error) => {
             dispatch(loginError(error.message));
@@ -345,6 +382,69 @@ export const busError = (message) => {
     }
 }
 
+//specialbus.js
+export const requestSpecialBusRequest = () => {
+    return {
+        type: ActionTypes.SPECIALBUSREQUEST_REQUEST
+    }
+}
+export const receiveSpecialBusRequest = (specialBusRequest) => {
+    return {
+        type: ActionTypes.SPECIALBUSREQUEST_SUCCESS,
+        specialBusRequest
+    }
+}
+export const specialBusRequestError = (message) => {
+    return {
+        type: ActionTypes.SPECIALBUSREQUEST_FAILURE,
+        message
+    }
+}
+// Special Bus functions
+export const postSpecialBusRequest = (user, specialbusrequest) => async (dispatch) => {
+    console.log(specialbusrequest);
+    dispatch(requestSpecialBusRequest());
+    try {
+        await addDoc(collection(db, 'specialBusRequest'), specialbusrequest);
+        dispatch(receiveSpecialBusRequest(specialbusrequest));
+    }
+    catch (error) {
+        dispatch(specialBusRequestError(error.message))
+    }
+};
+
+export const fetchSpecialBusRequest = () => async (dispatch) => {
+
+    dispatch(requestSpecialBusRequest());
+    try {
+        const querySnapshot = await getDocs(collection(db, "specialBusRequest"));
+        let specialBusArr = [];
+        querySnapshot.forEach((doc) => {
+            specialBusArr.push(doc.data());
+        })
+        dispatch(receiveSpecialBusRequest(specialBusArr));
+    }
+    catch (error) {
+        dispatch(specialBusRequestError(error.message))
+    }
+}
+
+
+export const deleteSpecialBusRequest = (specialbusrequest) => async (dispatch) => {
+    {
+        dispatch(requestSpecialBusRequest());
+        try {
+            const specialBusRef = doc(db, "specialBusRequest", specialbusrequest.specialBusId);
+            await deleteDoc(specialBusRef);
+            dispatch(receiveSpecialBusRequest(specialbusrequest));
+
+        } catch (error) {
+            dispatch(specialBusRequestError(error.message));
+        }
+
+    };
+}
+
 //outpass.js
 export const requestOutpass = () => {
     return {
@@ -357,6 +457,7 @@ export const receiveOutpass = (outpass) => {
         outpass
     }
 }
+
 export const outpassError = (message) => {
     return {
         type: ActionTypes.OUTPASS_FAILURE,
@@ -365,20 +466,20 @@ export const outpassError = (message) => {
 }
 
 //schedule.js
-export const requestUpdateSchedule = () => {
+export const requestSchedule = () => {
     return {
-        type: ActionTypes.UPDATESCHEDULE_REQUEST
+        type: ActionTypes.SCHEDULE_REQUEST
     }
 }
-export const receiveUpdateSchedule = (schedule) => {
+export const receiveSchedule = (schedule) => {
     return {
-        type: ActionTypes.UPDATESCHEDULE_SUCCESS,
+        type: ActionTypes.SCHEDULE_SUCCESS,
         schedule
     }
 }
-export const updateScheduleError = (message) => {
+export const scheduleError = (message) => {
     return {
-        type: ActionTypes.UPDATESCHEDULE_FAILURE,
+        type: ActionTypes.SCHEDULE_FAILURE,
         message
     }
 }

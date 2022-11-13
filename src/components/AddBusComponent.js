@@ -3,6 +3,32 @@ import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
 
 class AddBusComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      source: "",
+      destination: "",
+      date: "",
+      time: "",
+      busType: "",
+      totalSeats: "",
+      busNumber: "",
+      driverName: ""
+    };
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleInput = this.handleInput.bind(this);
+  }
+  handleSubmit(event) {
+    event.preventDefault();
+    this.props.postBus(this.state);
+    this.setState({source: "",destination: "",date: "",time: "",busType: "",totalSeats: "",busNumber: "",driverName: ""});
+  }
+
+  handleInput(event) {
+    const name = event.target.name;
+    const value = event.target.value;
+    this.setState({ ...this.state, [name]: value });
+  }
   render() {
     return (
       <div>
@@ -13,13 +39,16 @@ class AddBusComponent extends Component {
           <div className="row-fluid mb-5 align-self-center mt-4">
             <div className="card col-12 col-sm-10 col-md-8 col-xl-6 offset-xl-3 offset-md-2 offset-sm-1 align-self-center ">
               <div className="card-body align-self-center p-4">
-                <form>
+                <form onSubmit={this.handleSubmit}>
                   <div className="form-group pt-4">
                     <input
                       type="text"
                       className="form-control"
                       id="formGroupExampleInput"
                       placeholder="Source"
+                      name="source"
+                      onChange={this.handleInput}
+                      value={this.state.source}
                     />
                   </div>
                   <div className="form-group  ">
@@ -28,42 +57,56 @@ class AddBusComponent extends Component {
                       className="form-control"
                       id="formGroupExampleInput"
                       placeholder="Destination"
+                      name="destination"
+                      onChange={this.handleInput}
+                      value={this.state.destination}
                     />
                   </div>
 
                   <div className="form-group pt-3">
                     <Stack component="form" noValidate spacing={3}>
                       <div className="row-flex d-flex">
-                        <div className="input-group align-self-left mb-4">
-                          <select
-                            className="form-select"
-                            id="inputGroupSelect02"
-                            style={{ width: "130px" }}
+                        <div className="pt-3 form-group">
+                          <Stack
+                            component="form"
+                            className=""
+                            noValidate
+                            spacing={3}
                           >
-                            <option selected disabled>
-                              Select Day
-                            </option>
-                            <option value="1">Monday</option>
-                            <option value="2">Tuesday</option>
-                            <option value="3">Wednesday</option>
-                            <option value="4">Thursday</option>
-                            <option value="5">Friday</option>
-                            <option value="6">Saturday</option>
-                            <option value="7">Sunday</option>
-                          </select>
-                        </div>
-
-                        <div className="align-self-right mb-4 ml-3">
-                          <TextField
-                            id="time"
-                            label="Departure Time"
-                            type="time"
-                            defaultValue="06:00"
-                            sx={{}}
-                            InputLabelProps={{
-                              shrink: true,
-                            }}
-                          />
+                            <TextField
+                              id="date"
+                              label="Select Date"
+                              type="date"
+                              model=".date"
+                              className=""
+                              defaultValue="2022-01-01"
+                              sx={{ width: 220 }}
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              name="date"
+                              onChange={this.handleInput}
+                              value={this.state.date}
+                            />
+                            <TextField
+                              id="time"
+                              label="Select Time"
+                              type="time"
+                              model=".time"
+                              className=""
+                              defaultValue="06:00"
+                              InputLabelProps={{
+                                shrink: true,
+                              }}
+                              inputProps={{
+                                step: 300, // 5 mins
+                              }}
+                              name="time"
+                              onChange={this.handleInput}
+                              value={this.state.time}
+                              sx={{ width: 220 }}
+                            />
+                          </Stack>
                         </div>
                       </div>
                     </Stack>
@@ -76,12 +119,15 @@ class AddBusComponent extends Component {
                           <select
                             className="form-select"
                             id="inputGroupSelect02"
+                            name="busType"
+                            onChange={this.handleInput}
+                            value={this.state.busType}
                           >
                             <option selected disabled>
                               Select Type
                             </option>
-                            <option value="1">Regular</option>
-                            <option value="2">Special</option>
+                            <option value="Regular">Regular</option>
+                            <option value="Special">Special</option>
                           </select>
                         </div>
 
@@ -91,6 +137,9 @@ class AddBusComponent extends Component {
                             className="form-control"
                             id="formGroupExampleInput"
                             placeholder="Total Seats"
+                            name="totalSeats"
+                            onChange={this.handleInput}
+                            value={this.state.totalSeats}
                           />
                         </div>
                       </div>
@@ -103,11 +152,20 @@ class AddBusComponent extends Component {
                       className="form-control"
                       id="formGroupExampleInput"
                       placeholder="Enter Bus Number"
+                      name="busNumber"
+                      onChange={this.handleInput}
+                      value={this.state.busNumber}
                     />
                   </div>
 
                   <div className="input-group justify-content-center mt-4 mb-4">
-                    <select className="form-select p-2" id="inputGroupSelect02">
+                    <select
+                      className="form-select p-2"
+                      id="inputGroupSelect02"
+                      name="driverName"
+                      onChange={this.handleInput}
+                      value={this.state.driverName}
+                    >
                       <option selected disabled>
                         Bus Driver Name
                       </option>
@@ -118,15 +176,13 @@ class AddBusComponent extends Component {
                       <option value="5">Radheshyam</option>
                     </select>
                   </div>
-                </form>
-                <div className="row m-3 pt-2 pt-2 pd-2">
                   <button
-                    type="button"
+                    type="submit"
                     className="cardBtn btn-primary btn d-flex  mb-3 btn-block justify-content-center nav-link"
                   >
                     Add Bus
                   </button>
-                </div>
+                </form>
               </div>
             </div>
           </div>
@@ -138,6 +194,3 @@ class AddBusComponent extends Component {
 
 export default AddBusComponent;
 
-// Padding
-// Bus Number in which form
-// Which Conductor ??
