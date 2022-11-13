@@ -16,13 +16,15 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 import { loginUser, googleLogin, logoutUser ,postBus,postOutpass,
   postStore,postTicket,postWallet,fetchBus,fetchWallet,fetchOutpass,
   fetchStore,fetchTicket,deleteBus,deleteOutpass,
-  postSpecialBusRequest,fetchSpecialBusRequest,deleteSpecialBusRequest} from "../redux/ActionCreators";
+  postSpecialBusRequest,fetchSpecialBusRequest,deleteSpecialBusRequest,postSchedule,fetchSchedule} from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
     bus: state.bus,
-    specialbusrequest: state.specialbusrequest
+    specialbusrequest: state.specialbusrequest,
+    schedule: state.schedule,
+
   };
 };
 
@@ -45,6 +47,10 @@ const mapDispatchToProps = (dispatch) => ({
 
   postTicket: (ticket)=> dispatch(postTicket(ticket)),
   fetchTicket: ()=>dispatch(fetchTicket()),
+
+  
+  postSchedule: (schedule)=> dispatch(postSchedule(schedule)),
+  fetchSchedule: ()=>dispatch(fetchSchedule()),
 
   deleteBus: (bus)=> dispatch(deleteBus(bus)),
   deleteOutpass: (outpass)=>dispatch(deleteOutpass(outpass)),
