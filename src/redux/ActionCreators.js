@@ -26,7 +26,11 @@ export const loginError = (message) => {
 
 // outpass functions
 
-const postOutpass = (outpass) => async (dispatch) => {
+export const postOutpass = (outpass) => async (dispatch) => {
+
+    const user = auth.currentUser;
+    const userid = user.uid;
+    outpass['uid'] = userid;
 
     dispatch(requestOutpass());
 
@@ -42,7 +46,7 @@ const postOutpass = (outpass) => async (dispatch) => {
 };
 
 
-const fetchOutpass = () => async (dispatch) => {
+export const fetchOutpass = () => async (dispatch) => {
 
     dispatch(requestOutpass());
     try {
@@ -71,8 +75,27 @@ const fetchOutpass = () => async (dispatch) => {
     }
 }
 
+
+export const deleteOutpass = (outpass) => async (dispatch) => {
+    {
+        dispatch(requestOutpass());
+        try {
+            const outpassRef = doc(db, "outpass", outpass.uid);
+            await deleteDoc(outpassRef);
+            dispatch(receiveOutpass(outpass));
+
+        } catch (error) {
+            dispatch(outpassError(error.message));
+        }
+
+    };
+}
+
+
+
+
 // Bus functions
-const postBus = (bus) => async (dispatch) => {
+export const postBus = (bus) => async (dispatch) => {
 
     dispatch(requestBus());
 
@@ -85,7 +108,7 @@ const postBus = (bus) => async (dispatch) => {
     }
 };
 
-const fetchBus = () => async (dispatch) => {
+export const fetchBus = () => async (dispatch) => {
 
     dispatch(requestBus());
     try {
@@ -121,7 +144,7 @@ export const deleteBus = (bus) => async (dispatch) => {
 
 
 // Store functions
-const postStore = (store) => async (dispatch) => {
+export const postStore = (store) => async (dispatch) => {
     dispatch(requestStore());
     try {
         await addDoc(collection(db, 'store'), store);
@@ -132,7 +155,7 @@ const postStore = (store) => async (dispatch) => {
     }
 };
 
-const fetchStore = () => async (dispatch) => {
+export const fetchStore = () => async (dispatch) => {
 
     dispatch(requestStore());
     try {
@@ -148,7 +171,12 @@ const fetchStore = () => async (dispatch) => {
     }
 }
 // Ticket functions
-const postTicket = (ticket) => async (dispatch) => {
+export const postTicket = (ticket) => async (dispatch) => {
+
+    const user = auth.currentUser;
+    const userid = user.uid;
+    ticket['uid'] = userid;
+
     dispatch(requestTicket());
     try {
         await addDoc(collection(db, 'ticket'), ticket);
@@ -159,7 +187,7 @@ const postTicket = (ticket) => async (dispatch) => {
     }
 };
 
-const fetchTicket = () => async (dispatch) => {
+export const fetchTicket = () => async (dispatch) => {
 
     dispatch(requestTicket());
     try {
@@ -185,7 +213,7 @@ const fetchTicket = () => async (dispatch) => {
     }
 }
 // Wallet functions
-const postWallet = (wallet) => async (dispatch) => {
+export const postWallet = (wallet) => async (dispatch) => {
     dispatch(requestWallet());
     try {
         await addDoc(collection(db, 'wallet'), wallet);
@@ -196,7 +224,7 @@ const postWallet = (wallet) => async (dispatch) => {
     }
 };
 
-const fetchWallet = () => async (dispatch) => {
+export const fetchWallet = () => async (dispatch) => {
 
     dispatch(requestWallet());
     try {
@@ -339,12 +367,7 @@ export const googleLogin = () => (dispatch) => {
                 dispatch(loginError("Error 401: Unauthorized"))
             }
             else {
-                const bb={
-                    busId : '2',
-                    // Name : 'delete',
-                    Id : '2'
-                }
-                dispatch(deleteBus(bb));
+
                 dispatch(fetchUser(user));
             }
         })
@@ -384,6 +407,7 @@ export const receiveOutpass = (outpass) => {
         outpass
     }
 }
+
 export const outpassError = (message) => {
     return {
         type: ActionTypes.OUTPASS_FAILURE,

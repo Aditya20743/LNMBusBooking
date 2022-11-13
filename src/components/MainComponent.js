@@ -12,7 +12,7 @@ import ApproveOutpassComponent from "./ApproveOutpassComponent";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { loginUser, googleLogin, logoutUser } from "../redux/ActionCreators";
+import { loginUser, googleLogin, logoutUser ,postBus,postOutpass,postStore,postTicket,postWallet,fetchBus,fetchWallet,fetchOutpass,fetchStore,fetchTicket,deleteBus,deleteOutpass} from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
   return {
@@ -24,6 +24,26 @@ const mapDispatchToProps = (dispatch) => ({
   loginUser: (creds) => dispatch(loginUser(creds)),
   logoutUser: () => dispatch(logoutUser()),
   googleLogin: () => dispatch(googleLogin()),
+  
+  postOutpass: (outpass)=> dispatch(postOutpass(outpass)),
+  fetchOutpass: ()=>dispatch(fetchOutpass()),
+  
+  postWallet: (wallet)=> dispatch(postWallet(wallet)),
+  fetchWallet: ()=>dispatch(fetchWallet()),
+
+  postStore: (store)=> dispatch(postStore(store)),
+  fetchStore: ()=>dispatch(fetchStore()),
+
+  postBus: (bus)=> dispatch(postBus(bus)),
+  fetchBus: ()=>dispatch(fetchBus()),
+
+  postTicket: (ticket)=> dispatch(postTicket(ticket)),
+  fetchTicket: ()=>dispatch(fetchTicket()),
+
+  deleteBus: (bus)=> dispatch(deleteBus(bus)),
+  deleteOutpass: (outpass)=>dispatch(deleteOutpass(outpass)),
+
+  
 });
 
 class Main extends Component {
