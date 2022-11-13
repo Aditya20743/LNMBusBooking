@@ -90,7 +90,7 @@ class Main extends Component {
               />
               <Route
                 path="/approveOutpass"
-                component={() => <ApproveOutpassComponent />}
+                component={() => <ApproveOutpassComponent/>}
               />
               <Route
                 path="/selectBus"
