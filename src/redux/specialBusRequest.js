@@ -1,24 +1,24 @@
 import * as ActionTypes from './ActionTypes';
 
-export const specilBusRequest = (state = {
+export const SpecialBusRequest = (state = {
     isLoading: false,
-    specilBusRequest: [],
+    specialBusRequest: [],
     errMess: null
 }, action) => {
     switch (action.type) {
-        case ActionTypes.SPECIALBUS_REQUEST:
+        case ActionTypes.SPECIALBUSREQUEST_REQUEST:
             return {
                 ...state,
                 isLoading: true
             };
-        case ActionTypes.SPECIALBUS_SUCCESS:
+        case ActionTypes.SPECIALBUSREQUEST_SUCCESS:
             return {
                 ...state,
                 isLoading: false,
-                specilBusRequest: action.specilBusRequest,
+                specialBusRequest: action.specialBusRequest,
                 errMess: ''
             };
-        case ActionTypes.SPECIALBUS_FAILURE:
+        case ActionTypes.SPECIALBUSREQUEST_FAILURE:
             return {
                 ...state,
                 isLoading: false,

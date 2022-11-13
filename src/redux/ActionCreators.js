@@ -42,7 +42,6 @@ export const postOutpass = (user, outpass) => async (dispatch) => {
     }
 };
 
-
 export const fetchOutpass = (user) => async (dispatch) => {
 
     dispatch(requestOutpass());
@@ -384,64 +383,63 @@ export const busError = (message) => {
 }
 
 //specialbus.js
-export const requestSpecialBus = () => {
+export const requestSpecialBusRequest = () => {
     return {
-        type: ActionTypes.SPECIALBUS_REQUEST
+        type: ActionTypes.SPECIALBUSREQUEST_REQUEST
     }
 }
-export const receiveSpecialBus = (specialBusRequest) => {
+export const receiveSpecialBusRequest = (specialBusRequest) => {
     return {
-        type: ActionTypes.SPECIALBUS_SUCCESS,
+        type: ActionTypes.SPECIALBUSREQUEST_SUCCESS,
         specialBusRequest
     }
 }
-export const specialBusError = (message) => {
+export const specialBusRequestError = (message) => {
     return {
-        type: ActionTypes.SPECIALBUS_FAILURE,
+        type: ActionTypes.SPECIALBUSREQUEST_FAILURE,
         message
     }
 }
 // Special Bus functions
-export const postSpecialBus = (specialbusrequest) => async (dispatch) => {
-
-    dispatch(requestSpecialBus());
-
+export const postSpecialBusRequest = (user, specialbusrequest) => async (dispatch) => {
+    console.log(specialbusrequest);
+    dispatch(requestSpecialBusRequest());
     try {
         await addDoc(collection(db, 'specialBusRequest'), specialbusrequest);
-        dispatch(receiveSpecialBus(specialbusrequest));
+        dispatch(receiveSpecialBusRequest(specialbusrequest));
     }
     catch (error) {
-        dispatch(specialBusError(error.message))
+        dispatch(specialBusRequestError(error.message))
     }
 };
 
-export const fetchSpecialBus = () => async (dispatch) => {
+export const fetchSpecialBusRequest = () => async (dispatch) => {
 
-    dispatch(requestSpecialBus());
+    dispatch(requestSpecialBusRequest());
     try {
         const querySnapshot = await getDocs(collection(db, "specialBusRequest"));
         let specialBusArr = [];
         querySnapshot.forEach((doc) => {
             specialBusArr.push(doc.data());
         })
-        dispatch(receiveBus(specialBusArr));
+        dispatch(receiveSpecialBusRequest(specialBusArr));
     }
     catch (error) {
-        dispatch(specialBusError(error.message))
+        dispatch(specialBusRequestError(error.message))
     }
 }
 
 
-export const deleteSpecialBus = (specialbusrequest) => async (dispatch) => {
+export const deleteSpecialBusRequest = (specialbusrequest) => async (dispatch) => {
     {
-        dispatch(requestSpecialBus());
+        dispatch(requestSpecialBusRequest());
         try {
             const specialBusRef = doc(db, "specialBusRequest", specialbusrequest.specialBusId);
             await deleteDoc(specialBusRef);
-            dispatch(receiveBus(specialbusrequest));
+            dispatch(receiveSpecialBusRequest(specialbusrequest));
 
         } catch (error) {
-            dispatch(specialBusError(error.message));
+            dispatch(specialBusRequestError(error.message));
         }
 
     };

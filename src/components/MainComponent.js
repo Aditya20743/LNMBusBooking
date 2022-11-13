@@ -14,18 +14,21 @@ import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 
-import { loginUser, googleLogin, logoutUser ,postBus,postOutpass,postStore,postTicket,postWallet,fetchBus,fetchWallet,fetchOutpass,fetchStore,fetchTicket,deleteBus,deleteOutpass,postSpecialBus,fetchSpecialBus,deleteSpecialBus} from "../redux/ActionCreators";
+import {
+  loginUser, googleLogin, logoutUser, postBus, postOutpass, postStore, postTicket, postWallet, fetchBus,
+  fetchOutpass, fetchStore, fetchTicket, deleteBus, deleteOutpass, postSpecialBusRequest, fetchSpecialBusRequest, deleteSpecialBusRequest
+} from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
-    specialbusrequest: state.specialBus
     bus: state.bus,
     outpass: state.outpass,
     store: state.store,
     ticket: state.ticket,
     wallet: state.wallet,
-    schedule: state.schedule
+    schedule: state.schedule,
+    specialbusrequest: state.specialbusrequest
   };
 };
 
@@ -51,9 +54,9 @@ const mapDispatchToProps = (dispatch) => ({
   deleteBus: (bus)=> dispatch(deleteBus(bus)),
   deleteOutpass: (outpass)=>dispatch(deleteOutpass(outpass)),
 
-  postSpecialBus: (specilBusRequest) => dispatch(postSpecialBus(specilBusRequest)),
-  fetchSpecialBus: ()=> dispatch(fetchSpecialBus()),
-  deleteSpecialBus: (specilBusRequest)=> dispatch(fetch(deleteSpecialBus(specilBusRequest))),
+  postSpecialBusRequest: (user, specialBusRequest) => dispatch(postSpecialBusRequest(user, specialBusRequest)),
+  fetchSpecialBusRequest: ()=> dispatch(fetchSpecialBusRequest()),
+  deleteSpecialBusRequest: (specialBusRequest)=> dispatch(fetch(deleteSpecialBusRequest(specialBusRequest))),
 });
 
 class Main extends Component {
@@ -92,7 +95,8 @@ class Main extends Component {
               />
               <Route
                 path="/requestSpecialBus"
-                component={() => <RequestSpecialBusComponent />}
+                component={() => <RequestSpecialBusComponent auth={this.props.auth}
+                  postSpecialBusRequest={this.props.postSpecialBusRequest} />}
               />
               <Route
                 path="/requestOutpass"
