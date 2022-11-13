@@ -18,11 +18,11 @@ class UpdateScheduleComponent extends Component {
               <div className="card-body align-self-center p-4">
                 <div className="row ">
                   <form>
-                    <div class="input-group  mt-4 mb-4 ">
+                    <div className="input-group  mt-4 mb-4 ">
                       <div className="row ">
                         <div className="col p-2">
                           <select
-                            class="form-select p-2"
+                            className="form-select p-2"
                             id="inputGroupSelect02"
                           >
                             <option selected disabled>
@@ -39,7 +39,7 @@ class UpdateScheduleComponent extends Component {
                         </div>
                         <div className="col p-2">
                           <select
-                            class="form-select p-2 "
+                            className="form-select p-2 "
                             id="inputGroupSelect02"
                           >
                             <option selected disabled>
@@ -60,12 +60,12 @@ class UpdateScheduleComponent extends Component {
                 </div>
                 <div className="row p-1">
                   <div className="col p-2 ">
-                    <button type="button" class="btn btn-success">
+                    <button type="button" className="btn btn-success">
                       Add Bus
                     </button>
                   </div>
                   <div className="col p-2">
-                    <button type="button" class="btn btn-danger">
+                    <button type="button" className="btn btn-danger">
                       Remove Bus
                     </button>
                   </div>
@@ -80,19 +80,22 @@ class UpdateScheduleComponent extends Component {
               <div className="card-body  p-4 ">
                 <div className="row">
                   <div className="col-6 col-md-3">
-                    <div class="form-group  ">
+                    <div className="form-group  ">
                       <input
                         type="number"
-                        class="form-control"
+                        className="form-control"
                         id="formGroupExampleInput"
                         placeholder="Bus No.1"
                       />
                     </div>
                   </div>
-                  
+
                   <div className="col-6 col-md-9 ">
-                    <div class="input-group justify-content-end  ">
-                      <select class="form-select p-2" id="inputGroupSelect02">
+                    <div className="input-group justify-content-end  ">
+                      <select
+                        className="form-select p-2"
+                        id="inputGroupSelect02"
+                      >
                         <option selected disabled>
                           Select Bus Type
                         </option>
@@ -105,7 +108,7 @@ class UpdateScheduleComponent extends Component {
 
                 <div className="row">
                   <div className="col-5 p-3">
-                    <div class=" form-group  ">
+                    <div className=" form-group  ">
                       <input
                         type="text"
                         class="form-control"
@@ -116,7 +119,7 @@ class UpdateScheduleComponent extends Component {
                   </div>
                   <div className="col-2 p-3 mt-1 "></div>
                   <div className="col-5 p-3 justify-content-start">
-                    <div class="form-group  ">
+                    <div className="form-group  ">
                       <input
                         type="text"
                         class="form-control"
@@ -158,8 +161,11 @@ class UpdateScheduleComponent extends Component {
                     </div>
                   </div>
                   <div className="col-sm col-sm-4">
-                    <div class="input-group mt-2 ">
-                      <select class="form-select p-2" id="inputGroupSelect02">
+                    <div className="input-group mt-2 ">
+                      <select
+                        className="form-select p-2"
+                        id="inputGroupSelect02"
+                      >
                         <option selected>Monday</option>
                         <option value="1">Tuesday</option>
                         <option value="2">Wednesday</option>
@@ -172,7 +178,7 @@ class UpdateScheduleComponent extends Component {
                   </div>
                   <div className="col-sm col-sm-2 mt-3">Seats:-</div>
                   <div className="col-12 col-sm-4 col-md-2 mt-2">
-                    <div class="form-group  ">
+                    <div className="form-group  ">
                       <input
                         type="number"
                         class="form-control"
@@ -191,7 +197,7 @@ class UpdateScheduleComponent extends Component {
             <div className="row m-3 pt-2 pt-2 pd-2">
               <button
                 type="button"
-                class="cardBtn btn-primary btn d-flex  mb-3 btn-block justify-content-center nav-link"
+                className="cardBtn btn-primary btn d-flex  mb-3 btn-block justify-content-center nav-link"
               >
                 Update Schedule
               </button>
