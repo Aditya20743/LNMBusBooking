@@ -15,22 +15,18 @@ import ApproveBusReqComponent from "./ApproveBusReqComponent";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-
-import {
-  loginUser, googleLogin, logoutUser, postBus, postOutpass, postStore, postTicket, postWallet, fetchBus,
-  fetchOutpass, fetchStore, fetchTicket, deleteBus, deleteOutpass, postSpecialBusRequest, fetchSpecialBusRequest, deleteSpecialBusRequest
-} from "../redux/ActionCreators";
+import { loginUser, googleLogin, logoutUser ,postBus,postOutpass,
+  postStore,postTicket,postWallet,fetchBus,fetchWallet,fetchOutpass,
+  fetchStore,fetchTicket,deleteBus,deleteOutpass,
+  postSpecialBusRequest,fetchSpecialBusRequest,deleteSpecialBusRequest,postSchedule,fetchSchedule} from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
   return {
     auth: state.auth,
     bus: state.bus,
-    outpass: state.outpass,
-    store: state.store,
-    ticket: state.ticket,
-    wallet: state.wallet,
+    specialbusrequest: state.specialbusrequest,
     schedule: state.schedule,
-    specialbusrequest: state.specialbusrequest
+
   };
 };
 
@@ -39,10 +35,11 @@ const mapDispatchToProps = (dispatch) => ({
   logoutUser: () => dispatch(logoutUser()),
   googleLogin: () => dispatch(googleLogin()),
   
-  postOutpass: (user, outpass)=> dispatch(postOutpass(user, outpass)),
+  postOutpass: (user,outpass)=> dispatch(postOutpass(user,outpass)),
   fetchOutpass: ()=>dispatch(fetchOutpass()),
   
   postWallet: (wallet)=> dispatch(postWallet(wallet)),
+  fetchWallet: ()=>dispatch(fetchWallet()),
 
   postStore: (store)=> dispatch(postStore(store)),
   fetchStore: ()=>dispatch(fetchStore()),
@@ -53,25 +50,19 @@ const mapDispatchToProps = (dispatch) => ({
   postTicket: (ticket)=> dispatch(postTicket(ticket)),
   fetchTicket: ()=>dispatch(fetchTicket()),
 
+  
+  postSchedule: (schedule)=> dispatch(postSchedule(schedule)),
+  fetchSchedule: ()=>dispatch(fetchSchedule()),
+
   deleteBus: (bus)=> dispatch(deleteBus(bus)),
   deleteOutpass: (outpass)=>dispatch(deleteOutpass(outpass)),
 
-  postSpecialBusRequest: (user, specialBusRequest) => dispatch(postSpecialBusRequest(user, specialBusRequest)),
+  postSpecialBusRequest: (user,specialbusrequest) => dispatch(postSpecialBusRequest(user,specialbusrequest)),
   fetchSpecialBusRequest: ()=> dispatch(fetchSpecialBusRequest()),
-  deleteSpecialBusRequest: (specialBusRequest)=> dispatch(fetch(deleteSpecialBusRequest(specialBusRequest))),
+  deleteSpecialBusRequest: (specialbusrequest)=> dispatch(fetch(deleteSpecialBusRequest(specialbusrequest))),
 });
 
 class Main extends Component {
-  componentDidMount() {
-    this.props.fetchStore();
-    this.props.fetchBus();
-    this.props.fetchTicket();
-  }
-
-  componentWillUnmount() {
-    this.props.logoutUser();
-  }
-
   render() {
     return (
       <div>

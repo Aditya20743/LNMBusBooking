@@ -1,7 +1,7 @@
 import * as ActionTypes from './ActionTypes';
 import { auth, firestore, fireauth, firebasestore } from '../firebase/firebase';
 import { getDatabase, ref, set } from "firebase/database";
-import { doc, Firestore, getDoc, getDocs, getFirestore } from "firebase/firestore";
+import { doc, Firestore, getDoc, getDocs, getFirestore, updateDoc } from "firebase/firestore";
 import { collection, addDoc } from "firebase/firestore";
 import { setDoc, deleteDoc } from "firebase/firestore";
 import { db } from '../firebase/firebase';
@@ -27,10 +27,12 @@ export const loginError = (message) => {
 // outpass functions
 
 export const postOutpass = (user, outpass) => async (dispatch) => {
-    console.log(outpass);
-    console.log(user.uid);
-    const userid = user.uid;
-    outpass['uid'] = userid;
+     
+    
+    console.log(user);
+    outpass['uid'] = user.uid;
+     outpass['name']= user.name;
+     outpass['rollNum']= user.rollNum;
 
     dispatch(requestOutpass());
     try {
@@ -58,12 +60,15 @@ export const fetchOutpass = (user) => async (dispatch) => {
                 }   
             })
         }
-        else {
+        else if(user.role==='caretaker'){
             const hostel = user.hostelName;
             querySnapshot.forEach((doc) => {
                 if (doc.data().hostelName === hostel)
                     outpassArr.push(doc.data());
             })
+        }
+        else{
+            dispatch(outpassError('Error unauthorized'));
         }
         dispatch(receiveOutpass(outpassArr));
     }
@@ -104,7 +109,8 @@ export const fetchBus = () => async (dispatch) => {
         const querySnapshot = await getDocs(collection(db, "bus"));
         let busArr = [];
         querySnapshot.forEach((doc) => {
-            busArr.push(doc.data());
+            const _id = doc.id;
+                    busArr.push({ _id, ...doc.data() });
         })
         dispatch(receiveBus(busArr));
     }
@@ -149,7 +155,8 @@ export const fetchStore = () => async (dispatch) => {
         const querySnapshot = await getDocs(collection(db, "store"));
         let storeArr = [];
         querySnapshot.forEach((doc) => {
-            storeArr.push(doc.data());
+            const _id = doc.id;
+            storeArr.push({ _id, ...doc.data() });
         })
         dispatch(receiveStore(storeArr));
     }
@@ -185,13 +192,18 @@ export const fetchTicket = () => async (dispatch) => {
             const userid = user.uid;
             querySnapshot.forEach((doc) => {
                 if (doc.data().uid === userid)
-                    ticketArr.push(doc.data());
+                {const _id = doc.id;
+                ticketArr.push({ _id, ...doc.data() });}
             })
         }
-        else {
+        else if(user.role==='conductor') {
             querySnapshot.forEach((doc) => {
-                ticketArr.push(doc.data());
+                const _id = doc.id;
+                    ticketArr.push({ _id, ...doc.data() });
             })
+        }
+        else{
+            dispatch(ticketError('Error unauthorized'));
         }
         dispatch(receiveTicket(ticketArr));
     }
@@ -228,6 +240,41 @@ export const fetchWallet = () => async (dispatch) => {
         dispatch(walletError(error.message))
     }
 }
+
+export const updateWallet = (wallet,tokens) => async (dispatch) => {
+
+    dispatch(requestWallet());
+    try {    
+        const walletRef = doc(db,'wallet',wallet.uid);
+
+        walletRef.get().then((doc) => {
+            if (doc.exists) {
+                console.log("Document data:", doc.data());
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+            console.log("KKK");
+        }).catch((error) => {
+            console.log("Error getting document:", error);
+        });
+    
+        // var bal = wallet.tokenBalance + tokens;
+        console.log(walletRef.uid+ "Atharba");
+        await updateDoc(walletRef, {
+            
+            // console.log(wallet.tokenBalance+'atharv');
+            tokenBalance:50
+        });
+
+        console.log(wallet);
+        dispatch(receiveWallet(wallet)); 
+    }
+    catch (error) {
+        dispatch(walletError(error.message))
+    }
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -353,10 +400,16 @@ export const googleLogin = () => (dispatch) => {
                 dispatch(loginError("Error 401: Unauthorized"));
             }
             else {
+
                 dispatch(fetchUser(user));
             }
+            if(user.role==='student'){
+                dispatch(fetchOutpass(user));
+            }
+            dispatch(fetchWallet(user));
+            const b = {uid : '1'};
+            dispatch(updateWallet(b, 8));
 
-            dispatch(fetchOutpass(user));
         })
         .catch((error) => {
             dispatch(loginError(error.message));
@@ -403,6 +456,11 @@ export const specialBusRequestError = (message) => {
 // Special Bus functions
 export const postSpecialBusRequest = (user, specialbusrequest) => async (dispatch) => {
     console.log(specialbusrequest);
+    specialbusrequest['uid'] = user.uid;
+    specialbusrequest['name']= user.name;
+    specialbusrequest['email']= user.email;
+
+
     dispatch(requestSpecialBusRequest());
     try {
         await addDoc(collection(db, 'specialBusRequest'), specialbusrequest);
@@ -420,7 +478,8 @@ export const fetchSpecialBusRequest = () => async (dispatch) => {
         const querySnapshot = await getDocs(collection(db, "specialBusRequest"));
         let specialBusArr = [];
         querySnapshot.forEach((doc) => {
-            specialBusArr.push(doc.data());
+            const _id = doc.id;
+            specialBusArr.push({ _id, ...doc.data() });
         })
         dispatch(receiveSpecialBusRequest(specialBusArr));
     }
@@ -542,3 +601,33 @@ export const walletError = (message) => {
     }
 }
 
+
+export const postSchedule = (schedule) => async (dispatch) => {
+
+    dispatch(requestSchedule());
+    dispatch(requestSpecialBusRequest());
+    try {
+        await addDoc(collection(db, 'schedule'), schedule);
+        dispatch(receiveSchedule(schedule));
+    }
+    catch (error) {
+        dispatch(scheduleError(error.message))
+    }
+}
+
+export const fetchSchedule = () => async (dispatch) => {
+
+    dispatch(requestSchedule());
+    try {
+        const querySnapshot = await getDocs(collection(db, "schedule"));
+        let scheduleArr = [];
+        querySnapshot.forEach((doc) => {
+            const _id = doc.id;
+            scheduleArr.push({ _id, ...doc.data() });
+        })
+        dispatch(receiveSchedule(scheduleArr));
+    }
+    catch (error) {
+        dispatch(scheduleError(error.message))
+    }
+}
