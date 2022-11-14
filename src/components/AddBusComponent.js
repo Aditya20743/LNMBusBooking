@@ -14,6 +14,7 @@ class AddBusComponent extends Component {
       totalSeats: "",
       busNumber: "",
       driverName: "",
+      driverContactNum: "",
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInput = this.handleInput.bind(this);
@@ -21,7 +22,7 @@ class AddBusComponent extends Component {
   handleSubmit(event) {
     event.preventDefault();
     this.props.postBus(this.state);
-    this.setState({source: "",destination: "",date: "",time: "",busType: "",totalSeats: "",busNumber: "", driverName: ""});
+    this.setState({source: "",destination: "",date: "",time: "",busType: "",totalSeats: "",busNumber: "", driverName: "", driverContactNum: ""});
   }
 
   handleInput(event) {
@@ -155,24 +156,27 @@ class AddBusComponent extends Component {
                       value={this.state.busNumber}
                     />
                   </div>
-
-                  <div className="input-group justify-content-center mt-4 mb-4">
-                    <select
-                      className="form-select p-2"
-                      id="inputGroupSelect02"
+                  <div className="form-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      placeholder="Driver's Name"
                       name="driverName"
                       onChange={this.handleInput}
                       value={this.state.driverName}
-                    >
-                      <option selected disabled>
-                        Bus Driver Name
-                      </option>
-                      <option value="1">Ghanshyam</option>
-                      <option value="2">Suresh</option>
-                      <option value="3">Mohan</option>
-                      <option value="4">Mukesh</option>
-                      <option value="5">Radheshyam</option>
-                    </select>
+                    />
+                  </div>
+                  <div className="form-group">
+                    <input
+                      type="Number"
+                      className="form-control"
+                      id="formGroupExampleInput"
+                      placeholder="Contact Number"
+                      name="driverContactNum"
+                      onChange={this.handleInput}
+                      value={this.state.driverContactNum}
+                    />
                   </div>
                   <button
                     type="submit"
