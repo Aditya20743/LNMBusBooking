@@ -53,22 +53,28 @@ function RenderOutpassRequest({ outpass, onclick }) {
   );
 }
 class ApproveOutpassComponent extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
   }
 
   render() {
     if (this.props.outpass.isLoading) {
       return (
-        <div>Loading</div>
+        <div className="container pt-5 c-width">
+          <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
+            <h6>Loading...</h6>
+          </div>
+        </div>
       );
-    }
-    else if (this.props.outpass.errMess) {
+    } else if (this.props.outpass.errMess) {
       return (
-        <div>ERROR: {this.props.outpass.errMess}</div>
+        <div className="container pt-5 c-width">
+          <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
+            <h6>ERROR: {this.props.outpass.errMess}</h6>
+          </div>
+        </div>
       );
-    }
-    else {
+    } else {
       return (
         <div className="container c-width pt-5">
           <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
@@ -80,7 +86,7 @@ class ApproveOutpassComponent extends Component {
                 <div key={outpass._id} className="col-12 mb-4">
                   <RenderOutpassRequest outpass={outpass} />
                 </div>
-              )
+              );
             })}
           </div>
         </div>
@@ -90,5 +96,3 @@ class ApproveOutpassComponent extends Component {
 }
 
 export default ApproveOutpassComponent;
-
-//PENDING RESPONSIVENESS + OTHER FIELDS

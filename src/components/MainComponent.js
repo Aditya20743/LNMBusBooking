@@ -125,7 +125,7 @@ class Main extends Component {
               />
               <Route
                 path="/selectBus"
-                component={() => <SelectBusComponent />}
+                component={() => <SelectBusComponent bus = {this.props.bus}/>}
               />
               <Route
                 path="/viewTrips"
