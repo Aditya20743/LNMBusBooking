@@ -26,22 +26,21 @@ export const loginError = (message) => {
 
 // outpass functions
 export const postOutpass = (user, outpass) => async (dispatch) => {
-    // console.log(user);
-    outpass['uid'] = user.uid;
-    outpass['name'] = user.name;
-    outpass['rollNum'] = user.rollNum;
-
     try {
-        dispatch(requestOutpass());
-
-        if (user === undefined)
+        if (user !== undefined && user.role === 'student') {
+            outpass['uid'] = user.uid;
+            outpass['name'] = user.name;
+            outpass['rollNum'] = user.rollNum;
+            dispatch(requestOutpass());
+            await addDoc(collection(db, 'outpass'), outpass);
+            dispatch(fetchOutpass(user));
+        }
+        else {
             throw Error("Error 401: Unauthorized");
-
-        await addDoc(collection(db, 'outpass'), outpass);
-        dispatch(fetchOutpass(user));
+        }
     }
     catch (error) {
-        dispatch(outpassError(error.message))
+        dispatch(outpassError(error.message));
     }
 };
 
@@ -49,48 +48,43 @@ export const fetchOutpass = (user) => async (dispatch) => {
 
     try {
         dispatch(requestOutpass());
-
-        const querySnapshot = await getDocs(collection(db, "outpass"));
-        let outpassArr = [];
-
-        if (user === undefined)
-            throw Error("Error 401: Unauthorized");
-        if (user.role === 'student') {
-            const userid = user.uid;
-            querySnapshot.forEach((doc) => {
-                if (doc.data().uid === userid) {
-                    const _id = doc.id;
-                    outpassArr.push({ _id, ...doc.data() });
-                }
-            })
-        }
-        else if (user.role === 'caretaker') {
-            const hostel = user.hostelName;
-            console.log(user);
-            querySnapshot.forEach((doc) => {
-                if (doc.data().hostelName === hostel)
-                    outpassArr.push(doc.data());
-            })
+        if (user !== undefined) {
+            const querySnapshot = await getDocs(collection(db, "outpass"));
+            let outpassArr = [];
+            if (user.role === 'student') {
+                const userid = user.uid;
+                querySnapshot.forEach((doc) => {
+                    if (doc.data().uid === userid) {
+                        const _id = doc.id;
+                        outpassArr.push({ _id, ...doc.data() });
+                    }
+                })
+            }
+            else if (user.role === 'caretaker') {
+                const hostel = user.hostelName;
+                console.log(user);
+                querySnapshot.forEach((doc) => {
+                    if (doc.data().hostelName === hostel)
+                        outpassArr.push(doc.data());
+                })
+            }
+            dispatch(receiveOutpass(outpassArr));
         }
         else {
-            dispatch(outpassError('Error unauthorized'));
+            throw Error("Error 401: Unauthorized");
         }
-        dispatch(receiveOutpass(outpassArr));
     }
     catch (error) {
-        dispatch(outpassError(error.message))
+        dispatch(outpassError(error.message));
     }
 }
 
 export const deleteOutpass = (outpass) => async (dispatch) => {
     try {
         dispatch(requestOutpass());
-
         const user = auth.currentUser;
         if (user === undefined)
             throw Error("Error 401: Unauthorized");
-
-
         const outpassRef = doc(db, "outpass", outpass.uid);
         await deleteDoc(outpassRef);
         dispatch(receiveOutpass(outpass));
@@ -99,38 +93,34 @@ export const deleteOutpass = (outpass) => async (dispatch) => {
     }
 }
 
-export const updateOutpass = (outpass) => async (dispatch) => {
+export const updateOutpass = (user, outpass) => async (dispatch) => {
     try {
         dispatch(requestOutpass());
-
-        const user = auth.currentUser;
-        if (user === undefined)
+        if (user !== undefined && user.role === 'caretaker') {
+            const outpassRef = firestore.doc(`outpass/${outpass._id}`)
+            await outpassRef.set(outpass, { merge: true });
+            const docOutpass = await getDoc(outpassRef);
+            dispatch(receiveOutpass(docOutpass.data()));
+        }
+        else {
             throw Error("Error 401: Unauthorized");
-        const outpassRef = firestore.doc(`outpass/${outpass._id}`)
-        await outpassRef.set(outpass, { merge: true });
-        const docOutpass = await getDoc(outpassRef);
-        dispatch(receiveOutpass(docOutpass.data()));
-
+        }
     } catch (error) {
         dispatch(outpassError(error.message));
     }
 }
 
 // Bus functions
-export const postBus = (bus) => async (dispatch) => {
-
-
+export const postBus = (user, bus) => async (dispatch) => {
     try {
         dispatch(requestBus());
-
-
-        const user = auth.currentUser;
-        if (user === undefined)
+        if (user !== undefined && user.role === 'admin') {
+            await addDoc(collection(db, 'bus'), bus);
+            dispatch(receiveBus(bus));
+        }
+        else {
             throw Error("Error 401: Unauthorized");
-
-
-        await addDoc(collection(db, 'bus'), bus);
-        dispatch(receiveBus(bus));
+        }
     }
     catch (error) {
         dispatch(busError(error.message))
@@ -138,15 +128,11 @@ export const postBus = (bus) => async (dispatch) => {
 };
 
 export const fetchBus = () => async (dispatch) => {
-
     try {
-
         dispatch(requestBus());
-
         const user = auth.currentUser;
         if (user === undefined)
             throw Error("Error 401: Unauthorized");
-
         const querySnapshot = await getDocs(collection(db, "bus"));
         let busArr = [];
         querySnapshot.forEach((doc) => {
@@ -160,57 +146,52 @@ export const fetchBus = () => async (dispatch) => {
     }
 }
 
-export const deleteBus = (bus) => async (dispatch) => {
+export const deleteBus = (user, bus) => async (dispatch) => {
     {
         try {
             dispatch(requestBus());
-
-            const user = auth.currentUser;
-            if (user === undefined)
+            if (user !== undefined && user.role === 'admin') {
+                const busRef = doc(db, "bus", bus.busId);
+                await deleteDoc(busRef);
+                dispatch(receiveBus(bus));
+            }
+            else {
                 throw Error("Error 401: Unauthorized");
-
-
-
-            const busRef = doc(db, "bus", bus.busId);
-            await deleteDoc(busRef);
-            dispatch(receiveBus(bus));
-
+            }
         } catch (error) {
             dispatch(busError(error.message));
         }
     };
 }
 
-export const updateBus = (bus) => async (dispatch) => {
+export const updateBus = (user, bus) => async (dispatch) => {
     try {
         dispatch(requestBus());
-        const user = auth.currentUser;
-        if (user === undefined)
+        if (user !== undefined && user.role === 'student' && user.role === 'faculty') {
+            const busRef = firestore.doc(`bus/${bus._id}`)
+            await busRef.set(bus, { merge: true });
+            const docBus = await getDoc(busRef);
+            dispatch(receiveOutpass(docBus.data()));
+        }
+        else {
             throw Error("Error 401: Unauthorized");
-        const busRef = firestore.doc(`bus/${bus._id}`)
-        await busRef.set(bus, { merge: true });
-        const docBus = await getDoc(busRef);
-        dispatch(receiveOutpass(docBus.data()));
-
+        }
     } catch (error) {
         dispatch(busError(error.message));
     }
 }
 
 // Store functions
-export const postStore = (store) => async (dispatch) => {
+export const postStore = (user, store) => async (dispatch) => {
     try {
-
         dispatch(requestStore());
-        const user = auth.currentUser;
-
-        if (user === undefined)
+        if (user !== undefined && user.role === 'student' && user.role === 'faculty') {
+            await addDoc(collection(db, 'store'), store);
+            dispatch(receiveStore(store));
+        }
+        else {
             throw Error("Error 401: Unauthorized");
-
-
-
-        await addDoc(collection(db, 'store'), store);
-        dispatch(receiveStore(store));
+        }
     }
     catch (error) {
         dispatch(storeError(error.message))
@@ -218,18 +199,11 @@ export const postStore = (store) => async (dispatch) => {
 };
 
 export const fetchStore = () => async (dispatch) => {
-
-
     try {
-
         dispatch(requestStore());
-
         const user = auth.currentUser;
         if (user === undefined)
             throw Error("Error 401: Unauthorized");
-
-
-
         const querySnapshot = await getDocs(collection(db, "store"));
         let storeArr = [];
         querySnapshot.forEach((doc) => {
@@ -244,22 +218,17 @@ export const fetchStore = () => async (dispatch) => {
 }
 
 // Ticket functions
-export const postTicket = (ticket) => async (dispatch) => {
-
-    const user = auth.currentUser;
-    const userid = user.uid;
-    ticket['uid'] = userid;
-
+export const postTicket = (user, ticket) => async (dispatch) => {
     try {
         dispatch(requestTicket());
-
-        if (user === undefined)
+        if (user !== undefined && user.role === 'student' && user.role === 'faculty') {
+            ticket['uid'] = user.uid;
+            await addDoc(collection(db, 'ticket'), ticket);
+            dispatch(receiveTicket(ticket));
+        }
+        else {
             throw Error("Error 401: Unauthorized");
-
-
-
-        await addDoc(collection(db, 'ticket'), ticket);
-        dispatch(receiveTicket(ticket));
+        }
     }
     catch (error) {
         dispatch(ticketError(error.message))
@@ -270,26 +239,21 @@ export const fetchTicket = (user) => async (dispatch) => {
 
     try {
         dispatch(requestTicket());
-
-        if (user === undefined)
-            throw Error("Error 401: Unauthorized");
-
-        const querySnapshot = await getDocs(collection(db, "ticket"));
-        let ticketArr = [];
-
         if (user !== undefined && user.role === 'student') {
+            const querySnapshot = await getDocs(collection(db, "ticket"));
+            let ticketArr = [];
             const userid = user.uid;
             querySnapshot.forEach((doc) => {
                 if (doc.data().uid === userid) {
                     const _id = doc.id;
                     ticketArr.push({ _id, ...doc.data() });
                 }
-            })
+            });
+            dispatch(receiveTicket(ticketArr));
         }
         else {
-            dispatch(ticketError('Error unauthorized'));
+            throw Error("Error 401: Unauthorized");
         }
-        dispatch(receiveTicket(ticketArr));
     }
     catch (error) {
         dispatch(ticketError(error.message))
@@ -300,21 +264,20 @@ export const fetchTicket = (user) => async (dispatch) => {
 export const postWallet = (user) => async (dispatch) => {
 
     try {
-
         dispatch(requestWallet());
-
-        if (user === undefined)
+        if (user !== undefined && user.role === 'student' && user.role === 'faculty') {
+            const walletRef = firestore.doc(`wallet/${user.uid}`)
+            await walletRef.set({
+                tokenNo: 0,
+                uid: user.uid,
+            }, { merge: true }
+            )
+            const docUser = await getDoc(walletRef);
+            dispatch(receiveWallet(docUser.data()));
+        }
+        else {
             throw Error("Error unauthorized");
-        const walletRef = firestore.doc(`wallet/${user.uid}`)
-        await walletRef.set({
-            tokenNo: 0,
-            uid: user.uid,
-        }, { merge: true }
-        )
-
-        const docUser = await getDoc(walletRef);
-
-        dispatch(receiveWallet(docUser.data()));
+        }
     }
     catch (error) {
         dispatch(walletError(error.message))
@@ -322,22 +285,20 @@ export const postWallet = (user) => async (dispatch) => {
 };
 
 export const fetchWallet = (user) => async (dispatch) => {
-
     try {
-
         dispatch(requestWallet());
-
-
-        if (user === undefined)
-            throw Error("Error unauthorized");
-        const walletRef = firestore.doc(`wallet/${user.uid}`)
-        const docSnap = await getDoc(walletRef);
-
-        if (!docSnap.exists()) {
-            dispatch(postWallet(user));
+        if (user !== undefined && user.role === 'student' && user.role === 'faculty') {
+            const walletRef = firestore.doc(`wallet/${user.uid}`)
+            const docSnap = await getDoc(walletRef);
+            if (!docSnap.exists()) {
+                dispatch(postWallet(user));
+            }
+            else {
+                dispatch(receiveWallet(docSnap.data()));
+            }
         }
         else {
-            dispatch(receiveWallet(docSnap.data()));
+            throw Error("Error unauthorized");
         }
     }
     catch (error) {
@@ -349,27 +310,134 @@ export const updateWallet = (user, wallet, token) => async (dispatch) => {
 
     try {
         dispatch(requestWallet());
-
-
-        if (user === undefined)
+        if (user !== undefined && user.role === 'student' && user.role === 'faculty') {
+            const walletRef = firestore.doc(`wallet/${wallet.uid}`)
+            var newBal = wallet.tokenNo + token;
+            await walletRef.set({
+                tokenNo: newBal,
+            }, { merge: true }
+            )
+            dispatch(fetchWallet(user));
+        }
+        else {
             throw Error("Error 401: Unauthorized");
-
-
-        const walletRef = firestore.doc(`wallet/${wallet.uid}`)
-
-        var newBal = wallet.tokenNo + token;
-        await walletRef.set({
-            tokenNo: newBal,
-        }, { merge: true }
-        )
-
-        dispatch(fetchWallet(user));
+        }
     }
     catch (error) {
         dispatch(walletError(error.message))
     }
 }
 
+// Special Bus functions
+export const postSpecialBusRequest = (user, specialbusrequest) => async (dispatch) => {
+    dispatch(requestSpecialBusRequest());
+    try {
+        if (user !== undefined && user.role === 'student' && user.role === 'faculty') {
+            specialbusrequest['uid'] = user.uid;
+            specialbusrequest['name'] = user.name;
+            specialbusrequest['email'] = user.email;
+            await addDoc(collection(db, 'specialBusRequest'), specialbusrequest);
+            dispatch(receiveSpecialBusRequest(specialbusrequest));
+        }
+        else {
+            throw Error("Error 401: Unauthorized");
+        }
+    }
+    catch (error) {
+        dispatch(specialBusRequestError(error.message))
+    }
+};
+
+export const fetchSpecialBusRequest = (user) => async (dispatch) => {
+
+    try {
+        dispatch(requestSpecialBusRequest());
+        if (user !== undefined && user.role === 'admin') {
+            const querySnapshot = await getDocs(collection(db, "specialBusRequest"));
+            let specialBusArr = [];
+            querySnapshot.forEach((doc) => {
+                const _id = doc.id;
+                specialBusArr.push({ _id, ...doc.data() });
+            })
+            dispatch(receiveSpecialBusRequest(specialBusArr));
+        }
+        else {
+            throw Error("Error 401: Unauthorized");
+        }
+    }
+    catch (error) {
+        dispatch(specialBusRequestError(error.message))
+    }
+}
+
+
+export const deleteSpecialBusRequest = (user, specialbusrequest) => async (dispatch) => {
+    {
+        dispatch(requestSpecialBusRequest());
+        try {
+            if (user !== undefined && user.role === 'admin') {
+                const specialBusRef = doc(db, "specialBusRequest", specialbusrequest.specialBusId);
+                await deleteDoc(specialBusRef);
+                dispatch(receiveSpecialBusRequest(specialbusrequest));
+            }
+            else {
+                throw Error("Error 401: Unauthorized");
+            }
+        } catch (error) {
+            dispatch(specialBusRequestError(error.message));
+        }
+
+    };
+}
+export const updateSpecialBus = (user, specialbus) => async (dispatch) => {
+    try {
+        dispatch(requestSpecialBusRequest());
+        if (user !== undefined && user.role === 'admin') {
+            const specialBusRef = firestore.doc(`specialbus/${specialbus._id}`)
+            await specialBusRef.set(specialbus, { merge: true });
+            dispatch(fetchSpecialBusRequest());
+        }
+        else {
+            throw Error("Error 401: Unauthorized");
+        }
+    } catch (error) {
+        dispatch(specialBusRequestError(error.message));
+    }
+}
+
+
+export const postSchedule = (user, schedule) => async (dispatch) => {
+    try {
+        if (user !== undefined && user.role === 'admin') {
+            dispatch(requestSchedule());
+            dispatch(requestSpecialBusRequest());
+            await addDoc(collection(db, 'schedule'), schedule);
+            dispatch(receiveSchedule(schedule));
+        }
+        else {
+            throw Error("Error 401: Unauthorized");
+        }
+    }
+    catch (error) {
+        dispatch(scheduleError(error.message))
+    }
+}
+
+export const fetchSchedule = () => async (dispatch) => {
+    try {
+        dispatch(requestSchedule());
+        const querySnapshot = await getDocs(collection(db, "schedule"));
+        let scheduleArr = [];
+        querySnapshot.forEach((doc) => {
+            const _id = doc.id;
+            scheduleArr.push({ _id, ...doc.data() });
+        })
+        dispatch(receiveSchedule(scheduleArr));
+    }
+    catch (error) {
+        dispatch(scheduleError(error.message))
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////////
 
@@ -432,7 +500,12 @@ export const logoutUser = () => (dispatch) => {
 
     localStorage.removeItem('user');
     dispatch(receiveLogout());
+
     dispatch(fetchOutpass());
+    dispatch(fetchWallet());
+    dispatch(fetchTicket());
+    dispatch(fetchBus());
+    dispatch(fetchSpecialBusRequest());
 }
 
 export const fetchUser = (user) => async (dispatch) => {
@@ -485,9 +558,15 @@ export const fetchUser = (user) => async (dispatch) => {
     const docUser = await getDoc(userRef);
     console.log(docUser.data());
 
-
     dispatch(fetchWallet(docUser.data()));
     dispatch(fetchTicket(docUser.data()));
+    dispatch(fetchBus(docUser.data()));
+
+    if (docUser.data().role === 'student') {
+        dispatch(fetchOutpass(docUser.data()));
+    }
+
+
     dispatch(receiveLogin(docUser.data()));
 }
 
@@ -556,76 +635,6 @@ export const specialBusRequestError = (message) => {
     return {
         type: ActionTypes.SPECIALBUSREQUEST_FAILURE,
         message
-    }
-}
-// Special Bus functions
-export const postSpecialBusRequest = (user, specialbusrequest) => async (dispatch) => {
-    console.log(specialbusrequest);
-    specialbusrequest['uid'] = user.uid;
-    specialbusrequest['name'] = user.name;
-    specialbusrequest['email'] = user.email;
-
-
-    dispatch(requestSpecialBusRequest());
-    try {
-        await addDoc(collection(db, 'specialBusRequest'), specialbusrequest);
-        dispatch(receiveSpecialBusRequest(specialbusrequest));
-    }
-    catch (error) {
-        dispatch(specialBusRequestError(error.message))
-    }
-};
-
-export const fetchSpecialBusRequest = (user) => async (dispatch) => {
-
-    try {
-        dispatch(requestSpecialBusRequest());
-
-        if (user !== undefined && user.role === 'admin') {
-            const querySnapshot = await getDocs(collection(db, "specialBusRequest"));
-            let specialBusArr = [];
-            querySnapshot.forEach((doc) => {
-                const _id = doc.id;
-                specialBusArr.push({ _id, ...doc.data() });
-            })
-            dispatch(receiveSpecialBusRequest(specialBusArr));
-        }
-        else {
-            throw Error("Error 401: Unauthorized");
-        }
-    }
-    catch (error) {
-        dispatch(specialBusRequestError(error.message))
-    }
-}
-
-
-export const deleteSpecialBusRequest = (specialbusrequest) => async (dispatch) => {
-    {
-        dispatch(requestSpecialBusRequest());
-        try {
-            const specialBusRef = doc(db, "specialBusRequest", specialbusrequest.specialBusId);
-            await deleteDoc(specialBusRef);
-            dispatch(receiveSpecialBusRequest(specialbusrequest));
-
-        } catch (error) {
-            dispatch(specialBusRequestError(error.message));
-        }
-
-    };
-}
-export const updateSpecialBus = (user, specialbus) => async (dispatch) => {
-    try {
-        dispatch(requestSpecialBusRequest());
-
-        if (user === undefined)
-            throw Error("Error 401: Unauthorized");
-        const specialBusRef = firestore.doc(`specialbus/${specialbus._id}`)
-        await specialBusRef.set(specialbus, { merge: true });
-        dispatch(fetchSpecialBusRequest());
-
-    } catch (error) {
-        dispatch(specialBusRequestError(error.message));
     }
 }
 
@@ -723,41 +732,5 @@ export const walletError = (message) => {
     return {
         type: ActionTypes.WALLET_FAILURE,
         message
-    }
-}
-
-
-export const postSchedule = (schedule) => async (dispatch) => {
-
-
-    try {
-
-        dispatch(requestSchedule());
-        dispatch(requestSpecialBusRequest());
-        await addDoc(collection(db, 'schedule'), schedule);
-        dispatch(receiveSchedule(schedule));
-    }
-    catch (error) {
-        dispatch(scheduleError(error.message))
-    }
-}
-
-export const fetchSchedule = () => async (dispatch) => {
-
-
-    try {
-
-        dispatch(requestSchedule());
-        dispatch(requestSpecialBusRequest());
-        const querySnapshot = await getDocs(collection(db, "schedule"));
-        let scheduleArr = [];
-        querySnapshot.forEach((doc) => {
-            const _id = doc.id;
-            scheduleArr.push({ _id, ...doc.data() });
-        })
-        dispatch(receiveSchedule(scheduleArr));
-    }
-    catch (error) {
-        dispatch(scheduleError(error.message))
     }
 }
