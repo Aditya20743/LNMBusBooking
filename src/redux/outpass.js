@@ -14,10 +14,11 @@ export const Outpass = (state = {
             return {...state,
                 isLoading: false,
                 outpass: action.outpass,
-                errMess: '',                
+                errMess: null                
             };
         case ActionTypes.OUTPASS_FAILURE:
-            return {...state,
+            return {
+                outpass: [],
                 isLoading: false,
                 errMess: action.message
             };

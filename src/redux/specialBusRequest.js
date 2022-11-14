@@ -16,11 +16,11 @@ export const SpecialBusRequest = (state = {
                 ...state,
                 isLoading: false,
                 specialBusRequest: action.specialBusRequest,
-                errMess: ''
+                errMess: null
             };
         case ActionTypes.SPECIALBUSREQUEST_FAILURE:
             return {
-                ...state,
+                specialBusRequest: [],
                 isLoading: false,
                 errMess: action.message
             };

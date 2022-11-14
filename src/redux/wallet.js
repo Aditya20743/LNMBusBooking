@@ -15,10 +15,11 @@ export const Wallet = (state = {
             return {...state,
                 isLoading: false,
                 wallet: action.wallet,
-                errMess: ''
+                errMess: null
             };
         case ActionTypes.WALLET_FAILURE:
-            return {...state,
+            return {
+                wallet: null,
                 isLoading: false,
                 errMess: action.message
             };

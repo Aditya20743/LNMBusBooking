@@ -16,7 +16,7 @@ export const Bus = (state = {
                 ...state,
                 isLoading: false,
                 bus: action.bus,
-                errMess: ''
+                errMess: null
             };
         case ActionTypes.BUS_FAILURE:
             return {

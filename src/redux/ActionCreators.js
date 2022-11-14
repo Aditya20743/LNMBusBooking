@@ -25,14 +25,11 @@ export const loginError = (message) => {
 }
 
 // outpass functions
-
 export const postOutpass = (user, outpass) => async (dispatch) => {
-     
-    
     console.log(user);
     outpass['uid'] = user.uid;
-     outpass['name']= user.name;
-     outpass['rollNum']= user.rollNum;
+    outpass['name']= user.name;
+    outpass['rollNum']= user.rollNum;
 
     dispatch(requestOutpass());
     try {
@@ -51,6 +48,8 @@ export const fetchOutpass = (user) => async (dispatch) => {
         const querySnapshot = await getDocs(collection(db, "outpass"));
         let outpassArr = [];
 
+        if (user === undefined)
+            throw Error("Error unauthorized");
         if (user.role === 'student') {
             const userid = user.uid;
             querySnapshot.forEach((doc) => {
@@ -131,11 +130,8 @@ export const deleteBus = (bus) => async (dispatch) => {
         } catch (error) {
             dispatch(busError(error.message));
         }
-
     };
 }
-
-
 
 // Store functions
 export const postStore = (store) => async (dispatch) => {
@@ -165,6 +161,7 @@ export const fetchStore = () => async (dispatch) => {
         dispatch(storeError(error.message))
     }
 }
+
 // Ticket functions
 export const postTicket = (ticket) => async (dispatch) => {
 
@@ -189,18 +186,12 @@ export const fetchTicket = () => async (dispatch) => {
         const querySnapshot = await getDocs(collection(db, "ticket"));
         let ticketArr = [];
         const user = auth.currentUser;
-        if (user.role === 'student') {
+        if (user !== undefined && user.role === 'student') {
             const userid = user.uid;
             querySnapshot.forEach((doc) => {
                 if (doc.data().uid === userid)
                 {const _id = doc.id;
                 ticketArr.push({ _id, ...doc.data() });}
-            })
-        }
-        else if(user.role==='conductor') {
-            querySnapshot.forEach((doc) => {
-                const _id = doc.id;
-                    ticketArr.push({ _id, ...doc.data() });
             })
         }
         else{
@@ -212,6 +203,7 @@ export const fetchTicket = () => async (dispatch) => {
         dispatch(ticketError(error.message))
     }
 }
+
 // Wallet functions
 export const postWallet = (wallet) => async (dispatch) => {
     dispatch(requestWallet());
@@ -332,6 +324,7 @@ export const logoutUser = () => (dispatch) => {
 
     localStorage.removeItem('user');
     dispatch(receiveLogout());
+    dispatch(fetchOutpass());
 }
 
 export const fetchUser = (user) => async (dispatch) => {
@@ -401,16 +394,15 @@ export const googleLogin = () => (dispatch) => {
                 dispatch(loginError("Error 401: Unauthorized"));
             }
             else {
-
                 dispatch(fetchUser(user));
             }
+
             if(user.role==='student'){
                 dispatch(fetchOutpass(user));
             }
             dispatch(fetchWallet(user));
             const b = {uid : '1'};
             dispatch(updateWallet(b, 8));
-
         })
         .catch((error) => {
             dispatch(loginError(error.message));

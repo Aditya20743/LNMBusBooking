@@ -15,10 +15,11 @@ export const Store = (state = {
             return {...state,
                 isLoading: false,
                 store: action.store,
-                errMess: ''
+                errMess: null
             };
         case ActionTypes.STORE_FAILURE:
-            return {...state,
+            return {
+                store: null,
                 isLoading: false,
                 errMess: action.message
             };

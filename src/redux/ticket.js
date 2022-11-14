@@ -14,10 +14,11 @@ export const Ticket = (state = {
             return {...state,
                 isLoading: false,
                 ticket: action.ticket,
-                errMess: ''
+                errMess: null
             };
         case ActionTypes.ADDTICKET_FAILURE:
-            return {...state,
+            return {
+                ticket: [],
                 isLoading: false,
                 errMess: action.message
             };

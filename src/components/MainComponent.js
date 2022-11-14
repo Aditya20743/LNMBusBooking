@@ -24,9 +24,12 @@ const mapStateToProps = (state) => {
   return {
     auth: state.auth,
     bus: state.bus,
-    specialbusrequest: state.specialbusrequest,
+    outpass: state.outpass,
+    store: state.store,
+    ticket: state.ticket,
+    wallet: state.wallet,
     schedule: state.schedule,
-
+    specialbusrequest: state.specialbusrequest
   };
 };
 
@@ -62,7 +65,18 @@ const mapDispatchToProps = (dispatch) => ({
   deleteSpecialBusRequest: (specialbusrequest)=> dispatch(fetch(deleteSpecialBusRequest(specialbusrequest))),
 });
 
+
+
 class Main extends Component {
+  componentDidMount() {
+    this.props.fetchStore();
+    this.props.fetchBus();
+    this.props.fetchTicket();
+  }
+  componentWillUnmount() {
+    this.props.logoutUser();
+  }
+
   render() {
     return (
       <div>

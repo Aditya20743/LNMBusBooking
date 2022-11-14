@@ -56,24 +56,36 @@ class ApproveOutpassComponent extends Component {
   constructor(props){
     super(props);
   }
-  // const requests = 
+
   render() {
-    return (
-      <div className="container c-width pt-5 ">
-        <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
-          <h2>Outpass Request</h2>
+    if (this.props.outpass.isLoading) {
+      return (
+        <div>Loading</div>
+      );
+    }
+    else if (this.props.outpass.errMess) {
+      return (
+        <div>ERROR: {this.props.outpass.errMess}</div>
+      );
+    }
+    else {
+      return (
+        <div className="container c-width pt-5">
+          <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
+            <h2>Outpass Request</h2>
+          </div>
+          <div className="row-fluid mb-5 mt-4">
+            {this.props.outpass.outpass.map((outpass) => {
+              return (
+                <div key={outpass._id} className="col-12 mb-4">
+                  <RenderOutpassRequest outpass={outpass} />
+                </div>
+              )
+            })}
+          </div>
         </div>
-        <div className="row-fluid mb-5 mt-4">{
-          this.props.outpass.outpass.map((outpass)=>{
-            return (
-              <div key = {outpass._id} className="col-12 mb-4">
-                <RenderOutpassRequest outpass = {outpass} />
-              </div>
-            )
-          })
-        }</div>
-      </div>
-    );
+      );
+    }
   }
 }
 
