@@ -11,6 +11,7 @@ import ApproveOutpassComponent from "./ApproveOutpassComponent";
 import SelectBusComponent from "./SelectBusComponent";
 import ViewTripsComponent from "./ViewTripsComponent";
 import ApproveBusReqComponent from "./ApproveBusReqComponent";
+import WalletComponent from "./WalletComponent";
 
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -135,6 +136,11 @@ class Main extends Component {
                 path="/approveBus"
                 component={() => <ApproveBusReqComponent />}
                 />
+              <Route
+                path="/wallet"
+                component={() => <WalletComponent store = {this.props.store}/>}
+                />
+
               <Redirect to="/home" />
 
             </Switch>
