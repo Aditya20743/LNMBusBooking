@@ -260,6 +260,22 @@ export const fetchTicket = (user) => async (dispatch) => {
     }
 }
 
+export const updateTicket = (user, ticket) => async (dispatch) => {
+    try {
+        dispatch(requestTicket());
+        if (user !== undefined && user.role === 'student' && user.role === 'faculty') {
+            const ticketRef = firestore.doc(`ticket/${ticket._id}`)
+            await ticketRef.set(ticket, { merge: true });
+            dispatch(fetchTicket(user));
+        }
+        else {
+            throw Error("Error 401: Unauthorized");
+        }
+    } catch (error) {
+        dispatch(ticketError(error.message))
+    }
+}
+
 // Wallet functions
 export const postWallet = (user) => async (dispatch) => {
 
@@ -435,6 +451,22 @@ export const fetchSchedule = () => async (dispatch) => {
         dispatch(receiveSchedule(scheduleArr));
     }
     catch (error) {
+        dispatch(scheduleError(error.message))
+    }
+}
+
+export const updateSchedule = (user, schedule) => async (dispatch) => {
+    try {
+        dispatch(requestSchedule());
+        if (user !== undefined && user.role === 'admin') {
+            const scheduleRef = firestore.doc(`schedule/${schedule._id}`)
+            await scheduleRef.set(schedule, { merge: true });
+            dispatch(fetchSchedule());
+        }
+        else {
+            throw Error("Error 401: Unauthorized");
+        }
+    } catch (error) {
         dispatch(scheduleError(error.message))
     }
 }
@@ -732,87 +764,5 @@ export const walletError = (message) => {
     return {
         type: ActionTypes.WALLET_FAILURE,
         message
-    }
-}
-
-export const postSchedule = (user,schedule) => async (dispatch) => {
-
-
-    try {
-
-        dispatch(requestSchedule());
-        dispatch(requestSpecialBusRequest());
-        if (user === undefined)
-            throw Error("Error 401: Unauthorized");
-
-
-        await addDoc(collection(db, 'schedule'), schedule);
-        dispatch(receiveSchedule(schedule));
-    }
-    catch (error) {
-        dispatch(scheduleError(error.message))
-    }
-}
-
-export const fetchSchedule = () => async (dispatch) => {
-
-
-    try {
-
-        dispatch(requestSchedule());
-        dispatch(requestSpecialBusRequest());
-        // const user = auth.currentUser;
-        // if (user === undefined)
-        //     throw Error("Error 401: Unauthorized");
-
-        const querySnapshot = await getDocs(collection(db, "schedule"));
-        let scheduleArr = [];
-        querySnapshot.forEach((doc) => {
-            const _id = doc.id;
-            scheduleArr.push({ _id, ...doc.data() });
-        })
-        dispatch(receiveSchedule(scheduleArr));
-    }
-    catch (error) {
-        dispatch(scheduleError(error.message))
-    }
-}
-
-
-
-export const updateSchedule = (schedule) => async (dispatch) => {
-    try {
-        dispatch(requestSchedule());
-
-        const user = auth.currentUser;
-        if (user === undefined)
-            throw Error("Error 401: Unauthorized");
-        const scheduleRef = firestore.doc(`schedule/${schedule._id}`)
-        await scheduleRef.set(schedule, { merge: true });
-        
-       
-        dispatch(fetchSchedule());
-
-    } catch (error) {
-        dispatch(scheduleError(error.message))
-    }
-}
-
-
-export const updateTicket = (user,ticket) => async (dispatch) => {
-    try {
-        dispatch(requestTicket());
-
-        
-        if (user === undefined)
-            throw Error("Error 401: Unauthorized");
-        const ticketRef = firestore.doc(`ticket/${ticket._id}`)
-        await ticketRef.set(ticket, { merge: true });
-        
-       
-        dispatch(fetchTicket(user));
-
-    } catch (error) {
-        dispatch(ticketError(error.message))
     }
 }
