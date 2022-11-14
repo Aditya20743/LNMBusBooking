@@ -42,7 +42,7 @@ class Home extends Component {
                   <div className="row mt-3">
                     <button
                       type="button "
-                      class="cardBtn btn-primary btn d-flex py-2 px-3 mb-3 btn-block justify-content-center nav-link"
+                      className="cardBtn btn-primary btn d-flex py-2 px-3 mb-3 btn-block justify-content-center nav-link"
                     >
                       View Bus Requests
                       <div className="home-btn-icon ml-2">
@@ -68,7 +68,7 @@ class Home extends Component {
                   <div className="row mb-3">
                     <button
                       type="button"
-                      class="cardBtn btn-primary btn d-flex py-2 px-3 btn-block justify-content-center nav-link"
+                      className="cardBtn btn-primary btn d-flex py-2 px-3 btn-block justify-content-center nav-link"
                     >
                       Remove Bus
                       <div className="home-btn-icon ml-2">
@@ -81,7 +81,7 @@ class Home extends Component {
                   <div className="row mb-3">
                     <button
                       type="button"
-                      class="cardBtn btn-primary btn d-flex py-2 px-3 mb-3 btn-block justify-content-center nav-link"
+                      className="cardBtn btn-primary btn d-flex py-2 px-3 mb-3 btn-block justify-content-center nav-link"
                     >
                       Update Schedule
                       <div className="home-btn-icon ml-2 ">
@@ -119,7 +119,7 @@ class Home extends Component {
                   <Link to={`/approveOutpass`}>
                     <button
                       type="button "
-                      class="cardBtn btn-primary btn> d-flex p-3 mb-3 btn-block justify-content-center nav-link"
+                      className="cardBtn btn-primary btn> d-flex p-3 mb-3 btn-block justify-content-center nav-link"
                     >
                       Display Outpass Requests
                       <div className="home-btn-icon ml-2">
@@ -159,7 +159,7 @@ class Home extends Component {
                     <div className="row mt-3">
                       <button
                         type="button"
-                        class="cardBtn btn-primary btn d-flex p-2 mb-3 btn-block justify-content-center nav-link"
+                        className="cardBtn btn-primary btn d-flex p-2 mb-3 btn-block justify-content-center nav-link"
                       >
                         Purchase Tokens
                         <div className="home-btn-icon ml-2">
@@ -172,7 +172,7 @@ class Home extends Component {
                   <div className="row mt-3">
                     <button
                       type="button"
-                      class="cardBtn btn-primary btn d-flex p-2 mb-3 btn-block justify-content-center nav-link"
+                      className="cardBtn btn-primary btn d-flex p-2 mb-3 btn-block justify-content-center nav-link"
                       onClick={this.toggleModal}
                     >
                       Login
@@ -201,7 +201,7 @@ class Home extends Component {
                   <div className="row mt-3">
                     <button
                       type="button "
-                      class="cardBtn btn-primary btn> d-flex p-2 mb-3 btn-block justify-content-center nav-link"
+                      className="cardBtn btn-primary btn> d-flex p-2 mb-3 btn-block justify-content-center nav-link"
                     >
                       Book Ticket
                       <div className="home-btn-icon ml-2">
@@ -214,7 +214,7 @@ class Home extends Component {
                   <div className="row ">
                     <button
                       type="button"
-                      class="cardBtn btn-primary btn> d-flex py-2 px-4 mb-3 btn-block justify-content-center nav-link"
+                      className="cardBtn btn-primary btn> d-flex py-2 px-4 mb-3 btn-block justify-content-center nav-link"
                     >
                       View Schedule
                       <div className="home-btn-icon ml-2 ">
@@ -227,7 +227,7 @@ class Home extends Component {
                   <div className="row mb-3">
                     <button
                       type="button"
-                      class="cardBtn btn-primary btn> d-flex py-2 px-4 btn-block justify-content-center nav-link"
+                      className="cardBtn btn-primary btn> d-flex py-2 px-4 btn-block justify-content-center nav-link"
                     >
                       Outpass
                       <div className="home-btn-icon ml-2">

@@ -16,10 +16,8 @@ import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import {
-  loginUser, googleLogin, logoutUser, postBus, postOutpass,
-  postStore, postTicket, postWallet, fetchBus, fetchWallet, fetchOutpass,
-  fetchStore, fetchTicket, deleteBus, deleteOutpass,
-  postSpecialBusRequest, fetchSpecialBusRequest, deleteSpecialBusRequest, postSchedule, fetchSchedule, updateSchedule, updateTicket, updateSpecialBus, updateWallet, updateBus
+  loginUser, googleLogin, logoutUser, postBus, postOutpass, postStore, postTicket, postWallet, fetchStore, deleteBus, postSpecialBusRequest,
+  deleteSpecialBusRequest, postSchedule, fetchSchedule, updateSchedule, updateTicket,
 } from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
@@ -56,7 +54,6 @@ const mapDispatchToProps = (dispatch) => ({
   updateSchedule: (user, schedule) => dispatch(updateSchedule(user, schedule)),
 
   deleteBus: (user, bus) => dispatch(deleteBus(user, bus)),
-  deleteOutpass: (outpass) => dispatch(deleteOutpass(outpass)),
   deleteSpecialBusRequest: (user, specialbusrequest) => dispatch(fetch(deleteSpecialBusRequest(user, specialbusrequest)))
 });
 
