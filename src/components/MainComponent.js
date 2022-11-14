@@ -15,8 +15,10 @@ import ApproveBusReqComponent from "./ApproveBusReqComponent";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { loginUser, googleLogin, logoutUser ,postBus, postOutpass, postStore, postTicket, postWallet, fetchBus,
-  fetchStore, deleteBus, deleteOutpass, postSpecialBusRequest, deleteSpecialBusRequest, postSchedule, fetchSchedule} from "../redux/ActionCreators";
+import { loginUser, googleLogin, logoutUser ,postBus,postOutpass,
+  postStore,postTicket,postWallet,fetchBus,fetchWallet,fetchOutpass,
+  fetchStore,fetchTicket,deleteBus,deleteOutpass,
+  postSpecialBusRequest,fetchSpecialBusRequest,deleteSpecialBusRequest,postSchedule,fetchSchedule,updateSchedule,updateTicket,updateSpecialBus,updateWallet ,updateBus}  from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
   return {
@@ -44,9 +46,12 @@ const mapDispatchToProps = (dispatch) => ({
 
   postStore: (store)=> dispatch(postStore(store)),
   fetchStore: ()=>dispatch(fetchStore()),
+
+  updateTicket: (user,ticket)=> dispatch(updateTicket(user,ticket)),
   
-  postSchedule: (schedule)=> dispatch(postSchedule(schedule)),
+  postSchedule: (user,schedule)=> dispatch(postSchedule(user,schedule)),
   fetchSchedule: ()=>dispatch(fetchSchedule()),
+  updateSchedule: (schedule)=> dispatch(updateSchedule(schedule)),
 
   deleteBus: (bus)=> dispatch(deleteBus(bus)),
   deleteOutpass: (outpass)=>dispatch(deleteOutpass(outpass)),
