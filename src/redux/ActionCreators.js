@@ -734,3 +734,85 @@ export const walletError = (message) => {
         message
     }
 }
+
+export const postSchedule = (user,schedule) => async (dispatch) => {
+
+
+    try {
+
+        dispatch(requestSchedule());
+        dispatch(requestSpecialBusRequest());
+        if (user === undefined)
+            throw Error("Error 401: Unauthorized");
+
+
+        await addDoc(collection(db, 'schedule'), schedule);
+        dispatch(receiveSchedule(schedule));
+    }
+    catch (error) {
+        dispatch(scheduleError(error.message))
+    }
+}
+
+export const fetchSchedule = () => async (dispatch) => {
+
+
+    try {
+
+        dispatch(requestSchedule());
+        dispatch(requestSpecialBusRequest());
+        // const user = auth.currentUser;
+        // if (user === undefined)
+        //     throw Error("Error 401: Unauthorized");
+
+        const querySnapshot = await getDocs(collection(db, "schedule"));
+        let scheduleArr = [];
+        querySnapshot.forEach((doc) => {
+            const _id = doc.id;
+            scheduleArr.push({ _id, ...doc.data() });
+        })
+        dispatch(receiveSchedule(scheduleArr));
+    }
+    catch (error) {
+        dispatch(scheduleError(error.message))
+    }
+}
+
+
+
+export const updateSchedule = (schedule) => async (dispatch) => {
+    try {
+        dispatch(requestSchedule());
+
+        const user = auth.currentUser;
+        if (user === undefined)
+            throw Error("Error 401: Unauthorized");
+        const scheduleRef = firestore.doc(`schedule/${schedule._id}`)
+        await scheduleRef.set(schedule, { merge: true });
+        
+       
+        dispatch(fetchSchedule());
+
+    } catch (error) {
+        dispatch(scheduleError(error.message))
+    }
+}
+
+
+export const updateTicket = (user,ticket) => async (dispatch) => {
+    try {
+        dispatch(requestTicket());
+
+        
+        if (user === undefined)
+            throw Error("Error 401: Unauthorized");
+        const ticketRef = firestore.doc(`ticket/${ticket._id}`)
+        await ticketRef.set(ticket, { merge: true });
+        
+       
+        dispatch(fetchTicket(user));
+
+    } catch (error) {
+        dispatch(ticketError(error.message))
+    }
+}

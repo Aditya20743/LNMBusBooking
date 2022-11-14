@@ -38,7 +38,7 @@ class Home extends Component {
           <div className="row ">
             <div className="card col-10 col-sm-6 col-md-6 col-xl-4 offset-1 offset-sm-0 align-self-center ">
               <div className="card-body align-self-center p-3">
-                <Link to={`/`}>
+                <Link to={`/approveBusRequest`}>
                   <div className="row mt-3">
                     <button
                       type="button "

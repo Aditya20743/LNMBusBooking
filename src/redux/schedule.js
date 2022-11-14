@@ -15,7 +15,7 @@ export const Schedule = (state = {
             return {...state,
                 isLoading: false,
                 schedule: action.schedule,
-                errMess: ''
+                errMess: null
             };
         case ActionTypes.SCHEDULE_FAILURE:
             return {...state,
