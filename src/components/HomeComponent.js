@@ -152,10 +152,11 @@ class Home extends Component {
                     <div className="row">
                       <div className="d-flex col-flex justify-content-center token-count-circle offset-2">
                         <div className="align-self-center">
-                          <h1>16</h1> Tokens
+                          <h1>{this.props.wallet.isLoading ? "Loading" : this.props.wallet.wallet.tokenNo}</h1> Tokens
                         </div>
                       </div>
                     </div>
+                    <Link to={`/wallet`}>
                     <div className="row mt-3">
                       <button
                         type="button"
@@ -166,7 +167,8 @@ class Home extends Component {
                           <ArrowCircleRightOutlinedIcon />
                         </div>
                       </button>
-                    </div>
+                      </div>
+                    </Link>
                   </>
                 ) : (
                   <div className="row mt-3">
@@ -197,7 +199,7 @@ class Home extends Component {
           <div className="row pb-4">
             <div className="card col-8 col-sm-6 col-md-4 col-lg-3 offset-2 offset-sm-3 offset-md-6 offset-lg-7">
               <div className="card-body align-self-center p-3">
-                <Link to={`/`}>
+                <Link to={`/selectBus`}>
                   <div className="row mt-3">
                     <button
                       type="button "

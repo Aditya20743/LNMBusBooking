@@ -37,8 +37,8 @@ class Header extends Component {
                   <img
                     src="assests/images/logo.png"
                     alt="LNMBus"
-                    height="80%"
-                    width="80%"
+                    height="70%"
+                    width="70%"
                     className=" align-self-center"
                   />
                 </NavLink>
@@ -97,7 +97,7 @@ class Header extends Component {
                             className="dropdown-menu"
                             aria-labelledby="navbarDropdown"
                             >
-                            <NavLink to="/">
+                            <NavLink to="/selectBus">
                               <div className="dropdown-item">
                                     Book Ticket
                               </div>

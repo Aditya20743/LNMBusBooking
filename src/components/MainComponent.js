@@ -87,6 +87,7 @@ class Main extends Component {
                     auth={this.props.auth}
                     loginUser={this.props.loginUser}
                     googleLogin={this.props.googleLogin}
+                    wallet={this.props.wallet}
                   />
                 )}
               />
@@ -122,7 +123,7 @@ class Main extends Component {
               />
               <Route
                 path="/wallet"
-                component={() => <WalletComponent store = {this.props.store}/>}
+                component={() => <WalletComponent wallet={this.props.wallet} store = {this.props.store}/>}
                 />
               <Route
                 path="/approveBusRequest"
