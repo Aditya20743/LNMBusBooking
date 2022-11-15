@@ -453,7 +453,7 @@ export const updateSpecialBus = (user, specialbus) => async (dispatch) => {
         dispatch(requestSpecialBusRequest());
         if (user !== undefined && user.role === 'admin') {
             const specialBusRef = firestore.doc(`specialbus/${specialbus._id}`)
-            await specialBusRef.set(specialbus, { merge: true });
+            await specialBusRef.set(specialBusRequest, { merge: true });
             dispatch(fetchSpecialBusRequest(user));
         }
         else {
