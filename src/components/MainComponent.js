@@ -12,6 +12,7 @@ import SelectBusComponent from "./SelectBusComponent";
 import ViewTripsComponent from "./ViewTripsComponent";
 import ApproveBusReqComponent from "./ApproveBusReqComponent";
 import WalletComponent from "./WalletComponent";
+import SelectBusSeatComponent from "./SelectBusSeatComponent";
 
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -136,6 +137,10 @@ class Main extends Component {
               <Route
                 path="/approveBusRequest"
                 component={() => <ApproveBusReqComponent specialbusrequest = {this.props.specialbusrequest} auth={this.props.auth} />}
+              />
+              <Route
+                path="/selectSeat"
+                component={() => <SelectBusSeatComponent bus = {this.props.bus} auth={this.props.auth} />}
               />
               <Redirect to="/home" />
 
