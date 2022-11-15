@@ -301,11 +301,7 @@ export const cancelTicket = (user, wallet,ticket) => async (dispatch) => {
             if((busHour-curHour)*60 +(busMin-curMin)>15){
                 dispatch(updateWallet(user,wallet,0.5));
             }
-<<<<<<< HEAD
             dispatch(updateTicket(user, ticket));
-=======
-            dispatch(updateTicket(user,ticket));
->>>>>>> 72fe3afabfde3c34602eb60ec4626d0ec8af6083
             dispatch(fetchTicket(user));
         }
         else {
