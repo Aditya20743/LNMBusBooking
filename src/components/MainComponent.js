@@ -19,7 +19,7 @@ import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import {
   loginUser, googleLogin, logoutUser, postBus, postOutpass, postStore, postTicket, postWallet, fetchStore, deleteBus, postSpecialBusRequest,
-  deleteSpecialBusRequest, postSchedule, fetchSchedule, updateSchedule, updateTicket, updateOutpass, updateBus, updateWallet, updateSpecialBus, checkUser
+  deleteSpecialBusRequest, postSchedule, fetchSchedule, updateSchedule, updateTicket, updateOutpass, updateBus, updateWallet, updateSpecialBus, checkUser, cancelTicket
 } from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
@@ -62,7 +62,10 @@ const mapDispatchToProps = (dispatch) => ({
   updateSchedule: (user, schedule) => dispatch(updateSchedule(user, schedule)),
 
   deleteBus: (user, bus) => dispatch(deleteBus(user, bus)),
-  deleteSpecialBusRequest: (user, specialbusrequest) => dispatch(fetch(deleteSpecialBusRequest(user, specialbusrequest)))
+  deleteSpecialBusRequest: (user, specialbusrequest) => dispatch(fetch(deleteSpecialBusRequest(user, specialbusrequest))),
+
+  cancelTicket: (user, wallet,ticket) => dispatch(cancelTicket(user, wallet, ticket))
+  
 });
 
 class Main extends Component {
@@ -127,7 +130,8 @@ class Main extends Component {
               />
               <Route
                 path="/viewTrips"
-                component={() => <ViewTripsComponent auth = {this.props.auth} ticket = {this.props.ticket} 
+                component={() => <ViewTripsComponent auth = {this.props.auth} ticket = {this.props.ticket} cancelTicket = {this.props.cancelTicket}
+                wallet = {this.props.wallet}
                 />}
               />
               <Route
