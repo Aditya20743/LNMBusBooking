@@ -39,22 +39,27 @@ const mapDispatchToProps = (dispatch) => ({
   logoutUser: () => dispatch(logoutUser()),
   googleLogin: () => dispatch(googleLogin()),
   checkUser: () => dispatch(checkUser()),
-  updateOutpass: (user, outpass) => dispatch(updateOutpass(user, outpass)),
+  
   postOutpass: (user, outpass) => dispatch(postOutpass(user, outpass)),
   postWallet: (user) => dispatch(postWallet(user)),
   postTicket: (user, ticket) => dispatch(postTicket(user, ticket)),
   postSpecialBusRequest: (user, specialbusrequest) => dispatch(postSpecialBusRequest(user, specialbusrequest)),
+
   postBus: (user, bus) => dispatch(postBus(user, bus)),
   updateBus: (user, bus) => dispatch(updateBus(user, bus)),
+
   postStore: (user, store) => dispatch(postStore(user, store)),
   fetchStore: () => dispatch(fetchStore()),
 
+  updateOutpass: (user, outpass) => dispatch(updateOutpass(user, outpass)),
+  updateSpecialBus: (user, specialbus) => dispatch(updateSpecialBus(user, specialbus)),
   updateTicket: (user, ticket) => dispatch(updateTicket(user, ticket)),
   updateWallet: (user, wallet, token) => dispatch(updateWallet(user, wallet, token)),
+
   postSchedule: (user, schedule) => dispatch(postSchedule(user, schedule)),
   fetchSchedule: () => dispatch(fetchSchedule()),
   updateSchedule: (user, schedule) => dispatch(updateSchedule(user, schedule)),
-  updateSpecialBus: (user, specialbus) => dispatch(updateSpecialBus(user, specialbus)),
+
   deleteBus: (user, bus) => dispatch(deleteBus(user, bus)),
   deleteSpecialBusRequest: (user, specialbusrequest) => dispatch(fetch(deleteSpecialBusRequest(user, specialbusrequest)))
 });

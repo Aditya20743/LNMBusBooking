@@ -61,7 +61,7 @@ class ApproveOutpassComponent extends Component {
   }
 
   handleSubmit(outpass, response) {
-    outpass = {... outpass, status : response} ;
+    outpass = {...outpass, status : response} ;
     this.props.updateOutpass(this.props.auth.user, outpass);
   }
 

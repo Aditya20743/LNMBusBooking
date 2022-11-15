@@ -172,7 +172,6 @@ export const updateBus = (user, bus) => async (dispatch) => {
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
             const busRef = firestore.doc(`bus/${bus._id}`)
             await busRef.set(bus, { merge: true });
-            const docBus = await getDoc(busRef);
             dispatch(fetchBus());
         }
         else {
@@ -284,7 +283,6 @@ export const cancelTicket = (user, wallet,ticket) => async (dispatch) => {
         dispatch(requestTicket());
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
             
-
             //get bus and Time
             const busRef = firestore.doc(`bus/${ticket.busid}`)
             const docBus = await getDoc(busRef);
@@ -294,20 +292,15 @@ export const cancelTicket = (user, wallet,ticket) => async (dispatch) => {
                 minute: "numeric",
                 timeZone: 'Asia/Kolkata'});
             const busDepartureTime=docBus.data().time;
-
-           
             const curHour = parseInt(currentTime.slice(0, 2));
             const curMin=parseInt(currentTime.slice(3, 5));
 
             const busHour=parseInt(busDepartureTime.slice(0, 2));
             const busMin= parseInt(busDepartureTime.slice(3, 5));
 
-
-
-            if((busHour-curHour)*60 +(busMin-curMin)>15)
-                {
-                    dispatch(updateWallet(user,wallet,0.5));
-                }
+            if((busHour-curHour)*60 +(busMin-curMin)>15){
+                dispatch(updateWallet(user,wallet,0.5));
+            }
             dispatch(fetchTicket(user));
         }
         else {
@@ -317,8 +310,6 @@ export const cancelTicket = (user, wallet,ticket) => async (dispatch) => {
         dispatch(ticketError(error.message))
     }
 }
-
-
 
 // Wallet functions
 export const postWallet = (user) => async (dispatch) => {
@@ -332,7 +323,6 @@ export const postWallet = (user) => async (dispatch) => {
                 uid: user.uid,
             }, { merge: true }
             )
-            const docUser = await getDoc(walletRef);
             dispatch(fetchWallet(user));
         }
         else {
@@ -659,12 +649,9 @@ export const fetchUser = (user) => async (dispatch) => {
                 image: photoURL,
                 role: "faculty",
             }, { merge: true })
-                .then(() => {
-                    dispatch(receiveLogin(user));
-                })
-                .catch((error) => {
-                    dispatch(loginError(error.message));
-                });
+            .catch((error) => {
+                dispatch(loginError(error.message));
+            });
         }
 
         const docUser = await getDoc(userRef);

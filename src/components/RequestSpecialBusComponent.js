@@ -27,7 +27,7 @@ class RequestSpecialBusComponent extends Component {
     const name = event.target.name;
     const value = event.target.value;
 
-    this.setState({ ... this.state, [name]: value });
+    this.setState({ ...this.state, [name]: value });
   }
 
   render() {
