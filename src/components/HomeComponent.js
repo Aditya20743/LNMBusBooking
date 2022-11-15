@@ -152,7 +152,7 @@ class Home extends Component {
                     <div className="row">
                       <div className="d-flex col-flex justify-content-center token-count-circle offset-2">
                         <div className="align-self-center">
-                          <h1>{this.props.wallet.isLoading ? "Loading" : this.props.wallet.wallet.tokenNo}</h1> Tokens
+                          {/* <h1>{this.props.wallet.isLoading ? "Loading" : this.props.wallet.wallet.tokenNo}</h1> Tokens */}
                         </div>
                       </div>
                     </div>

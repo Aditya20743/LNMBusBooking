@@ -61,8 +61,10 @@ export const fetchOutpass = (user) => async (dispatch) => {
                 const hostel = user.hostelName;
                 console.log(user);
                 querySnapshot.forEach((doc) => {
-                    if (doc.data().hostelName === hostel)
-                        outpassArr.push(doc.data());
+                    if (doc.data().hostelName === hostel && doc.data().status === "pending"){
+                        const _id = doc.id;
+                        outpassArr.push({ _id, ...doc.data() });
+                    }
                 })
             }
             dispatch(receiveOutpass(outpassArr));
@@ -93,10 +95,10 @@ export const fetchOutpass = (user) => async (dispatch) => {
 export const updateOutpass = (user, outpass) => async (dispatch) => {
     try {
         dispatch(requestOutpass());
-        if (user !== undefined && user.role === 'caretaker') {
+        
+        if (user !== undefined && user.role === "caretaker") {
             const outpassRef = firestore.doc(`outpass/${outpass._id}`)
             await outpassRef.set(outpass, { merge: true });
-            const docOutpass = await getDoc(outpassRef);
             dispatch(fetchOutpass(user));
         }
         else {
@@ -531,8 +533,6 @@ export const loginUser = (creds) => (dispatch) => {
         .then(() => {
             var user = auth.currentUser;
 
-            localStorage.setItem('user', JSON.stringify(user));
-
             var userRef = firestore.collection("User");
             var query = userRef.where('email', '==', user.email);
 
@@ -547,7 +547,7 @@ export const loginUser = (creds) => (dispatch) => {
                         dispatch(fetchOutpass(doc.data()));
                     if (doc.data().role === "admin")
                         dispatch(fetchSpecialBusRequest(doc.data()));
-
+                    localStorage.setItem('user', JSON.stringify(doc.data()));
                 });
             })
                 .catch((error) => {
@@ -574,27 +574,53 @@ export const receiveLogout = () => {
 export const logoutUser = () => (dispatch) => {
     try {
         dispatch(requestLogout())
-    auth.signOut().then(() => {
-        // Sign-out successful.
-    }).catch((error) => {
-        throw Error("Error 401: Unauthorized");
-    });
+        auth.signOut().then(() => {
+            // Sign-out successful.
+        }).catch((error) => {
+            //
+        });
 
-    localStorage.removeItem('user');
-    dispatch(receiveLogout(
+        localStorage.removeItem('user');
+        dispatch(receiveLogout());
 
-    ));
-
-    dispatch(fetchOutpass());
-    dispatch(fetchWallet());
-    dispatch(fetchTicket());
-    dispatch(fetchBus());
-    dispatch(fetchSpecialBusRequest());
+        dispatch(fetchOutpass());
+        dispatch(fetchWallet());
+        dispatch(fetchTicket());
+        dispatch(fetchBus());
+        dispatch(fetchSpecialBusRequest());
 
     } catch (error) {
         throw Error("Error 401: Unauthorized");
+    }   
+}
+
+export const checkUser = () => (dispatch) => {
+    try {
+        if( localStorage.getItem('user') === null){
+            throw Error("Error 401: Unauthorized");
+        }
+        else{
+            const user = JSON.parse(localStorage.getItem('user'));
+
+            dispatch(receiveLogin(user));
+
+            if (user.role === "caretaker")
+                dispatch(fetchOutpass(user));
+            if (user.role === "admin")
+                dispatch(fetchSpecialBusRequest(user));
+            else{
+                dispatch(fetchWallet(user));
+                dispatch(fetchTicket(user));
+                dispatch(fetchBus(user));
+
+                if (user.role === 'student') {
+                    dispatch(fetchOutpass(user));
+                }
+            }
+        }
+    }catch(error){
+        dispatch(loginError(error.message));
     }
-    
 }
 
 export const fetchUser = (user) => async (dispatch) => {
@@ -646,6 +672,8 @@ export const fetchUser = (user) => async (dispatch) => {
         dispatch(fetchTicket(docUser.data()));
         dispatch(fetchBus(docUser.data()));
 
+        localStorage.setItem('user', JSON.stringify(docUser.data()));
+
         if (docUser.data().role === 'student') {
             dispatch(fetchOutpass(docUser.data()));
         }
@@ -663,7 +691,6 @@ export const googleLogin = () => (dispatch) => {
     auth.signInWithPopup(provider)
         .then((result) => {
             var user = result.user;
-            localStorage.setItem('user', JSON.stringify(user));
 
             if (user.email.includes("@lnmiit.ac.in") === false) {
                 dispatch(logoutUser());
