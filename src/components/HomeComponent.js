@@ -77,7 +77,7 @@ class Home extends Component {
                     </button>
                   </div>
                 </Link>
-                <Link to={`/`}>
+                <Link to={`/updateSchedule`}>
                   <div className="row mb-3">
                     <button
                       type="button"

@@ -13,6 +13,7 @@ import ViewTripsComponent from "./ViewTripsComponent";
 import ApproveBusReqComponent from "./ApproveBusReqComponent";
 import WalletComponent from "./WalletComponent";
 import SelectBusSeatComponent from "./SelectBusSeatComponent";
+import OutpassComponent from "./OutpassComponent";
 
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -90,7 +91,6 @@ class Main extends Component {
         <TransitionGroup>
           <CSSTransition classNames="page" timeout={300}>
             <Switch>
-
               <Route
                 path="/home"
                 component={() => (
@@ -118,7 +118,9 @@ class Main extends Component {
               />
               <Route
                 path="/updateSchedule"
-                component={() => <UpdateScheduleComponent auth={this.props.auth} />}
+                component={() => <UpdateScheduleComponent auth={this.props.auth} schedule={this.props.schedule} updateSchedule={this.props.updateSchedule}
+                  postSchedule={this.props.postSchedule}
+                />}
               />
               <Route
                 path="/approveOutpass"
@@ -130,8 +132,7 @@ class Main extends Component {
               />
               <Route
                 path="/viewTrips"
-                component={() => <ViewTripsComponent auth = {this.props.auth} ticket = {this.props.ticket} cancelTicket = {this.props.cancelTicket}
-                wallet = {this.props.wallet}
+                component={() => <ViewTripsComponent auth = {this.props.auth} ticket = {this.props.ticket} cancelTicket = {this.props.cancelTicket} wallet = {this.props.wallet}
                 />}
               />
               <Route
@@ -145,6 +146,10 @@ class Main extends Component {
               <Route
                 path="/selectSeat"
                 component={() => <SelectBusSeatComponent bus = {this.props.bus} auth={this.props.auth} />}
+              />
+              <Route
+                path="/outpass"
+                component={() => <OutpassComponent  auth = {this.props.auth}  outpass={this.props.outpass} />}
               />
               <Redirect to="/home" />
 
