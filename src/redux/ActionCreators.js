@@ -112,6 +112,13 @@ export const postBus = (user, bus) => async (dispatch) => {
     try {
         dispatch(requestBus());
         if (user !== undefined && user.role === 'admin') {
+
+            var seatsArr = new Array(bus.totalSeats);
+            bus['seatsAvailable']=0;
+            bus['seatsArray']=seatsArr;
+
+
+
             await addDoc(collection(db, 'bus'), bus);
             dispatch(receiveBus(bus));
         }
@@ -272,6 +279,52 @@ export const updateTicket = (user, ticket) => async (dispatch) => {
     }
 }
 
+
+export const cancelTicket = (user, wallet,ticket) => async (dispatch) => {
+    try {
+        dispatch(requestTicket());
+        if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
+            
+
+            //get bus and Time
+            const busRef = firestore.doc(`bus/${ticket.busid}`)
+            const docBus = await getDoc(busRef);
+
+            const currentTime =new Date().toLocaleTimeString('it-IT', { hour12: false, 
+                hour: "numeric", 
+                minute: "numeric",
+                timeZone: 'Asia/Kolkata'});
+            const busDepartureTime=docBus.data().time;
+
+           
+            const curHour = parseInt(currentTime.slice(0, 2));
+            const curMin=parseInt(currentTime.slice(3, 5));
+
+            const busHour=parseInt(busDepartureTime.slice(0, 2));
+            const busMin= parseInt(busDepartureTime.slice(3, 5));
+
+
+
+            if((busHour-curHour)*60 +(busMin-curMin)>15)
+                {
+                    dispatch(updateWallet(user,wallet,0.5));
+                }
+
+            
+
+
+            dispatch(fetchTicket(user));
+        }
+        else {
+            throw Error("Error 401: Unauthorized");
+        }
+    } catch (error) {
+        dispatch(ticketError(error.message))
+    }
+}
+
+
+
 // Wallet functions
 export const postWallet = (user) => async (dispatch) => {
 
@@ -324,6 +377,18 @@ export const updateWallet = (user, wallet, token) => async (dispatch) => {
         dispatch(requestWallet());
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
             const walletRef = firestore.doc(`wallet/${wallet.uid}`)
+
+            //Check If token Is Int
+            if (typeof(token)!== 'number'){
+                throw Error("Token is not a Number");
+              }
+
+            if(wallet.tokenNo + token<0)
+            {   throw Error("Insufficient Balance");
+
+            }
+
+
             var newBal = wallet.tokenNo + token;
             await walletRef.set({
                 tokenNo: newBal,
