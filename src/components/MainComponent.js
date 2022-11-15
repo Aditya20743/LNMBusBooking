@@ -16,10 +16,10 @@ import WalletComponent from "./WalletComponent";
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { loginUser, googleLogin, logoutUser ,postBus,postOutpass,
-  postStore,postTicket,postWallet,fetchBus,fetchWallet,fetchOutpass,
-  fetchStore,fetchTicket,deleteBus,deleteOutpass,
-  postSpecialBusRequest,fetchSpecialBusRequest,deleteSpecialBusRequest,postSchedule,fetchSchedule} from "../redux/ActionCreators";
+import {
+  loginUser, googleLogin, logoutUser, postBus, postOutpass, postStore, postTicket, postWallet, fetchStore, deleteBus, postSpecialBusRequest,
+  deleteSpecialBusRequest, postSchedule, fetchSchedule, updateSchedule, updateTicket,
+} from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
   return {
@@ -38,41 +38,30 @@ const mapDispatchToProps = (dispatch) => ({
   loginUser: (creds) => dispatch(loginUser(creds)),
   logoutUser: () => dispatch(logoutUser()),
   googleLogin: () => dispatch(googleLogin()),
-  
-  postOutpass: (user,outpass)=> dispatch(postOutpass(user,outpass)),
-  fetchOutpass: ()=>dispatch(fetchOutpass()),
-  
-  postWallet: (wallet)=> dispatch(postWallet(wallet)),
-  fetchWallet: ()=>dispatch(fetchWallet()),
 
-  postStore: (store)=> dispatch(postStore(store)),
-  fetchStore: ()=>dispatch(fetchStore()),
+  postOutpass: (user, outpass) => dispatch(postOutpass(user, outpass)),
+  postWallet: (user) => dispatch(postWallet(user)),
+  postTicket: (user, ticket) => dispatch(postTicket(user, ticket)),
+  postSpecialBusRequest: (user, specialbusrequest) => dispatch(postSpecialBusRequest(user, specialbusrequest)),
+  postBus: (user, bus) => dispatch(postBus(user, bus)),
 
-  postBus: (bus)=> dispatch(postBus(bus)),
-  fetchBus: ()=>dispatch(fetchBus()),
+  postStore: (user, store) => dispatch(postStore(user, store)),
+  fetchStore: () => dispatch(fetchStore()),
 
-  postTicket: (ticket)=> dispatch(postTicket(ticket)),
-  fetchTicket: ()=>dispatch(fetchTicket()),
+  updateTicket: (user, ticket) => dispatch(updateTicket(user, ticket)),
 
-  
-  postSchedule: (schedule)=> dispatch(postSchedule(schedule)),
-  fetchSchedule: ()=>dispatch(fetchSchedule()),
+  postSchedule: (user, schedule) => dispatch(postSchedule(user, schedule)),
+  fetchSchedule: () => dispatch(fetchSchedule()),
+  updateSchedule: (user, schedule) => dispatch(updateSchedule(user, schedule)),
 
-  deleteBus: (bus)=> dispatch(deleteBus(bus)),
-  deleteOutpass: (outpass)=>dispatch(deleteOutpass(outpass)),
-
-  postSpecialBusRequest: (user,specialbusrequest) => dispatch(postSpecialBusRequest(user,specialbusrequest)),
-  fetchSpecialBusRequest: ()=> dispatch(fetchSpecialBusRequest()),
-  deleteSpecialBusRequest: (specialbusrequest)=> dispatch(fetch(deleteSpecialBusRequest(specialbusrequest))),
+  deleteBus: (user, bus) => dispatch(deleteBus(user, bus)),
+  deleteSpecialBusRequest: (user, specialbusrequest) => dispatch(fetch(deleteSpecialBusRequest(user, specialbusrequest)))
 });
-
-
 
 class Main extends Component {
   componentDidMount() {
+    this.props.fetchSchedule();
     this.props.fetchStore();
-    this.props.fetchBus();
-    this.props.fetchTicket();
   }
   componentWillUnmount() {
     this.props.logoutUser();
@@ -98,6 +87,7 @@ class Main extends Component {
                     auth={this.props.auth}
                     loginUser={this.props.loginUser}
                     googleLogin={this.props.googleLogin}
+                    wallet={this.props.wallet}
                   />
                 )}
               />
@@ -108,39 +98,37 @@ class Main extends Component {
               />
               <Route
                 path="/requestOutpass"
-                component={() => <RequestOutpassComponent auth={this.props.auth}
-                  postOutpass={this.props.postOutpass} />}
+                component={() => <RequestOutpassComponent auth={this.props.auth} postOutpass={this.props.postOutpass} />}
               />
-              <Route path="/addBus" component={() => <AddBusComponent postBus={this.props.postBus} />} />
+              <Route path="/addBus" component={() => <AddBusComponent auth={this.props.auth} postBus={this.props.postBus} />} />
               <Route
                 path="/removeBus"
-                component={() => <RemoveBusComponent />}
+                component={() => <RemoveBusComponent auth={this.props.auth} bus={this.props.bus} deleteBus={this.props.deleteBus} />}
               />
               <Route
                 path="/updateSchedule"
-                component={() => <UpdateScheduleComponent />}
+                component={() => <UpdateScheduleComponent auth={this.props.auth} />}
               />
               <Route
                 path="/approveOutpass"
-                component={() => <ApproveOutpassComponent outpass = {this.props.outpass}/>}
+                component={() => <ApproveOutpassComponent auth={this.props.auth} outpass={this.props.outpass} />}
               />
               <Route
                 path="/selectBus"
-                component={() => <SelectBusComponent />}
+                component={() => <SelectBusComponent bus={this.props.bus} />}
               />
               <Route
                 path="/viewTrips"
                 component={() => <ViewTripsComponent  ticket = {this.props.ticket} />}
               />
               <Route
-                path="/approveBus"
-                component={() => <ApproveBusReqComponent />}
+                path="/wallet"
+                component={() => <WalletComponent wallet={this.props.wallet} store = {this.props.store}/>}
                 />
               <Route
-                path="/wallet"
-                component={() => <WalletComponent store = {this.props.store}/>}
-                />
-
+                path="/approveBusRequest"
+                component={() => <ApproveBusReqComponent auth={this.props.auth} />}
+              />
               <Redirect to="/home" />
 
             </Switch>

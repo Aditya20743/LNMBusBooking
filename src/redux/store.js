@@ -2,14 +2,13 @@ import * as ActionTypes from './ActionTypes';
 
 export const Store = (state = {
         isLoading: false,
-        store: null,
+        store: [],
         errMess: null
     }, action) => {
     switch (action.type) {
         case ActionTypes.STORE_REQUEST:
             return {...state,
-                isLoading: true,
-            
+                isLoading: true
             };
         case ActionTypes.STORE_SUCCESS:
             return {...state,
@@ -19,7 +18,7 @@ export const Store = (state = {
             };
         case ActionTypes.STORE_FAILURE:
             return {
-                store: null,
+                store: [],
                 isLoading: false,
                 errMess: action.message
             };

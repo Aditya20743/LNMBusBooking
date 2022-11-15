@@ -38,11 +38,11 @@ class Home extends Component {
           <div className="row ">
             <div className="card col-10 col-sm-6 col-md-6 col-xl-4 offset-1 offset-sm-0 align-self-center ">
               <div className="card-body align-self-center p-3">
-                <Link to={`/`}>
+                <Link to={`/approveBusRequest`}>
                   <div className="row mt-3">
                     <button
                       type="button "
-                      class="cardBtn btn-primary btn d-flex py-2 px-3 mb-3 btn-block justify-content-center nav-link"
+                      className="cardBtn btn-primary btn d-flex py-2 px-3 mb-3 btn-block justify-content-center nav-link"
                     >
                       View Bus Requests
                       <div className="home-btn-icon ml-2">
@@ -68,7 +68,7 @@ class Home extends Component {
                   <div className="row mb-3">
                     <button
                       type="button"
-                      class="cardBtn btn-primary btn d-flex py-2 px-3 btn-block justify-content-center nav-link"
+                      className="cardBtn btn-primary btn d-flex py-2 px-3 btn-block justify-content-center nav-link"
                     >
                       Remove Bus
                       <div className="home-btn-icon ml-2">
@@ -81,7 +81,7 @@ class Home extends Component {
                   <div className="row mb-3">
                     <button
                       type="button"
-                      class="cardBtn btn-primary btn d-flex py-2 px-3 mb-3 btn-block justify-content-center nav-link"
+                      className="cardBtn btn-primary btn d-flex py-2 px-3 mb-3 btn-block justify-content-center nav-link"
                     >
                       Update Schedule
                       <div className="home-btn-icon ml-2 ">
@@ -119,7 +119,7 @@ class Home extends Component {
                   <Link to={`/approveOutpass`}>
                     <button
                       type="button "
-                      class="cardBtn btn-primary btn> d-flex p-3 mb-3 btn-block justify-content-center nav-link"
+                      className="cardBtn btn-primary btn> d-flex p-3 mb-3 btn-block justify-content-center nav-link"
                     >
                       Display Outpass Requests
                       <div className="home-btn-icon ml-2">
@@ -152,27 +152,29 @@ class Home extends Component {
                     <div className="row">
                       <div className="d-flex col-flex justify-content-center token-count-circle offset-2">
                         <div className="align-self-center">
-                          <h1>16</h1> Tokens
+                          <h1>{this.props.wallet.isLoading ? "Loading" : this.props.wallet.wallet.tokenNo}</h1> Tokens
                         </div>
                       </div>
                     </div>
+                    <Link to={`/wallet`}>
                     <div className="row mt-3">
                       <button
                         type="button"
-                        class="cardBtn btn-primary btn d-flex p-2 mb-3 btn-block justify-content-center nav-link"
+                        className="cardBtn btn-primary btn d-flex p-2 mb-3 btn-block justify-content-center nav-link"
                       >
                         Purchase Tokens
                         <div className="home-btn-icon ml-2">
                           <ArrowCircleRightOutlinedIcon />
                         </div>
                       </button>
-                    </div>
+                      </div>
+                    </Link>
                   </>
                 ) : (
                   <div className="row mt-3">
                     <button
                       type="button"
-                      class="cardBtn btn-primary btn d-flex p-2 mb-3 btn-block justify-content-center nav-link"
+                      className="cardBtn btn-primary btn d-flex p-2 mb-3 btn-block justify-content-center nav-link"
                       onClick={this.toggleModal}
                     >
                       Login
@@ -197,11 +199,11 @@ class Home extends Component {
           <div className="row pb-4">
             <div className="card col-8 col-sm-6 col-md-4 col-lg-3 offset-2 offset-sm-3 offset-md-6 offset-lg-7">
               <div className="card-body align-self-center p-3">
-                <Link to={`/`}>
+                <Link to={`/selectBus`}>
                   <div className="row mt-3">
                     <button
                       type="button "
-                      class="cardBtn btn-primary btn> d-flex p-2 mb-3 btn-block justify-content-center nav-link"
+                      className="cardBtn btn-primary btn> d-flex p-2 mb-3 btn-block justify-content-center nav-link"
                     >
                       Book Ticket
                       <div className="home-btn-icon ml-2">
@@ -214,7 +216,7 @@ class Home extends Component {
                   <div className="row ">
                     <button
                       type="button"
-                      class="cardBtn btn-primary btn> d-flex py-2 px-4 mb-3 btn-block justify-content-center nav-link"
+                      className="cardBtn btn-primary btn> d-flex py-2 px-4 mb-3 btn-block justify-content-center nav-link"
                     >
                       View Schedule
                       <div className="home-btn-icon ml-2 ">
@@ -227,7 +229,7 @@ class Home extends Component {
                   <div className="row mb-3">
                     <button
                       type="button"
-                      class="cardBtn btn-primary btn> d-flex py-2 px-4 btn-block justify-content-center nav-link"
+                      className="cardBtn btn-primary btn> d-flex py-2 px-4 btn-block justify-content-center nav-link"
                     >
                       Outpass
                       <div className="home-btn-icon ml-2">
