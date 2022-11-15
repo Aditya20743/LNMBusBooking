@@ -118,11 +118,8 @@ export const postBus = (user, bus) => async (dispatch) => {
             var seatsArr = new Array(bus.totalSeats);
             bus['seatsAvailable']=0;
             bus['seatsArray']=seatsArr;
-
-
-
             await addDoc(collection(db, 'bus'), bus);
-            dispatch(receiveBus(bus));
+            dispatch(fetchBus());
         }
         else {
             throw Error("Error 401: Unauthorized");
@@ -158,7 +155,7 @@ export const deleteBus = (user, bus) => async (dispatch) => {
         if (user !== undefined && user.role === 'admin') {
             const busRef = doc(db, "bus", bus.busId);
             await deleteDoc(busRef);
-            dispatch(receiveBus(bus));
+            dispatch(fetchBus());
         }
         else {
             throw Error("Error 401: Unauthorized");
@@ -176,7 +173,7 @@ export const updateBus = (user, bus) => async (dispatch) => {
             const busRef = firestore.doc(`bus/${bus._id}`)
             await busRef.set(bus, { merge: true });
             const docBus = await getDoc(busRef);
-            dispatch(receiveOutpass(docBus.data()));
+            dispatch(fetchBus());
         }
         else {
             throw Error("Error 401: Unauthorized");
@@ -192,7 +189,7 @@ export const postStore = (user, store) => async (dispatch) => {
         dispatch(requestStore());
         if (user !== undefined && user.role === 'admin') {
             await addDoc(collection(db, 'store'), store);
-            dispatch(receiveStore(store));
+            dispatch(fetchStore(user));
         }
         else {
             throw Error("Error 401: Unauthorized");
@@ -229,7 +226,7 @@ export const postTicket = (user, ticket) => async (dispatch) => {
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
             ticket['uid'] = user.uid;
             await addDoc(collection(db, 'ticket'), ticket);
-            dispatch(receiveTicket(ticket));
+            dispatch(fetchTicket(user));
         }
         else {
             throw Error("Error 401: Unauthorized");
@@ -311,10 +308,6 @@ export const cancelTicket = (user, wallet,ticket) => async (dispatch) => {
                 {
                     dispatch(updateWallet(user,wallet,0.5));
                 }
-
-            
-
-
             dispatch(fetchTicket(user));
         }
         else {
@@ -340,7 +333,7 @@ export const postWallet = (user) => async (dispatch) => {
             }, { merge: true }
             )
             const docUser = await getDoc(walletRef);
-            dispatch(receiveWallet(docUser.data()));
+            dispatch(fetchWallet(user));
         }
         else {
             throw Error("Error 401: Unauthorized");
@@ -416,7 +409,7 @@ export const postSpecialBusRequest = (user, specialbusrequest) => async (dispatc
             specialbusrequest['name'] = user.name;
             specialbusrequest['email'] = user.email;
             await addDoc(collection(db, 'specialBusRequest'), specialbusrequest);
-            dispatch(receiveSpecialBusRequest(specialbusrequest));
+            dispatch(fetchSpecialBusRequest(user));
         }
         else {
             throw Error("Error 401: Unauthorized");
@@ -455,7 +448,7 @@ export const deleteSpecialBusRequest = (user, specialbusrequest) => async (dispa
         if (user !== undefined && user.role === 'admin') {
             const specialBusRef = doc(db, "specialBusRequest", specialbusrequest.specialBusId);
             await deleteDoc(specialBusRef);
-            dispatch(receiveSpecialBusRequest(specialbusrequest));
+            dispatch(fetchSpecialBusRequest(user));
         }
         else {
             throw Error("Error 401: Unauthorized");
@@ -471,7 +464,7 @@ export const updateSpecialBus = (user, specialbus) => async (dispatch) => {
         if (user !== undefined && user.role === 'admin') {
             const specialBusRef = firestore.doc(`specialbus/${specialbus._id}`)
             await specialBusRef.set(specialbus, { merge: true });
-            dispatch(fetchSpecialBusRequest());
+            dispatch(fetchSpecialBusRequest(user));
         }
         else {
             throw Error("Error 401: Unauthorized");
@@ -487,7 +480,7 @@ export const postSchedule = (user, schedule) => async (dispatch) => {
             dispatch(requestSchedule());
             dispatch(requestSpecialBusRequest());
             await addDoc(collection(db, 'schedule'), schedule);
-            dispatch(receiveSchedule(schedule));
+            dispatch(fetchSchedule());
         }
         else {
             throw Error("Error 401: Unauthorized");
