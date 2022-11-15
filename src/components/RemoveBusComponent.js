@@ -1,63 +1,146 @@
 import React, { Component } from "react";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
+import ArrowForward from "@mui/icons-material/ArrowForward";
+import moment from "moment";
 
 class RemoveBusComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      date: "",
+      selectedBus: "",
+    };
+
+    this.handleInput = this.handleInput.bind(this);
+  }
+  handleInput(event) {
+    const name = event.target.name;
+    const value = event.target.value;
+    console.log(this.state);
+    this.setState({ ...this.state, [name]: value });
+    console.log(this.state);
+  }
+
   render() {
-    return (
-      <div className="container pt-5 c-width">
-        <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
-          <h2>Remove Bus</h2>
+    if (this.props.bus.isLoading) {
+      return (
+        <div className="container pt-5 c-width">
+          <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center">
+            <h6>Loading...</h6>
+          </div>
         </div>
-        <div className="row-fluid mb-5 align-self-center mt-4">
-          <div className="col">
-            <div className="card col-12 col-sm-10 col-md-8 col-xl-4 offset-xl-4 offset-md-2 offset-sm-1 align-self-center">
-              <div className="card-body align-self-center p-4">
-                <form>
-                  <div className="pt-3 ">
-                    <Stack component="form" noValidate spacing={3}>
-                      <TextField
-                        id="date"
-                        label="Select Date"
-                        type="date"
+      );
+    } else if (this.props.bus.errMess) {
+      return (
+        <div className="container pt-5 c-width">
+          <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
+            <h6>ERROR: {this.props.bus.errMess}</h6>
+          </div>
+        </div>
+      );
+    } else if (
+      this.props.auth.user === null ||
+      this.props.auth.user.role !== "admin"
+    ) {
+      return (
+        <div className="container pt-5 c-width">
+          <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
+            <h6>ERROR: Unauthorized Access</h6>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="container pt-5 c-width">
+          <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
+            <h2>Remove Bus</h2>
+          </div>
+          <div className="row-fluid mb-5 align-self-center mt-4">
+            <div className="col">
+              <div className="card col-12 col-sm-10 col-md-8 col-xl-4 offset-xl-4 offset-md-2 offset-sm-1 align-self-center">
+                <div className="card-body align-self-center p-4">
+                  <form>
+                    <div className="pt-3 d-flex justify-content-center">
+                      <Stack component="form" noValidate spacing={3}>
+                        <TextField
+                          id="date"
+                          label="Select Date"
+                          type="date"
                         defaultValue="2022-01-01"
                         sx={{ width: 220 }}
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
-                      />
-                    </Stack>
-                  </div>
+                          name="date"
+                          value={this.state.date}
+                          onChange={this.handleInput}
+                          InputLabelProps={{
+                            shrink: true,
+                          }}
+                        />
+                      </Stack>
+                    </div>
 
-                  <div className="input-group justify-content-center mt-4 mb-4">
-                    <select className="form-select p-2" id="inputGroupSelect02">
-                      <option selected disabled>
-                        Select the Day
-                      </option>
-                      <option value="1">Monday</option>
-                      <option value="2">Tuesday</option>
-                      <option value="3">Wednesday</option>
-                      <option value="4">Thursday</option>
-                      <option value="5">Friday</option>
-                      <option value="6">Saturday</option>
-                      <option value="7">Sunday</option>
-                    </select>
+                    <div className="input-group justify-content-center mt-4 mb-4">
+                      <select
+                        className="form-select p-2"
+                        id="inputGroupSelect02"
+                        name="selectedBus"
+                        onChange={this.handleInput}
+                        value = {this.state.selectedBus}
+                      >
+                        <option selected disabled value="">
+                          Select the Bus
+                        </option>
+                        {this.props.bus.bus.filter(
+                          (bus) => bus.date === this.state.date
+                        ).length === 0 ? (
+                          <div className="d-flex align-self-center justify-content-center my-4">
+                            <h5>No Buses Available </h5>
+                          </div>
+                        ) : (
+                          this.props.bus.bus
+                            .filter((bus) => bus.date === this.state.date)
+                            .map((bus) => {
+                              return (
+                                <option value= {JSON.stringify(bus)} key={bus._id}>
+                                  Bus No. {bus.busNumber}, {bus.source} to{" "}
+                                  {bus.destination}, {bus.time}, {bus.busType}
+                                </option>
+                              );
+                            })
+                        )}
+                      </select>
+                    </div>
+                  </form>
+                  <div className="row m-3 pt-2 pt-2 pd-2">
+                    {this.state.selectedBus === "" ? (
+                      <button
+                        type="button"
+                        className="cardBtn btn text-white disabled btn d-flex mb-3 btn-block justify-content-center "
+                      >
+                        Delete Bus
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        className="cardBtn btn-primary btn d-flex mb-3 btn-block justify-content-center nav-link"
+                        onClick={() =>
+                          this.props.deleteBus(
+                            this.props.auth.user,
+                            JSON.parse(this.state.selectedBus)
+                          )
+                        }
+                      >
+                        Delete Bus
+                      </button>
+                    )}
                   </div>
-                </form>
-                <div className="row m-3 pt-2 pt-2 pd-2">
-                  <button
-                    type="button"
-                    className="cardBtn btn-primary btn d-flex mb-3 btn-block justify-content-center nav-link"
-                  >
-                    Delete Bus
-                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 }
 
