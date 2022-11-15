@@ -127,7 +127,7 @@ class Main extends Component {
                 />
               <Route
                 path="/approveBusRequest"
-                component={() => <ApproveBusReqComponent auth={this.props.auth} />}
+                component={() => <ApproveBusReqComponent specialbusrequest = {this.props.specialbusrequest} auth={this.props.auth} />}
               />
               <Redirect to="/home" />
 
