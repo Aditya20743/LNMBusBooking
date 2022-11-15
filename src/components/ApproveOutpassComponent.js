@@ -69,7 +69,7 @@ class ApproveOutpassComponent extends Component {
     if (this.props.outpass.isLoading) {
       return (
         <div className="container pt-5 c-width">
-          <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
+          <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center">
             <h6>Loading...</h6>
           </div>
         </div>
@@ -90,8 +90,10 @@ class ApproveOutpassComponent extends Component {
             <h2>Outpass Request</h2>
           </div>
           <div className="row-fluid mb-5 mt-4">
-            {this.props.outpass.outpass === [] ? 
-              <h4>Empty</h4>
+            {this.props.outpass.outpass.length === 0 ? 
+              <div className="d-flex align-self-center justify-content-center mt-5">
+                <h4>No Requests</h4>
+              </div>
             : this.props.outpass.outpass.map((outpass) => {
               return (
                 <div key={outpass._id} className="col-12 mb-4">

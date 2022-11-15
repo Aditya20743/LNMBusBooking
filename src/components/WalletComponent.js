@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Divider } from "@mui/material";
 
-function RenderPassCard({ pass }) {
+function RenderPassCard({ pass, handleSubmit }) {
   return (
     <div className="card my-3  ">
       <div className="card-body align-self-center p-3">
@@ -21,6 +21,7 @@ function RenderPassCard({ pass }) {
           <button
             type="button"
             className="cardBtn btn-primary btn d-flex p-2 mb-3 btn-block justify-content-center nav-link"
+            onClick={() => handleSubmit(pass.numOfTokens)}
           >
             Purchase Now
             <div className="home-btn-icon ml-2"></div>
@@ -32,6 +33,16 @@ function RenderPassCard({ pass }) {
 }
 
 class WalletComponent extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(noOfTokens) {
+    this.props.updateWallet(this.props.auth.user, this.props.wallet.wallet, noOfTokens);
+  }
+
   render() {
     if (this.props.store.isLoading) {
       return (
@@ -88,7 +99,7 @@ class WalletComponent extends Component {
                 {this.props.store.store.map((pass) => {
                   return (
                     <div className="col-6">
-                      <RenderPassCard pass={pass} />
+                      <RenderPassCard pass={pass}  handleSubmit = {this.handleSubmit}/>
                     </div>
                   );
                 })}

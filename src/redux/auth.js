@@ -5,8 +5,8 @@ import * as ActionTypes from './ActionTypes';
 // we would also want a util to check if the token is expired.
 export const Auth = (state = {
         isLoading: false,
-        isAuthenticated: localStorage.getItem('user') ? true : false,
-        user: localStorage.getItem('user'),
+        isAuthenticated: false,
+        user: null,
         errMess: null
     }, action) => {
     switch (action.type) {
