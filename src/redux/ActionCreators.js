@@ -418,8 +418,10 @@ export const fetchSpecialBusRequest = (user) => async (dispatch) => {
             const querySnapshot = await getDocs(collection(db, "specialBusRequest"));
             let specialBusArr = [];
             querySnapshot.forEach((doc) => {
-                const _id = doc.id;
-                specialBusArr.push({ _id, ...doc.data() });
+                if(doc.data().status === "pending" ){
+                    const _id = doc.id;
+                    specialBusArr.push({ _id, ...doc.data() });
+                }
             })
             dispatch(receiveSpecialBusRequest(specialBusArr));
         }
