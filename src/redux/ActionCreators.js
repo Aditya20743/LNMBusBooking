@@ -285,39 +285,6 @@ export const cancelTicket = (user, wallet, ticket) => async (dispatch) => {
       //get bus and Time
       const busRef = firestore.doc(`bus/${ticket.busid}`);
       const docBus = await getDoc(busRef);
-
-<<<<<<< HEAD
-      const currentTime = new Date().toLocaleTimeString("it-IT", {
-        hour12: false,
-        hour: "numeric",
-        minute: "numeric",
-        timeZone: "Asia/Kolkata",
-      });
-      const busDepartureTime = docBus.data().time;
-      const curHour = parseInt(currentTime.slice(0, 2));
-      const curMin = parseInt(currentTime.slice(3, 5));
-=======
-export const cancelTicket = (user, wallet,ticket) => async (dispatch) => {
-    try {
-        dispatch(requestTicket());
-        if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
-            
-            //get bus and Time
-            const busRef = firestore.doc(`bus/${ticket.busId}`)
-            const docBus = await getDoc(busRef);
->>>>>>> 6ee11f2fa8d9549bf296e64a691843a707fb3a48
-
-      const busHour = parseInt(busDepartureTime.slice(0, 2));
-      const busMin = parseInt(busDepartureTime.slice(3, 5));
-
-<<<<<<< HEAD
-      if ((busHour - curHour) * 60 + (busMin - curMin) > 15) {
-        dispatch(updateWallet(user, wallet, 0.5));
-      }
-      dispatch(fetchTicket(user));
-    } else {
-      throw Error("Error 401: Unauthorized");
-=======
             const busHour=parseInt(busDepartureTime.slice(0, 2));
             const busMin= parseInt(busDepartureTime.slice(3, 5));
 
@@ -332,11 +299,7 @@ export const cancelTicket = (user, wallet,ticket) => async (dispatch) => {
         }
     } catch (error) {
         dispatch(ticketError(error.message))
->>>>>>> 6ee11f2fa8d9549bf296e64a691843a707fb3a48
     }
-  } catch (error) {
-    dispatch(ticketError(error.message));
-  }
 };
 
 // Wallet functions
@@ -365,23 +328,6 @@ export const postWallet = (user) => async (dispatch) => {
 };
 
 export const fetchWallet = (user) => async (dispatch) => {
-<<<<<<< HEAD
-  try {
-    dispatch(requestWallet());
-    if (
-      user !== undefined &&
-      (user.role === "student" || user.role === "faculty")
-    ) {
-      const walletRef = firestore.doc(`wallet/${user.uid}`);
-      const docSnap = await getDoc(walletRef);
-      if (!docSnap.exists()) {
-        dispatch(postWallet(user));
-      } else {
-        dispatch(receiveWallet(docSnap.data()));
-      }
-    } else {
-      throw Error("Error 401: Unauthorized");
-=======
     try {
         dispatch(requestWallet());
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
@@ -401,7 +347,7 @@ export const fetchWallet = (user) => async (dispatch) => {
     catch (error) {
         dispatch(walletError(error.message))
     }
-}
+};
 
 export const updateWallet = (user, wallet, token) => async (dispatch) => {
 
@@ -452,69 +398,9 @@ export const postSpecialBusRequest = (user, specialbusrequest) => async (dispatc
         }
     }
     catch (error) {
-        dispatch(specialBusRequestError(error.message))
->>>>>>> 6ee11f2fa8d9549bf296e64a691843a707fb3a48
+        dispatch(specialBusRequestError(error.message));
     }
-  } catch (error) {
-    dispatch(walletError(error.message));
-  }
 };
-
-export const updateWallet = (user, wallet, token) => async (dispatch) => {
-  try {
-    dispatch(requestWallet());
-    if (
-      user !== undefined &&
-      (user.role === "student" || user.role === "faculty")
-    ) {
-      const walletRef = firestore.doc(`wallet/${wallet.uid}`);
-
-      //Check If token Is Int
-      if (typeof token !== "number") {
-        throw Error("Token is not a Number");
-      }
-
-      if (wallet.tokenNo + token < 0) {
-        throw Error("Insufficient Balance");
-      }
-
-      var newBal = wallet.tokenNo + token;
-      await walletRef.set(
-        {
-          tokenNo: newBal,
-        },
-        { merge: true }
-      );
-      dispatch(fetchWallet(user));
-    } else {
-      throw Error("Error 401: Unauthorized");
-    }
-  } catch (error) {
-    dispatch(walletError(error.message));
-  }
-};
-
-// Special Bus functions
-export const postSpecialBusRequest =
-  (user, specialbusrequest) => async (dispatch) => {
-    dispatch(requestSpecialBusRequest());
-    try {
-      if (
-        user !== undefined &&
-        (user.role === "student" || user.role === "faculty")
-      ) {
-        specialbusrequest["uid"] = user.uid;
-        specialbusrequest["name"] = user.name;
-        specialbusrequest["email"] = user.email;
-        await addDoc(collection(db, "specialBusRequest"), specialbusrequest);
-        dispatch(fetchSpecialBusRequest(user));
-      } else {
-        throw Error("Error 401: Unauthorized");
-      }
-    } catch (error) {
-      dispatch(specialBusRequestError(error.message));
-    }
-  };
 
 export const fetchSpecialBusRequest = (user) => async (dispatch) => {
   try {
