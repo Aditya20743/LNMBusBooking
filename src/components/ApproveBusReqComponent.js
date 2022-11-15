@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import moment from "moment";
 
-function RenderApproveBusRequest({ busRequest }) {
+function RenderApproveBusRequest({ busRequest, handleSubmit }) {
   return (
     <div className="card col-fluid">
       <div className="card-body  p-3">
@@ -10,12 +10,20 @@ function RenderApproveBusRequest({ busRequest }) {
             <h5 className="p-2 px-4">{busRequest.email}</h5>
           </div>
           <div className="col-6 col-md-3 mt-2 mt-md-0">
-            <button type="button" className="btn btn-block btn-outline-success">
+            <button
+              type="button"
+              className="btn btn-block btn-outline-success"
+              onClick={() => handleSubmit(busRequest, "Approve")}
+            >
               Approve
             </button>
           </div>
           <div className="col-6 col-md-3 mt-2 mt-md-0">
-            <button type="button" className="btn btn-block btn-outline-danger">
+            <button
+              type="button"
+              className="btn btn-block btn-outline-danger"
+              onClick={() => handleSubmit(busRequest, "Disapprove")}
+            >
               Disapprove
             </button>
           </div>
@@ -36,7 +44,9 @@ function RenderApproveBusRequest({ busRequest }) {
 
         <div className="row mt-1">
           <div className="col-6 col-md-3">Departure Time:</div>
-          <div className="col-6 col-md-3">{moment(busRequest.time,"hh:mm").format("LT")}</div>
+          <div className="col-6 col-md-3">
+            {moment(busRequest.time, "hh:mm").format("LT")}
+          </div>
           <div className="col-6 col-md-3">Purpose:</div>
           <div className="col-6 col-md-3">{busRequest.purpose}</div>
         </div>
@@ -46,6 +56,16 @@ function RenderApproveBusRequest({ busRequest }) {
 }
 
 class ApproveBusReqComponent extends Component {
+  constructor(props) {
+    super(props);
+
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(busRequest, response) {
+    busRequest = { ...busRequest, status: response };
+    this.props.updateSpecialBus(this.props.auth.user, busRequest);
+  }
 
   render() {
     if (this.props.specialbusrequest.isLoading) {
@@ -71,13 +91,24 @@ class ApproveBusReqComponent extends Component {
             <h2>Bus Requests</h2>
           </div>
           <div className="row-fluid mb-5  mt-4">
-            {this.props.specialbusrequest.specialBusRequest.map((busRequest) => {
-              return (
-                <div key={busRequest._id} className="col-12 mb-4">
-                  <RenderApproveBusRequest busRequest={busRequest} />
-                </div>
-              );
-            })}
+            {this.props.specialbusrequest.specialBusRequest.length === 0 ? (
+              <div className="d-flex align-self-center justify-content-center mt-5">
+                <h4>No requests</h4>
+              </div>
+            ) : (
+              this.props.specialbusrequest.specialBusRequest.map(
+                (busRequest) => {
+                  return (
+                    <div key={busRequest._id} className="col-12 mb-4">
+                      <RenderApproveBusRequest
+                        busRequest={busRequest}
+                        handleSubmit={this.handleSubmit}
+                      />
+                    </div>
+                  );
+                }
+              )
+            )}
           </div>
         </div>
       );
