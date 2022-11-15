@@ -284,7 +284,7 @@ export const cancelTicket = (user, wallet,ticket) => async (dispatch) => {
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
             
             //get bus and Time
-            const busRef = firestore.doc(`bus/${ticket.busid}`)
+            const busRef = firestore.doc(`bus/${ticket.busId}`)
             const docBus = await getDoc(busRef);
 
             const currentTime =new Date().toLocaleTimeString('it-IT', { hour12: false, 
@@ -301,6 +301,7 @@ export const cancelTicket = (user, wallet,ticket) => async (dispatch) => {
             if((busHour-curHour)*60 +(busMin-curMin)>15){
                 dispatch(updateWallet(user,wallet,0.5));
             }
+            dispatch(updateTicket(user, ticket));
             dispatch(fetchTicket(user));
         }
         else {
@@ -366,11 +367,10 @@ export const updateWallet = (user, wallet, token) => async (dispatch) => {
             //Check If token Is Int
             if (typeof(token)!== 'number'){
                 throw Error("Token is not a Number");
-              }
+            }
 
-            if(wallet.tokenNo + token<0)
-            {   throw Error("Insufficient Balance");
-
+            if (wallet.tokenNo + token < 0) {
+                throw Error("Insufficient Balance");
             }
 
 

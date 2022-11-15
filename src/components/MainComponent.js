@@ -132,7 +132,7 @@ class Main extends Component {
               />
               <Route
                 path="/wallet"
-                component={() => <WalletComponent wallet={this.props.wallet} store={this.props.store} />}
+                component={() => <WalletComponent auth = {this.props.auth} wallet={this.props.wallet} store={this.props.store} updateWallet={this.props.updateWallet} />}
               />
               <Route
                 path="/approveBusRequest"
