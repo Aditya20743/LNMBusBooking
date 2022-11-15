@@ -153,7 +153,8 @@ export const deleteBus = (user, bus) => async (dispatch) => {
     try {
         dispatch(requestBus());
         if (user !== undefined && user.role === 'admin') {
-            const busRef = doc(db, "bus", bus.busId);
+            console.log(bus._id);
+            const busRef = doc(db, "bus", bus._id);
             await deleteDoc(busRef);
             dispatch(fetchBus());
         }
