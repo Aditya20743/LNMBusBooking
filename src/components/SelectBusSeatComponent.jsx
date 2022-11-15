@@ -11,7 +11,7 @@ class SelectBusSeatComponent extends Component {
     return (
       <div className="container pt-5 c-width">
         <div className="row up-row ">
-          <div className="col-6 mt-3">
+          <div className="col-xl-6 col-12 mt-3">
             <div className="card col-12   mb-4">
               <div className="card-body  p-4 ">
                 <div className="row">
@@ -58,7 +58,7 @@ class SelectBusSeatComponent extends Component {
                       type="button"
                       className="btn btn-outline-primary btn-sm d-flex m-1 btn-block justify-content-center nav-link"
                     >
-                      Request Bus
+                      Select Seats
                       <div className="">
                         <ArrowForwardIcon />
                       </div>
