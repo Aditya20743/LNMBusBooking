@@ -9,10 +9,9 @@ import moment from "moment";
 const RenderBusCard = ({ bus }) => {
   const hour = bus.time.split(":")[0];
   const min = bus.time.split(":")[1];
-  const updateMinute = parseInt(min) + 10;
-  const date = new Date("", "", "", hour, updateMinute + "");
-  // const time = moment.utc().hour(hour).minute(min);
-  // const newTime = time.add(10,'m');
+  const newTime = moment.utc().hour(hour).minute(min).second(0);
+  const time = moment.utc().hour(hour).minute(min).second(0);
+  newTime.subtract(15, "m");
   return (
     <div className="card col-12 col-md-10 offset-md-1 mb-4">
       <div className="card-body  p-4 ">
@@ -36,7 +35,7 @@ const RenderBusCard = ({ bus }) => {
         <div className="row mt-2">
           <div className="col-sm-9 col-12 my-3">
             <AccessTimeIcon />
-            Departure Time: {bus.time}
+            Departure Time: {time.format("LT")}
           </div>
 
           <div className="col-sm-3 col-6 offset-3 offset-sm-0">
@@ -53,7 +52,7 @@ const RenderBusCard = ({ bus }) => {
         </div>
         <div className="row d-flex py-1 justify-content-center">
           <div className="align-item-center">
-            Bookings will get closed at 11 AM
+            Bookings will get closed at {newTime.format("LT")}
           </div>
         </div>
       </div>

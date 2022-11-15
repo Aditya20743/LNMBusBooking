@@ -85,7 +85,7 @@ class UpdateScheduleComponent extends Component {
                         type="number"
                         className="form-control"
                         id="formGroupExampleInput"
-                        placeholder="Bus No.1"
+                        placeholder="Bus No."
                       />
                     </div>
                   </div>

@@ -111,11 +111,11 @@ class RequestOutpassComponent extends Component {
                           <option selected disabled>
                             Hostel Name
                           </option>
-                          <option value="GH-1">GH-1</option>
                           <option value="BH-1">BH-1</option>
                           <option value="BH-2">BH-2</option>
                           <option value="BH-3">BH-3</option>
                           <option value="BH-4">BH-4</option>
+                          <option value="GH-1">GH-1</option>
                         </select>
                       </div>
                     </div>
