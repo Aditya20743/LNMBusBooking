@@ -1,5 +1,5 @@
 import * as ActionTypes from './ActionTypes';
-import { auth, firestore, fireauth} from '../firebase/firebase';
+import { auth, firestore, fireauth } from '../firebase/firebase';
 import { doc, getDoc, getDocs, collection, addDoc, deleteDoc } from "firebase/firestore";
 import { db } from '../firebase/firebase';
 
@@ -235,7 +235,7 @@ export const fetchTicket = (user) => async (dispatch) => {
 
     try {
         dispatch(requestTicket());
-        if (user !== undefined && user.role === 'student') {
+        if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
             const querySnapshot = await getDocs(collection(db, "ticket"));
             let ticketArr = [];
             const userid = user.uid;
@@ -288,7 +288,7 @@ export const postWallet = (user) => async (dispatch) => {
             dispatch(receiveWallet(docUser.data()));
         }
         else {
-            throw Error("Error unauthorized");
+            throw Error("Error 401: Unauthorized");
         }
     }
     catch (error) {
@@ -310,7 +310,7 @@ export const fetchWallet = (user) => async (dispatch) => {
             }
         }
         else {
-            throw Error("Error unauthorized");
+            throw Error("Error 401: Unauthorized");
         }
     }
     catch (error) {
@@ -514,77 +514,88 @@ export const receiveLogout = () => {
 
 // Logs the user out
 export const logoutUser = () => (dispatch) => {
-    dispatch(requestLogout())
+    try {
+        dispatch(requestLogout())
     auth.signOut().then(() => {
         // Sign-out successful.
     }).catch((error) => {
-
-        throw Error(error);
+        throw Error("Error 401: Unauthorized");
     });
 
     localStorage.removeItem('user');
-    dispatch(receiveLogout());
+    dispatch(receiveLogout(
+
+    ));
 
     dispatch(fetchOutpass());
     dispatch(fetchWallet());
     dispatch(fetchTicket());
     dispatch(fetchBus());
     dispatch(fetchSpecialBusRequest());
+
+    } catch (error) {
+        throw Error("Error 401: Unauthorized");
+    }
+    
 }
 
 export const fetchUser = (user) => async (dispatch) => {
-    // Detection Phase
-    const uid = user.uid;
-    const displayName = user.displayName;
-    const email = user.email;
-    const photoURL = user.photoURL;
-    var rnum = user.email.substring(0, 8);
-    const userRef = firestore.doc(`User/${uid}`)
+    try {
+        if( user === undefined || user === null){
+            throw Error("Error 401: Unauthorized");
+        }
+        const uid = user.uid;
+        const displayName = user.displayName;
+        const email = user.email;
+        const photoURL = user.photoURL;
+        var rnum = user.email.substring(0, 8);
+        const userRef = firestore.doc(`User/${uid}`)
 
-    if (email[0] >= '0' && email[0] <= '9') {
-        await userRef.set({
-            name: displayName,
-            email: email,
-            image: photoURL,
-            role: "student",
-            rollNum: rnum,
-            uid: uid
-        }, { merge: true }
-        )
-            .then(() => {
-                console.log("Student successfully written!");
-            })
-            .catch((error) => {
-                console.error("Error writing Student in document:  ", error);
-            });
+        if (email[0] >= '0' && email[0] <= '9') {
+            await userRef.set({
+                name: displayName,
+                email: email,
+                image: photoURL,
+                role: "student",
+                rollNum: rnum,
+                uid: uid
+            }, { merge: true }
+            )
+                .then(() => {
+                    dispatch(receiveLogin(user));
+                })
+                .catch((error) => {
+                    dispatch(loginError(error.message));
+                });
+        }
+        else {
+            await userRef.set({
+                name: displayName,
+                email: email,
+                image: photoURL,
+                role: "faculty",
+            }, { merge: true })
+                .then(() => {
+                    dispatch(receiveLogin(user));
+                })
+                .catch((error) => {
+                    dispatch(loginError(error.message));
+                });
+        }
+
+        const docUser = await getDoc(userRef);
+        dispatch(fetchWallet(docUser.data()));
+        dispatch(fetchTicket(docUser.data()));
+        dispatch(fetchBus(docUser.data()));
+
+        if (docUser.data().role === 'student') {
+            dispatch(fetchOutpass(docUser.data()));
+        }
+        dispatch(receiveLogin(docUser.data()));
     }
-    else {
-        await userRef.set({
-            name: displayName,
-            email: email,
-            image: photoURL,
-            role: "faculty",
-        }, { merge: true })
-            .then(() => {
-                console.log("Faculty successfully written!");
-            })
-            .catch((error) => {
-                console.error("Error writing Faculty in document:  ", error);
-            });
+    catch (error) {
+        dispatch(loginError(error.message))
     }
-
-    const docUser = await getDoc(userRef);
-    console.log(docUser.data());
-
-    dispatch(fetchWallet(docUser.data()));
-    dispatch(fetchTicket(docUser.data()));
-    dispatch(fetchBus(docUser.data()));
-
-    if (docUser.data().role === 'student') {
-        dispatch(fetchOutpass(docUser.data()));
-    }
-
-    dispatch(receiveLogin(docUser.data()));
 }
 
 

@@ -18,7 +18,7 @@ import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import {
   loginUser, googleLogin, logoutUser, postBus, postOutpass, postStore, postTicket, postWallet, fetchStore, deleteBus, postSpecialBusRequest,
-  deleteSpecialBusRequest, postSchedule, fetchSchedule, updateSchedule, updateTicket,
+  deleteSpecialBusRequest, postSchedule, fetchSchedule, updateSchedule, updateTicket, updateOutpass, updateBus, updateWallet, updateSpecialBus
 } from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
@@ -38,22 +38,22 @@ const mapDispatchToProps = (dispatch) => ({
   loginUser: (creds) => dispatch(loginUser(creds)),
   logoutUser: () => dispatch(logoutUser()),
   googleLogin: () => dispatch(googleLogin()),
-
+  updateOutpass: (user, outpass) => dispatch(updateOutpass(user, outpass)),
   postOutpass: (user, outpass) => dispatch(postOutpass(user, outpass)),
   postWallet: (user) => dispatch(postWallet(user)),
   postTicket: (user, ticket) => dispatch(postTicket(user, ticket)),
   postSpecialBusRequest: (user, specialbusrequest) => dispatch(postSpecialBusRequest(user, specialbusrequest)),
   postBus: (user, bus) => dispatch(postBus(user, bus)),
-
+  updateBus: (user, bus) => dispatch(updateBus(user, bus)),
   postStore: (user, store) => dispatch(postStore(user, store)),
   fetchStore: () => dispatch(fetchStore()),
 
   updateTicket: (user, ticket) => dispatch(updateTicket(user, ticket)),
-
+  updateWallet: (user, wallet, token) => dispatch(updateWallet(user, wallet, token)),
   postSchedule: (user, schedule) => dispatch(postSchedule(user, schedule)),
   fetchSchedule: () => dispatch(fetchSchedule()),
   updateSchedule: (user, schedule) => dispatch(updateSchedule(user, schedule)),
-
+  updateSpecialBus: (user, specialbus) => dispatch(updateSpecialBus(user, specialbus)),
   deleteBus: (user, bus) => dispatch(deleteBus(user, bus)),
   deleteSpecialBusRequest: (user, specialbusrequest) => dispatch(fetch(deleteSpecialBusRequest(user, specialbusrequest)))
 });
@@ -123,8 +123,8 @@ class Main extends Component {
               />
               <Route
                 path="/wallet"
-                component={() => <WalletComponent wallet={this.props.wallet} store = {this.props.store}/>}
-                />
+                component={() => <WalletComponent wallet={this.props.wallet} store={this.props.store} />}
+              />
               <Route
                 path="/approveBusRequest"
                 component={() => <ApproveBusReqComponent auth={this.props.auth} />}
