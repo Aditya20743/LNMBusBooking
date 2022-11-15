@@ -19,7 +19,7 @@ import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import {
   loginUser, googleLogin, logoutUser, postBus, postOutpass, postStore, postTicket, postWallet, fetchStore, deleteBus, postSpecialBusRequest,
-  deleteSpecialBusRequest, postSchedule, fetchSchedule, updateSchedule, updateTicket, updateOutpass, updateBus, updateWallet, updateSpecialBus
+  deleteSpecialBusRequest, postSchedule, fetchSchedule, updateSchedule, updateTicket, updateOutpass, updateBus, updateWallet, updateSpecialBus, checkUser
 } from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
@@ -39,33 +39,40 @@ const mapDispatchToProps = (dispatch) => ({
   loginUser: (creds) => dispatch(loginUser(creds)),
   logoutUser: () => dispatch(logoutUser()),
   googleLogin: () => dispatch(googleLogin()),
-  updateOutpass: (user, outpass) => dispatch(updateOutpass(user, outpass)),
+  checkUser: () => dispatch(checkUser()),
+  
   postOutpass: (user, outpass) => dispatch(postOutpass(user, outpass)),
   postWallet: (user) => dispatch(postWallet(user)),
   postTicket: (user, ticket) => dispatch(postTicket(user, ticket)),
   postSpecialBusRequest: (user, specialbusrequest) => dispatch(postSpecialBusRequest(user, specialbusrequest)),
+
   postBus: (user, bus) => dispatch(postBus(user, bus)),
   updateBus: (user, bus) => dispatch(updateBus(user, bus)),
+
   postStore: (user, store) => dispatch(postStore(user, store)),
   fetchStore: () => dispatch(fetchStore()),
 
+  updateOutpass: (user, outpass) => dispatch(updateOutpass(user, outpass)),
+  updateSpecialBus: (user, specialbus) => dispatch(updateSpecialBus(user, specialbus)),
   updateTicket: (user, ticket) => dispatch(updateTicket(user, ticket)),
   updateWallet: (user, wallet, token) => dispatch(updateWallet(user, wallet, token)),
+
   postSchedule: (user, schedule) => dispatch(postSchedule(user, schedule)),
   fetchSchedule: () => dispatch(fetchSchedule()),
   updateSchedule: (user, schedule) => dispatch(updateSchedule(user, schedule)),
-  updateSpecialBus: (user, specialbus) => dispatch(updateSpecialBus(user, specialbus)),
+
   deleteBus: (user, bus) => dispatch(deleteBus(user, bus)),
   deleteSpecialBusRequest: (user, specialbusrequest) => dispatch(fetch(deleteSpecialBusRequest(user, specialbusrequest)))
 });
 
 class Main extends Component {
   componentDidMount() {
+    this.props.checkUser();
     this.props.fetchSchedule();
     this.props.fetchStore();
   }
   componentWillUnmount() {
-    this.props.logoutUser();
+    // this.props.logoutUser();
   }
 
   render() {
@@ -112,7 +119,7 @@ class Main extends Component {
               />
               <Route
                 path="/approveOutpass"
-                component={() => <ApproveOutpassComponent auth={this.props.auth} outpass={this.props.outpass} />}
+                component={() => <ApproveOutpassComponent auth={this.props.auth} outpass={this.props.outpass} updateOutpass = {this.props.updateOutpass}/>}
               />
               <Route
                 path="/selectBus"
@@ -120,7 +127,8 @@ class Main extends Component {
               />
               <Route
                 path="/viewTrips"
-                component={() => <ViewTripsComponent  ticket = {this.props.ticket} />}
+                component={() => <ViewTripsComponent auth = {this.props.auth} ticket = {this.props.ticket} 
+                />}
               />
               <Route
                 path="/wallet"
