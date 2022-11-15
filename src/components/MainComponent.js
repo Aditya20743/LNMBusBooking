@@ -119,7 +119,7 @@ class Main extends Component {
               />
               <Route
                 path="/viewTrips"
-                component={() => <ViewTripsComponent ticket={this.props.ticket} />}
+                component={() => <ViewTripsComponent  ticket = {this.props.ticket} />}
               />
               <Route
                 path="/wallet"
