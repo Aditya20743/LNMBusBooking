@@ -120,8 +120,8 @@ export const postBus = (user, bus) => async (dispatch) => {
             for(let i=0;i<bus.totalSeats;i++)
                     seatsArr[i]=false;
                     
-            bus['seatsAvailable']=0;
-            bus['seatsArray']=seatsArr;
+            bus['seatsAvailable']=bus.totalSeats;
+            bus['seats']=seatsArr;
             await addDoc(collection(db, 'bus'), bus);
             dispatch(fetchBus());
         }

@@ -65,7 +65,7 @@ class RemoveBusComponent extends Component {
                           id="date"
                           label="Select Date"
                           type="date"
-                        defaultValue="2022-01-01"
+                        defaultValue={this.state.date}
                         sx={{ width: 220 }}
                           name="date"
                           value={this.state.date}
