@@ -91,7 +91,7 @@ footer {
 .plane {
   box-sizing: border-box;
   margin: 20px auto;
-  max-width: 220px;
+  max-width: 260px;
 }
 .cockpit {
   height: 250px;
@@ -139,23 +139,26 @@ ol {
 .seat:nth-child(2) {
   margin-right: 22%;
 }
-.seat input[type=checkbox] {
+.seat input[type=radio] {
   position: absolute;
   opacity: 0;
 }
-.seat input[type=checkbox]:checked + label {
+li>input{
+  -webkit-appearance:none;
+}
+.seat input[type=radio]:checked + label {
   background: #bada55;
   -webkit-animation-name: rubberBand;
   animation-name: rubberBand;
   animation-duration: 300ms;
   animation-fill-mode: both;
 }
-.seat input[type=checkbox]:disabled + label {
+.seat input[type=radio]:disabled + label {
   background: #ddd;
   text-indent: -9999px;
   overflow: hidden;
 }
-.seat input[type=checkbox]:disabled + label:after {
+.seat input[type=radio]:disabled + label:after {
   content: "X";
   text-indent: 0;
   position: absolute;
@@ -163,7 +166,7 @@ ol {
   left: 50%;
   transform: translate(-50%, 0%);
 }
-.seat input[type=checkbox]:disabled + label:hover {
+.seat input[type=radio]:disabled + label:hover {
   box-shadow: none;
   cursor: not-allowed;
 }
@@ -176,7 +179,7 @@ ol {
   font-weight: bold;
   line-height: 1.5rem;
   padding: 4px 0;
-  background: #f42536;
+  background: #25a1f4;
   border-radius: 5px;
   animation-duration: 300ms;
   animation-fill-mode: both;

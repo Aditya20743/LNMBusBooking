@@ -2,9 +2,36 @@ import React, { Component } from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import Divider from "@mui/material/Divider";
-import moment from "moment";
 
 class SelectBusSeatComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedSeat : ""
+    };
+
+    this.handleInput = this.handleInput.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleInput(event) {
+    const name = event.target.name;
+    const value = event.target.value;
+    this.setState({ ...this.state, [name]: value });
+  }
+
+  handleSubmit() {
+    // if (this.props.wallet.wallet.tokenNo === 0) {
+    //   alert("Buy Tokens");
+    // }
+    // else {
+
+      console.log(this.state.selectedSeat);
+      // bus.seats[this.state.selectedSeat] = true;
+      // this.props.bookBus(this.props.auth.user, bus);
+    // }
+  }
+
   render() {
 
     const getSeatRow = (i) => {
@@ -12,10 +39,10 @@ class SelectBusSeatComponent extends Component {
       for(let j = 0; j<4; j++){
         content.push(
           <li className="seat">
-          { this.props.bus.seats[i+j] === true ?
-            <input type="checkbox" id={i+j}/>
+          { this.props.bus.seats[i+j] === false ?
+              <input type="radio" name="selectedSeat" onChange={this.handleInput} value={i+j} id={i+j}/>
             :
-            <input type="checkbox" disabled id={i+j}/>
+            <input type="radio" name="selectedSeat" onChange={this.handleInput} disabled id={i+j}/>
           }
             <label htmlFor={i+j}>{i+j+1}</label>
           </li>
@@ -43,7 +70,7 @@ class SelectBusSeatComponent extends Component {
     return (
       <div className="container pt-5 c-width">
         <div className="row up-row">
-          <div className="col-lg-5 offset-1 offset-xl-0 col-10 mt-3">
+          <div className="col-lg-5 offset-1 offset-lg-0 col-10 mt-3">
             <div className="card mb-4 px-1">
               <div className="card-body">
                 <div className="row">
@@ -80,12 +107,23 @@ class SelectBusSeatComponent extends Component {
                 </div>
                 <div className="row d-flex py-1 justify-content-center ">
                   <div className="col-sm-4 m-1">
-                    <button
+                  {
+                    this.props.bus.seatsAvailable === 0 ? 
+                        <button
+                        type="button"
+                        className="btn disabled btn-secondary text-white nav-link"
+                      >
+                        Request Bus <ArrowForwardIcon />
+                      </button>
+                      :
+                      <button
                       type="button"
-                      className="btn btn-outline-primary nav-link"
+                        className="btn btn-outline-primary nav-link"
+                        onClick={this.handleSubmit}
                     >
                       Request Bus <ArrowForwardIcon />
                     </button>
+                  }
                   </div>
                   <div className="col-2"></div>
                 </div>
@@ -104,20 +142,45 @@ class SelectBusSeatComponent extends Component {
               </div>
             </div>
           </div>
-          <div className="col-6">
+          <div className="col-sm-8 col-12 col-lg-5 offset-sm-2 mb-5">
             <div className="card">
               <div className="card-body">
                 <div className="row">wheel</div>
                 <div className="col-12">
-                <div className="plane">
-                    <div className="fuselage"></div>
-                      {getSeatLayout(40)}
+                  <div className="plane">
+                  
+                    <div className="fuselage">
+                      <hr />
+                    </div>
+                      {getSeatLayout(this.props.bus.totalSeats)}
                     <div className=" fuselage">
                       <hr />
                     </div>
                   </div>
                 </div>
               </div>
+              <div className="row d-flex justify-content-center mb-4">
+                <div className="col-sm-4">
+                  {
+                    this.state.selectedSeat === "" ? 
+                        <button
+                        type="button"
+                        className="btn disabled btn-secondary text-white nav-link"
+                      >
+                        Book Seat <ArrowForwardIcon />
+                      </button>
+                      :
+                      <button
+                      type="button"
+                        className="btn btn-outline-primary nav-link"
+                        onClick={() => this.handleSubmit()}
+                    >
+                      Book Seat <ArrowForwardIcon />
+                    </button>
+                  }
+                    
+                  </div>
+                </div>
             </div>
           </div>
         </div>
