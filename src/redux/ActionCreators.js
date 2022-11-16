@@ -115,7 +115,11 @@ export const postBus = (user, bus) => async (dispatch) => {
         dispatch(requestBus());
         if (user !== undefined && user.role === 'admin') {
 
-            var seatsArr = new Array(bus.totalSeats);
+            const seatsArr = new Array(bus.totalSeats);
+
+            for(let i=0;i<bus.totalSeats;i++)
+                    seatsArr[i]=false;
+                    
             bus['seatsAvailable']=0;
             bus['seatsArray']=seatsArr;
             await addDoc(collection(db, 'bus'), bus);
