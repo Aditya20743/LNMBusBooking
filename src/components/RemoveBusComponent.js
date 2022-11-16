@@ -17,9 +17,7 @@ class RemoveBusComponent extends Component {
   handleInput(event) {
     const name = event.target.name;
     const value = event.target.value;
-    console.log(this.state);
     this.setState({ ...this.state, [name]: value });
-    console.log(this.state);
   }
 
   render() {

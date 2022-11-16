@@ -256,5 +256,3 @@ class Home extends Component {
 
 export default Home;
 
-//integrate wallet tokens
-//integrate view trips
