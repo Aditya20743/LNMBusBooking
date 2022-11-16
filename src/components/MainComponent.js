@@ -165,6 +165,11 @@ class Main extends Component {
                 path="/outpass"
                 component={() => <OutpassComponent  auth = {this.props.auth}  outpass={this.props.outpass} />}
               />
+              {/* UPDATE THE CODE */}
+              <Route exact
+                path="/busSeat"
+                component={() => <SelectBusSeatComponent auth = {this.props.auth} wallet={this.props.wallet} store={this.props.store} updateWallet={this.props.updateWallet} />}
+              />
               <Redirect to="/home" />
 
             </Switch>
