@@ -77,6 +77,17 @@ footer {
   align-items: center; */
 }
 
+.phone-bg-image{
+  background-image: url(../public/assests/images/phonebg.png);
+  background-size: 50% 100%;
+  background-repeat: no-repeat;
+  /* background-position: center; */
+  /* background-attachment:fixed; */
+}
+.qrimage{
+  height: 30vh;
+  /* width: 40ph; */
+}
 .plane {
   box-sizing: border-box;
   margin: 20px auto;

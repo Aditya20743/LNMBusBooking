@@ -14,6 +14,7 @@ import ApproveBusReqComponent from "./ApproveBusReqComponent";
 import WalletComponent from "./WalletComponent";
 import SelectBusSeatComponent from "./SelectBusSeatComponent";
 import OutpassComponent from "./OutpassComponent";
+import QrcodeComponent from "./QrcodeComponent";
 
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -165,8 +166,13 @@ class Main extends Component {
                 path="/outpass"
                 component={() => <OutpassComponent  auth = {this.props.auth}  outpass={this.props.outpass} />}
               />
+              <Route exact
+                path="/qrcode"
+                component={() => <QrcodeComponent  />}
+              />
+              
               <Redirect to="/home" />
-
+              
             </Switch>
           </CSSTransition>
         </TransitionGroup>
