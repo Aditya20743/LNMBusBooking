@@ -10,10 +10,10 @@ class SelectBusSeatComponent extends Component {
   render() {
     return (
       <div className="container pt-5 c-width">
-        <div className="row up-row ">
-          <div className="col-xl-6 col-12 mt-3">
-            <div className="card col-12   mb-4">
-              <div className="card-body  p-4 ">
+        <div className="row up-row">
+          <div className="col-xl-5 col-10 mt-3">
+            <div className="card col-12 mb-4">
+              <div className="card-body">
                 <div className="row">
                   <div className="col-sm-9 ">
                     <h2>Bus No. 1</h2>

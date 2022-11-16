@@ -97,7 +97,7 @@ class Header extends Component {
                             className="dropdown-menu"
                             aria-labelledby="navbarDropdown"
                             >
-                            <NavLink to="/selectBus">
+                            <NavLink to="/bus">
                               <div className="dropdown-item">
                                     Book Ticket
                               </div>

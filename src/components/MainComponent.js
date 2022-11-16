@@ -79,6 +79,17 @@ class Main extends Component {
   }
 
   render() {
+    const BusWithId = ({ match }) => {
+      return (
+        (this.props.auth.user && (this.props.auth.user.role === "student" || this.props.auth.user.role === "faculty"))
+          ?
+          <SelectBusSeatComponent bus={this.props.bus.bus.filter((bus) => bus._id === match.params.busId)[0]}
+            auth={this.props.auth} />
+          :
+          <div>Login karo pehle</div>
+      );
+    }
+
     return (
       <div>
         <Header
@@ -102,49 +113,48 @@ class Main extends Component {
                   />
                 )}
               />
-              <Route
+              <Route exact
                 path="/requestSpecialBus"
                 component={() => <RequestSpecialBusComponent auth={this.props.auth}
                   postSpecialBusRequest={this.props.postSpecialBusRequest} />}
               />
-              <Route
+              <Route exact
                 path="/requestOutpass"
                 component={() => <RequestOutpassComponent auth={this.props.auth} postOutpass={this.props.postOutpass} />}
               />
-              <Route path="/addBus" component={() => <AddBusComponent auth={this.props.auth} postBus={this.props.postBus} />} />
-              <Route
+              <Route exact path="/addBus" component={() => <AddBusComponent auth={this.props.auth} postBus={this.props.postBus} />} />
+              <Route exact
                 path="/removeBus"
                 component={() => <RemoveBusComponent auth={this.props.auth} bus={this.props.bus} deleteBus={this.props.deleteBus} />}
               />
-              <Route
+              <Route exact
                 path="/updateSchedule"
                 component={() => <UpdateScheduleComponent auth={this.props.auth} />}
               />
-              <Route
+              <Route exact
                 path="/approveOutpass"
                 component={() => <ApproveOutpassComponent auth={this.props.auth} outpass={this.props.outpass} updateOutpass = {this.props.updateOutpass}/>}
               />
-              <Route
-                path="/selectBus"
+              <Route exact
+                path="/bus"
                 component={() => <SelectBusComponent bus={this.props.bus} />}
               />
-              <Route
+              <Route exact
                 path="/viewTrips"
                 component={() => <ViewTripsComponent auth = {this.props.auth} ticket = {this.props.ticket} cancelTicket = {this.props.cancelTicket}
                 wallet = {this.props.wallet}
                 />}
               />
-              <Route
+              <Route exact
                 path="/wallet"
                 component={() => <WalletComponent auth = {this.props.auth} wallet={this.props.wallet} store={this.props.store} updateWallet={this.props.updateWallet} />}
               />
-              <Route
+              <Route exact
                 path="/approveBusRequest"
                 component={() => <ApproveBusReqComponent specialbusrequest = {this.props.specialbusrequest} auth={this.props.auth} updateSpecialBus={this.props.updateSpecialBus} />}
               />
               <Route
-                path="/selectSeat"
-                component={() => <SelectBusSeatComponent bus = {this.props.bus} auth={this.props.auth} />}
+                path="/bus/:busId" component={BusWithId}
               />
               <Redirect to="/home" />
 

@@ -5,6 +5,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import Divider from "@mui/material/Divider";
 import moment from "moment";
+import { Link } from "react-router-dom";
 
 const RenderBusCard = ({ bus }) => {
   const hour = bus.time.split(":")[0];
@@ -39,16 +40,19 @@ const RenderBusCard = ({ bus }) => {
           </div>
 
           <div className="col-sm-3 col-6 offset-3 offset-sm-0">
-            <button
-              type="button"
-              className="btn btn-outline-primary btn-sm d-flex mb-2 btn-block justify-content-center nav-link"
-            >
-              Select
-              <div className="my-0">
-                <ArrowForwardIcon />
-              </div>
-            </button>
-          </div>
+          <Link to={`/bus/${bus._id}`} >
+              <button
+                type="button"
+                className="btn btn-outline-primary btn-sm d-flex mb-2 btn-block justify-content-center nav-link"
+              >
+                Select
+                <div className="my-0">
+                  <ArrowForwardIcon />
+                </div>
+              </button>
+              </Link>
+            </div>
+          
         </div>
         <div className="row d-flex py-1 justify-content-center">
           <div className="align-item-center">
