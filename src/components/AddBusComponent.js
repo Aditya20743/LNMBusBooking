@@ -21,7 +21,7 @@ class AddBusComponent extends Component {
   }
   handleSubmit(event) {
     event.preventDefault();
-    this.props.postBus(this.state);
+    this.props.postBus(this.props.auth.user,this.state);
     this.setState({source: "",destination: "",date: "",time: "",busType: "",totalSeats: "",busNumber: "", driverName: "", driverContactNum: ""});
   }
 
