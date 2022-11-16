@@ -6,6 +6,40 @@ import moment from "moment";
 
 class SelectBusSeatComponent extends Component {
   render() {
+
+    const getSeatRow = (i) => {
+      let content = [];
+      for(let j = 0; j<4; j++){
+        content.push(
+          <li className="seat">
+          { this.props.bus.seats[i+j] === true ?
+            <input type="checkbox" id={i+j}/>
+            :
+            <input type="checkbox" disabled id={i+j}/>
+          }
+            <label htmlFor={i+j}>{i+j+1}</label>
+          </li>
+        );
+      }
+
+      return content;
+    }
+    const getSeatLayout = seatNumber => {
+      let content = [];
+      for(let i = 0; i<seatNumber; i+=4){
+        content.push(<ol className="cabin fuselage">
+          <li className="row ml-1">
+            <ol className="seats">
+              {getSeatRow(i)}
+            </ol>
+          </li>
+        </ol>);
+      }
+
+      return content;
+    }
+
+
     return (
       <div className="container pt-5 c-width">
         <div className="row up-row">
@@ -32,14 +66,12 @@ class SelectBusSeatComponent extends Component {
                   </div>
                 </div>
                 <Divider />
-                  <div className="col-sm-8 col-12 my-1">
-                    <AccessTimeIcon /> {" "}
-                    Departure Date: 15/01/22
-                  </div>
-                  <div className="col-sm-8 col-12">
-                    <AccessTimeIcon /> {" "}
-                    Departure Time: 08:00 AM
-                  </div>
+                <div className="col-sm-8 col-12 my-1">
+                  <AccessTimeIcon /> Departure Date: 15/01/22
+                </div>
+                <div className="col-sm-8 col-12">
+                  <AccessTimeIcon /> Departure Time: 08:00 AM
+                </div>
                 <div className="row m-1 ">
                   <div className="col-sm-8 col-12">Drivers Name : Imran</div>
                 </div>
@@ -52,7 +84,7 @@ class SelectBusSeatComponent extends Component {
                       type="button"
                       className="btn btn-outline-primary nav-link"
                     >
-                      Select Seats <ArrowForwardIcon />
+                      Request Bus <ArrowForwardIcon />
                     </button>
                   </div>
                   <div className="col-2"></div>
@@ -73,7 +105,20 @@ class SelectBusSeatComponent extends Component {
             </div>
           </div>
           <div className="col-6">
-            <div className="row"></div>
+            <div className="card">
+              <div className="card-body">
+                <div className="row">wheel</div>
+                <div className="col-12">
+                <div className="plane">
+                    <div className="fuselage"></div>
+                      {getSeatLayout(40)}
+                    <div className=" fuselage">
+                      <hr />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
