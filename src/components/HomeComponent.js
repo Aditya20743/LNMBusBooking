@@ -225,7 +225,7 @@ class Home extends Component {
                     </button>
                   </div>
                 </Link>
-                <Link to={`/requestOutpass`}>
+                <Link to={`/outpass`}>
                   <div className="row mb-3">
                     <button
                       type="button"

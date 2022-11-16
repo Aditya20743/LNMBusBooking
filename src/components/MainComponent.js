@@ -87,7 +87,11 @@ class Main extends Component {
           <SelectBusSeatComponent bus={this.props.bus.bus.filter((bus) => bus._id === match.params.busId)[0]}
             auth={this.props.auth} />
           :
-          <div>Login karo pehle</div>
+          <div className="container pt-5 c-width">
+          <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
+            <h6>Login Karo pehle</h6>
+          </div>
+        </div>
       );
     }
 
@@ -157,7 +161,7 @@ class Main extends Component {
               <Route
                 path="/bus/:busId" component={BusWithId}
               />
-              <Route
+              <Route exact
                 path="/outpass"
                 component={() => <OutpassComponent  auth = {this.props.auth}  outpass={this.props.outpass} />}
               />
