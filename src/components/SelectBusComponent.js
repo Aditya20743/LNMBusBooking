@@ -116,7 +116,7 @@ class SelectBusComponent extends Component {
                           id="date"
                           label="Select Date"
                           type="date"
-                          defaultValue="2022-01-01"
+                          defaultValue={this.state.date}
                           name = "date"
                           value={this.state.date}
                           onChange={this.handleInput}

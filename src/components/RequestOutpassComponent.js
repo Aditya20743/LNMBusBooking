@@ -69,10 +69,10 @@ class RequestOutpassComponent extends Component {
                             id="departureDate"
                             label="Departure Date"
                             type="date"
-                            defaultValue="2022-01-01"
                             name="departureDate"
                             onChange={this.handleInput}
                             value={this.state.departureDate}
+                            defaultValue = {this.state.departureDate}
                             sx={{ width: 220 }}
                             InputLabelProps={{
                               shrink: true,
@@ -86,8 +86,8 @@ class RequestOutpassComponent extends Component {
                             name="returnDate"
                             onChange={this.handleInput}
                             value={this.state.returnDate}
+                            defaultValue = {this.state.returnDate}
                             type="date"
-                            defaultValue="2022-01-01"
                             sx={{ width: 220 }}
                             InputLabelProps={{
                               shrink: true,
@@ -107,6 +107,7 @@ class RequestOutpassComponent extends Component {
                           name="hostelName"
                           onChange={this.handleInput}
                           value={this.state.hostelName}
+                          defaultValue={"BH-1"}
                         >
                           <option selected disabled>
                             Hostel Name

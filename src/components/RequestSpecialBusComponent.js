@@ -71,7 +71,7 @@ class RequestSpecialBusComponent extends Component {
                         label="Select Date"
                         type="date"
                         name = "date"
-                        defaultValue="2022-01-01"
+                        defaultValue={this.state.date}
                         onChange={this.handleInput}
                         value = {this.state.date}
                         sx={{ width: 220 }}

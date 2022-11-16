@@ -79,7 +79,7 @@ class AddBusComponent extends Component {
                             type="date"
                             model=".date"
                             className=""
-                            defaultValue="2022-01-01"
+                            defaultValue={this.state.date}
                             sx={{ width: 220 }}
                             InputLabelProps={{
                               shrink: true,
@@ -119,6 +119,7 @@ class AddBusComponent extends Component {
                             className="form-select"
                             id="inputGroupSelect02"
                             name="busType"
+                            defaultValue={"Regular"}
                             onChange={this.handleInput}
                             value={this.state.busType}
                           >
