@@ -15,7 +15,7 @@ const RenderBusCard = ({ bus }) => {
   newTime.subtract(15, "m");
   return (
     <div className="card col-12 col-md-10 offset-md-1 mb-4">
-      <div className="card-body  p-4 ">
+      <div className="card-body p-3">
         <div className="row">
           <div className="col-sm-9 ">
             <h2>Bus No. {bus.busNumber}</h2>
@@ -26,16 +26,16 @@ const RenderBusCard = ({ bus }) => {
         </div>
 
         <div className="row">
-          <div className="col-12 p-3 ">
+          <div className="col-12 py-1 ps-2">
             <h5>
               {bus.source} <ArrowForwardIcon /> {bus.destination}
             </h5>
           </div>
         </div>
         <Divider />
-        <div className="row mt-2">
+        <div className="row mt-1">
           <div className="col-sm-9 col-12 my-3">
-            <AccessTimeIcon />
+            <AccessTimeIcon />{" "}
             Departure Time: {time.format("LT")}
           </div>
 
