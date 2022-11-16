@@ -1,6 +1,4 @@
 import React, { Component } from "react";
-import TextField from "@mui/material/TextField";
-import Stack from "@mui/material/Stack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import Divider from "@mui/material/Divider";
@@ -10,15 +8,15 @@ class SelectBusSeatComponent extends Component {
   render() {
     return (
       <div className="container pt-5 c-width">
-        <div className="row up-row ">
-          <div className="col-xl-6 col-12 mt-3">
-            <div className="card col-12   mb-4">
-              <div className="card-body  p-4 ">
+        <div className="row up-row">
+          <div className="col-lg-5 offset-1 offset-xl-0 col-10 mt-3">
+            <div className="card mb-4 px-1">
+              <div className="card-body">
                 <div className="row">
-                  <div className="col-sm-9 ">
-                    <h2>Bus No. 1</h2>
+                  <div className="col-sm-7">
+                    <h3>Bus No. 1</h3>
                   </div>
-                  <div className="col-12 col-sm-3 ">
+                  <div className="justify-content-end d-flex col-12 col-sm-5">
                     <h5>Regular</h5>
                   </div>
                 </div>
@@ -34,46 +32,40 @@ class SelectBusSeatComponent extends Component {
                   </div>
                 </div>
                 <Divider />
-                <div className="row m-1 pt-2">
-                  <div className="col-sm-8 col-12 my-1 ">
-                    <AccessTimeIcon />
+                  <div className="col-sm-8 col-12 my-1">
+                    <AccessTimeIcon /> {" "}
                     Departure Date: 15/01/22
                   </div>
-                </div>
-                <div className="row m-1 ">
                   <div className="col-sm-8 col-12">
-                    <AccessTimeIcon />
+                    <AccessTimeIcon /> {" "}
                     Departure Time: 08:00 AM
                   </div>
-                </div>
                 <div className="row m-1 ">
                   <div className="col-sm-8 col-12">Drivers Name : Imran</div>
                 </div>
                 <div className="row m-1">
                   <div className="col-sm-8 col-12">Contact No : 987654321</div>
                 </div>
-                <div className="row d-flex py-1 justify-content-center">
-                  <div className="col-sm-4 col-6 offset-3 offset-sm-0">
+                <div className="row d-flex py-1 justify-content-center ">
+                  <div className="col-sm-4 m-1">
                     <button
                       type="button"
-                      className="btn btn-outline-primary btn-sm d-flex m-1 btn-block justify-content-center nav-link"
+                      className="btn btn-outline-primary nav-link"
                     >
-                      Select Seats
-                      <div className="">
-                        <ArrowForwardIcon />
-                      </div>
+                      Select Seats <ArrowForwardIcon />
                     </button>
                   </div>
+                  <div className="col-2"></div>
                 </div>
               </div>
             </div>
             <div className="row">
-              <div className="card col-12   mb-4">
-                <div className="card-body  p-4 ">
-                  <div className="row h3 d-flex py-1 justify-content-center">
+              <div className="card col-10 mb-4 offset-1 offset-sm-1">
+                <div className="card-body p-3">
+                  <div className="row h4 d-flex justify-content-center">
                     Seats Available: 15
                   </div>
-                  <div className="row h3 d-flex py-1 justify-content-center">
+                  <div className="row h4 d-flex justify-content-center">
                     Extra Bus Requests: 0
                   </div>
                 </div>

@@ -599,8 +599,10 @@ export const checkUser = () => (dispatch) => {
 
             if (user.role === "caretaker")
                 dispatch(fetchOutpass(user));
-            if (user.role === "admin")
+            if (user.role === "admin") {
+                dispatch(fetchBus(user));
                 dispatch(fetchSpecialBusRequest(user));
+            }
             else{
                 dispatch(fetchWallet(user));
                 dispatch(fetchTicket(user));

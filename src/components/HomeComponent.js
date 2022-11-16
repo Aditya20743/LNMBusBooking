@@ -199,7 +199,7 @@ class Home extends Component {
           <div className="row pb-4">
             <div className="card col-8 col-sm-6 col-md-4 col-lg-3 offset-2 offset-sm-3 offset-md-6 offset-lg-7">
               <div className="card-body align-self-center p-3">
-                <Link to={`/selectBus`}>
+                <Link to={`/bus`}>
                   <div className="row mt-3">
                     <button
                       type="button "
