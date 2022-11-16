@@ -97,7 +97,7 @@ class ViewTripsComponent extends Component {
           <Divider textAlign="left">Past Trips </Divider>
           {this.props.ticket.ticket.filter((trip) => trip.status === "Past").length === 0  ? 
               <div className="d-flex align-self-center justify-content-center my-4">
-                <h5>No Trips</h5>
+                <h5>No Trips :( </h5>
               </div>
             : this.props.ticket.ticket.filter((trip) => trip.status === "Past")
             .map((trip) => {
