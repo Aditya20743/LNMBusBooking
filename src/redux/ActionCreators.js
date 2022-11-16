@@ -169,7 +169,8 @@ export const deleteBus = (user, bus) => async (dispatch) => {
 }
 
 // Book Seat
-export const updateBus = (user, bus) => async (dispatch) => {
+export const bookBus = (user, bus) => async (dispatch) => {
+    console.log(user, bus);
     try {
         dispatch(requestBus());
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {

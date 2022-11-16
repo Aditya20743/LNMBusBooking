@@ -20,7 +20,7 @@ import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import {
   loginUser, googleLogin, logoutUser, postBus, postOutpass, postStore, postTicket, postWallet, fetchStore, deleteBus, postSpecialBusRequest,
-  deleteSpecialBusRequest, postSchedule, fetchSchedule, updateSchedule, updateTicket, updateOutpass, updateBus, updateWallet, updateSpecialBus, checkUser, cancelTicket, deleteSchedule
+  deleteSpecialBusRequest, postSchedule, fetchSchedule, updateSchedule, updateTicket, updateOutpass, bookBus, updateWallet, updateSpecialBus, checkUser, cancelTicket, deleteSchedule
 } from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
@@ -48,7 +48,7 @@ const mapDispatchToProps = (dispatch) => ({
   postSpecialBusRequest: (user, specialbusrequest) => dispatch(postSpecialBusRequest(user, specialbusrequest)),
 
   postBus: (user, bus) => dispatch(postBus(user, bus)),
-  updateBus: (user, bus) => dispatch(updateBus(user, bus)),
+  bookBus: (user, bus) => dispatch(bookBus(user, bus)),
 
   postStore: (user, store) => dispatch(postStore(user, store)),
   fetchStore: () => dispatch(fetchStore()),
@@ -85,7 +85,7 @@ class Main extends Component {
         (this.props.auth.user && (this.props.auth.user.role === "student" || this.props.auth.user.role === "faculty"))
           ?
           <SelectBusSeatComponent bus={this.props.bus.bus.filter((bus) => bus._id === match.params.busId)[0]}
-            auth={this.props.auth} />
+            auth={this.props.auth} wallet={this.props.wallet} bookTicket={this.props.bookTicket} />
           :
           <div className="container pt-5 c-width">
           <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
@@ -164,11 +164,6 @@ class Main extends Component {
               <Route exact
                 path="/outpass"
                 component={() => <OutpassComponent  auth = {this.props.auth}  outpass={this.props.outpass} />}
-              />
-              {/* UPDATE THE CODE */}
-              <Route exact
-                path="/busSeat"
-                component={() => <SelectBusSeatComponent auth = {this.props.auth} wallet={this.props.wallet} store={this.props.store} updateWallet={this.props.updateWallet} />}
               />
               <Redirect to="/home" />
 
