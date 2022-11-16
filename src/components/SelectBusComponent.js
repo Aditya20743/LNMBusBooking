@@ -65,6 +65,22 @@ const RenderBusCard = ({ bus }) => {
 };
 
 class SelectBusComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      date: "",
+    };
+
+    this.handleInput = this.handleInput.bind(this);
+  }
+
+  handleInput(event) {
+    const name = event.target.name;
+    const value = event.target.value;
+    console.log(this.state);
+    this.setState({ ...this.state, [name]: value });
+    console.log(this.state);
+  }
 
   render() {
     if (this.props.bus.isLoading) {
@@ -101,27 +117,34 @@ class SelectBusComponent extends Component {
                           label="Select Date"
                           type="date"
                           defaultValue="2022-01-01"
+                          name = "date"
+                          value={this.state.date}
+                          onChange={this.handleInput}
                           sx={{ width: 220 }}
                           InputLabelProps={{
                             shrink: true,
                           }}
                         />
                       </Stack>
+
                     </div>
                   </form>
                 </div>
               </div>
             </div>
           </div>
-
           <div className="row-fluid mb-5 mt-4">
-            {this.props.bus.bus.map((bus) => {
+            {this.props.bus.bus.filter((bus) => bus.date === this.state.date).length === 0 ? (
+              <div className="d-flex align-self-center justify-content-center my-4">
+              <h5>No Buses :( </h5>
+            </div>
+            ) : (this.props.bus.bus.filter((bus) => bus.date === this.state.date).map((bus) => {
               return (
                 <div key={bus._id} className="col-12 mb-4">
                   <RenderBusCard bus={bus} />
                 </div>
               );
-            })}
+            })) }
           </div>
         </div>
       );
