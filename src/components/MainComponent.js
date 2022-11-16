@@ -20,7 +20,7 @@ import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import {
   loginUser, googleLogin, logoutUser, postBus, postOutpass, postStore, postTicket, postWallet, fetchStore, deleteBus, postSpecialBusRequest,
-  deleteSpecialBusRequest, postSchedule, fetchSchedule, updateSchedule, updateTicket, updateOutpass, updateBus, updateWallet, updateSpecialBus, checkUser, cancelTicket
+  deleteSpecialBusRequest, postSchedule, fetchSchedule, updateSchedule, updateTicket, updateOutpass, updateBus, updateWallet, updateSpecialBus, checkUser, cancelTicket, deleteSchedule
 } from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
@@ -61,7 +61,7 @@ const mapDispatchToProps = (dispatch) => ({
   postSchedule: (user, schedule) => dispatch(postSchedule(user, schedule)),
   fetchSchedule: () => dispatch(fetchSchedule()),
   updateSchedule: (user, schedule) => dispatch(updateSchedule(user, schedule)),
-
+  deleteSchedule: (user, schedule) => dispatch(deleteSchedule(user, schedule)),
   deleteBus: (user, bus) => dispatch(deleteBus(user, bus)),
   deleteSpecialBusRequest: (user, specialbusrequest) => dispatch(fetch(deleteSpecialBusRequest(user, specialbusrequest))),
 

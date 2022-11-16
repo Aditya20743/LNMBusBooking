@@ -59,7 +59,6 @@ export const fetchOutpass = (user) => async (dispatch) => {
             }
             else if (user.role === 'caretaker') {
                 const hostel = user.hostelName;
-                console.log(user);
                 querySnapshot.forEach((doc) => {
                     if (doc.data().hostelName === hostel && doc.data().status === "pending"){
                         const _id = doc.id;
@@ -157,7 +156,6 @@ export const deleteBus = (user, bus) => async (dispatch) => {
     try {
         dispatch(requestBus());
         if (user !== undefined && user.role === 'admin') {
-            console.log(bus._id);
             const busRef = doc(db, "bus", bus._id);
             await deleteDoc(busRef);
             dispatch(fetchBus());
@@ -443,7 +441,7 @@ export const deleteSpecialBusRequest = (user, specialbusrequest) => async (dispa
     dispatch(requestSpecialBusRequest());
     try {
         if (user !== undefined && user.role === 'admin') {
-            const specialBusRef = doc(db, "specialBusRequest", specialbusrequest.specialBusId);
+            const specialBusRef = doc(db, "specialBusRequest", specialbusrequest._id);
             await deleteDoc(specialBusRef);
             dispatch(fetchSpecialBusRequest(user));
         }
@@ -520,6 +518,21 @@ export const updateSchedule = (user, schedule) => async (dispatch) => {
     }
 }
 
+export const deleteSchedule = (user, schedule) => async (dispatch) => {
+    dispatch(requestSchedule());
+    try {
+        if (user !== undefined && user.role === 'admin') {
+            const scheduleRef = doc(db, "schedule", schedule._id);
+            await deleteDoc(scheduleRef);
+            dispatch(fetchSchedule(user));
+        }
+        else {
+            throw Error("Error 401: Unauthorized");
+        }
+    } catch (error) {
+        dispatch(scheduleError(error.message));
+    }
+}
 ///////////////////////////////////////////////////////////////////////////////////
 
 export const loginUser = (creds) => (dispatch) => {
