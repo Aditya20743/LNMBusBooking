@@ -20,16 +20,14 @@ class SelectBusSeatComponent extends Component {
     this.setState({ ...this.state, [name]: value });
   }
 
-  handleSubmit() {
-    // if (this.props.wallet.wallet.tokenNo === 0) {
-    //   alert("Buy Tokens");
-    // }
-    // else {
-
-      console.log(this.state.selectedSeat);
-      // bus.seats[this.state.selectedSeat] = true;
-      // this.props.bookBus(this.props.auth.user, bus);
-    // }
+  handleSubmit(bus) {
+    if (this.props.wallet.wallet.tokenNo === 0) {
+      alert("Buy Tokens");
+    }
+    else {
+      bus.seats[this.state.selectedSeat] = true;
+      this.props.bookBus(this.props.auth.user, bus);
+    }
   }
 
   render() {
@@ -119,7 +117,6 @@ class SelectBusSeatComponent extends Component {
                       <button
                       type="button"
                         className="btn btn-outline-primary nav-link"
-                        onClick={this.handleSubmit}
                     >
                       Request Bus <ArrowForwardIcon />
                     </button>
@@ -173,7 +170,7 @@ class SelectBusSeatComponent extends Component {
                       <button
                       type="button"
                         className="btn btn-outline-primary nav-link"
-                        onClick={() => this.handleSubmit()}
+                        onClick={() => this.handleSubmit(this.props.bus)}
                     >
                       Book Seat <ArrowForwardIcon />
                     </button>

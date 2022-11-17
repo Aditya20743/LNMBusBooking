@@ -86,7 +86,7 @@ class Main extends Component {
         (this.props.auth.user && (this.props.auth.user.role === "student" || this.props.auth.user.role === "faculty"))
           ?
           <SelectBusSeatComponent bus={this.props.bus.bus.filter((bus) => bus._id === match.params.busId)[0]}
-            auth={this.props.auth} wallet={this.props.wallet} bookTicket={this.props.bookTicket} />
+            auth={this.props.auth} wallet={this.props.wallet} bookBus={this.props.bookBus} />
           :
           <div className="container pt-5 c-width">
           <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
