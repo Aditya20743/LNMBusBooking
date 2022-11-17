@@ -2,6 +2,8 @@ import * as ActionTypes from './ActionTypes';
 import { auth, firestore, fireauth } from '../firebase/firebase';
 import { doc, getDoc, getDocs, collection, addDoc, deleteDoc } from "firebase/firestore";
 import { db } from '../firebase/firebase';
+import moment from "moment";
+
 
 export const requestLogin = () => {
     return {
@@ -49,20 +51,40 @@ export const fetchOutpass = (user) => async (dispatch) => {
             const querySnapshot = await getDocs(collection(db, "outpass"));
             let outpassArr = [];
             if (user.role === 'student') {
+
                 const userid = user.uid;
                 querySnapshot.forEach((doc) => {
-                    if (doc.data().uid === userid) {
+                    if (doc.data().uid === userid ) {
+                       
+                        var cur=moment(new Date()).format("YYYY-MM-DD");
+                        var returnDate=doc.data().returnDate;
+
+                        if(moment(returnDate).isBefore(cur)){
+                            deleteOutpass(user,doc.data());
+                        }
+
+
+                        else{
+                        
                         const _id = doc.id;
                         outpassArr.push({ _id, ...doc.data() });
+                        }
                     }
                 })
             }
             else if (user.role === 'caretaker') {
                 const hostel = user.hostelName;
+                console.log(moment(new Date()).format("DD-MM-YYYY"));
+              
                 querySnapshot.forEach((doc) => {
                     if (doc.data().hostelName === hostel && doc.data().status === "pending"){
+                        
+                      
+
                         const _id = doc.id;
                         outpassArr.push({ _id, ...doc.data() });
+
+                       
                     }
                 })
             }
@@ -83,7 +105,7 @@ export const deleteOutpass = (user, outpass) => async (dispatch) => {
             if (user !== undefined && user.role === "student") {
                 const outpassRef = doc(db, "outpass", outpass.uid);
                 await deleteDoc(outpassRef);
-                dispatch(fetchOutpass(user));
+                //dispatch(fetchOutpass(user));
             }
             else {
                 throw Error("Error 401: Unauthorized");
@@ -171,11 +193,17 @@ export const deleteBus = (user, bus) => async (dispatch) => {
 }
 
 // Book Seat
-export const bookBus = (user, bus) => async (dispatch) => {
+export const bookBus = (user, bus,wallet,ticket) => async (dispatch) => {
     console.log(user, bus);
     try {
         dispatch(requestBus());
+      
+
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
+
+            updateWallet(user,wallet,-1);
+            postTicket(user,ticket);
+
             const busRef = firestore.doc(`bus/${bus._id}`)
             await busRef.set(bus, { merge: true });
             dispatch(fetchBus());
@@ -304,7 +332,7 @@ export const cancelTicket = (user, wallet,ticket) => async (dispatch) => {
             const busHour=parseInt(busDepartureTime.slice(0, 2));
             const busMin= parseInt(busDepartureTime.slice(3, 5));
 
-            if((busHour-curHour)*60 +(busMin-curMin)>15){
+            if((busHour-curHour)*60 +(busMin-curMin)>120){
                 dispatch(updateWallet(user,wallet,0.5));
             }
             dispatch(updateTicket(user, ticket));
