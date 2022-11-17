@@ -50,7 +50,7 @@ class ViewTripsComponent extends Component {
 
   handleSubmit(ticket) {
     ticket = {...ticket, status : "Cancelled"} ;
-    this.props.cancelTicket(this.props.auth.user, this.props.wallet, ticket);
+    this.props.cancelTicket(this.props.auth.user, this.props.wallet.wallet, ticket);
   }
   
   render() {

@@ -121,7 +121,7 @@ export const postBus = (user, bus) => async (dispatch) => {
             for(let i=0;i<bus.totalSeats;i++)
                     seatsArr[i]=false;
                     
-            bus['seatsAvailable']=bus.totalSeats;
+            bus['seatsAvailable'] = bus.totalSeats;
             bus['seats']=seatsArr;
             await addDoc(collection(db, 'bus'), bus);
             dispatch(fetchBus());
@@ -371,7 +371,7 @@ export const updateWallet = (user, wallet, token) => async (dispatch) => {
             const walletRef = firestore.doc(`wallet/${wallet.uid}`)
 
             //Check If token Is Int
-            if (typeof(token)!== 'number'){
+            if (typeof(token)!== 'number'|| typeof(wallet.tokenNo)!== 'number'){
                 throw Error("Token is not a Number");
             }
 
