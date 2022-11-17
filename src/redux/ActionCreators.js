@@ -77,19 +77,21 @@ export const fetchOutpass = (user) => async (dispatch) => {
     }
 }
 
-// export const deleteOutpass = (outpass) => async (dispatch) => {
-//     try {
-//         dispatch(requestOutpass());
-//         const user = auth.currentUser;
-//         if (user === undefined)
-//             throw Error("Error 401: Unauthorized");
-//         const outpassRef = doc(db, "outpass", outpass.uid);
-//         await deleteDoc(outpassRef);
-//         dispatch(receiveOutpass(outpass));
-//     } catch (error) {
-//         dispatch(outpassError(error.message));
-//     }
-// }
+export const deleteOutpass = (user, outpass) => async (dispatch) => {
+    try {
+        dispatch(requestOutpass());
+            if (user !== undefined && user.role === "student") {
+                const outpassRef = doc(db, "outpass", outpass.uid);
+                await deleteDoc(outpassRef);
+                dispatch(fetchOutpass(user));
+            }
+            else {
+                throw Error("Error 401: Unauthorized");
+            }
+    } catch (error) {
+        dispatch(outpassError(error.message));
+    }
+}
 
 export const updateOutpass = (user, outpass) => async (dispatch) => {
     try {
