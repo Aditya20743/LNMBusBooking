@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import moment from "moment";
 import Divider from "@mui/material/Divider";
 
 class SelectBusSeatComponent extends Component {
+  
   constructor(props) {
     super(props);
     this.state = {
@@ -21,16 +23,42 @@ class SelectBusSeatComponent extends Component {
   }
 
   handleSubmit(bus) {
-    if (this.props.wallet.wallet.tokenNo === 0) {
+    if (this.props.wallet.wallet.tokenNo <= 1) {
       alert("Buy Tokens");
     }
     else {
       bus.seats[this.state.selectedSeat] = true;
+      bus.seatsAvailable--;
       this.props.bookBus(this.props.auth.user, bus);
     }
   }
 
   render() {
+    const hour = this.props.bus.time.split(":")[0];
+    const min = this.props.bus.time.split(":")[1];
+    const time = moment.utc().hour(hour).minute(min).second(0);
+
+    if (this.props.bus.isLoading) {
+      return (
+        <div className="container pt-5 c-width">
+          <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
+            <h6>Loading...</h6>
+          </div>
+        </div>
+      );
+    }
+
+    else if (this.props.bus.errMess) {
+      return (
+        <div className="container pt-5 c-width">
+          <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
+            <h6>ERROR: {this.props.bus.errMess}</h6>
+          </div>
+        </div>
+      );
+    }
+
+    else{
 
     const getSeatRow = (i) => {
       let content = [];
@@ -73,10 +101,10 @@ class SelectBusSeatComponent extends Component {
               <div className="card-body">
                 <div className="row">
                   <div className="col-sm-7">
-                    <h3>Bus No. 1</h3>
+                    <h3>Bus No. {this.props.bus.busNumber}</h3>
                   </div>
                   <div className="justify-content-end d-flex col-12 col-sm-5">
-                    <h5>Regular</h5>
+                    <h5>{this.props.bus.busType}</h5>
                   </div>
                 </div>
 
@@ -84,24 +112,24 @@ class SelectBusSeatComponent extends Component {
                   <div className="col-12 p-1 ">
                     <div className="row h5 d-flex py-1 justify-content-center">
                       <h5>
-                        Source
-                        <ArrowForwardIcon /> Destination
+                        {this.props.bus.source}
+                        <ArrowForwardIcon /> {this.props.bus.destination}
                       </h5>
                     </div>
                   </div>
                 </div>
                 <Divider />
                 <div className="col-sm-8 col-12 my-1">
-                  <AccessTimeIcon /> Departure Date: 15/01/22
+                  <AccessTimeIcon /> Departure Date: {this.props.bus.date}
                 </div>
                 <div className="col-sm-8 col-12">
-                  <AccessTimeIcon /> Departure Time: 08:00 AM
+                  <AccessTimeIcon /> Departure Time: {time.format('LT')}
                 </div>
                 <div className="row m-1 ">
-                  <div className="col-sm-8 col-12">Drivers Name : Imran</div>
+                  <div className="col-sm-8 col-12">Drivers Name : {this.props.bus.driverName}</div>
                 </div>
                 <div className="row m-1">
-                  <div className="col-sm-8 col-12">Contact No : 987654321</div>
+                  <div className="col-sm-8 col-12">Contact No : {this.props.bus.driverContactNum}</div>
                 </div>
                 <div className="row d-flex py-1 justify-content-center ">
                   <div className="col-sm-4 m-1">
@@ -130,7 +158,7 @@ class SelectBusSeatComponent extends Component {
               <div className="card col-10 mb-4 offset-1 offset-sm-1">
                 <div className="card-body p-3">
                   <div className="row h4 d-flex justify-content-center">
-                    Seats Available: 15
+                    Seats Available: {this.props.bus.seatsAvailable}
                   </div>
                   <div className="row h4 d-flex justify-content-center">
                     Extra Bus Requests: 0
@@ -184,6 +212,7 @@ class SelectBusSeatComponent extends Component {
       </div>
     );
   }
+}
 }
 
 export default SelectBusSeatComponent;

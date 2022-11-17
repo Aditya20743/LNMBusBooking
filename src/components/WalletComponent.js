@@ -44,7 +44,7 @@ class WalletComponent extends Component {
   }
 
   render() {
-    if (this.props.store.isLoading) {
+    if (this.props.store.isLoading && this.props.wallet.isLoading) {
       return (
         <div className="container c-width pt-5">
           <div className="row up-row d-flex justify-content-center align-self-center">
@@ -80,7 +80,7 @@ class WalletComponent extends Component {
                       <div className="row h3 mx-1">Tokens Available</div>
                     </div>
                     <div className="col-flex token-count-circle d-flex justify-content-center align-self-center">
-                      <div className="mt-4 pt-1 h1">{this.props.wallet.wallet.tokenNo}</div>
+                      <div className="mt-4 pt-1 h1">{this.props.wallet.isLoading ? "Loading" : ( this.props.wallet.wallet ) ? this.props.wallet.wallet.tokenNo : "Loading"}</div>
                     </div>
                   </div>
                 </div>

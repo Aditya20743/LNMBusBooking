@@ -379,8 +379,8 @@ export const updateWallet = (user, wallet, token) => async (dispatch) => {
                 throw Error("Insufficient Balance");
             }
 
-
             var newBal = wallet.tokenNo + token;
+            console.log(newBal);
             await walletRef.set({
                 tokenNo: newBal,
             }, { merge: true }
