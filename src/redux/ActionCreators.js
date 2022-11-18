@@ -55,36 +55,26 @@ export const fetchOutpass = (user) => async (dispatch) => {
                 const userid = user.uid;
                 querySnapshot.forEach((doc) => {
                     if (doc.data().uid === userid ) {
-                       
-                        var cur=moment(new Date()).format("YYYY-MM-DD");
-                        var returnDate=doc.data().returnDate;
+                        var cur = moment(new Date()).format("YYYY-MM-DD");
+                        var returnDate = doc.data().returnDate;
 
                         if(moment(returnDate).isBefore(cur)){
                             deleteOutpass(user,doc.data());
                         }
-
-
                         else{
-                        
-                        const _id = doc.id;
-                        outpassArr.push({ _id, ...doc.data() });
+                            const _id = doc.id;
+                            outpassArr.push({ _id, ...doc.data() });
                         }
                     }
                 })
             }
             else if (user.role === 'caretaker') {
                 const hostel = user.hostelName;
-                console.log(moment(new Date()).format("DD-MM-YYYY"));
-              
+
                 querySnapshot.forEach((doc) => {
                     if (doc.data().hostelName === hostel && doc.data().status === "pending"){
-                        
-                      
-
                         const _id = doc.id;
                         outpassArr.push({ _id, ...doc.data() });
-
-                       
                     }
                 })
             }
@@ -105,7 +95,7 @@ export const deleteOutpass = (user, outpass) => async (dispatch) => {
             if (user !== undefined && user.role === "student") {
                 const outpassRef = doc(db, "outpass", outpass.uid);
                 await deleteDoc(outpassRef);
-                //dispatch(fetchOutpass(user));
+                // dispatch(fetchOutpass(user));          // Removed because deleteOutpass function is already used in fetchOutpass -> avoiding loop
             }
             else {
                 throw Error("Error 401: Unauthorized");
@@ -197,8 +187,6 @@ export const bookBus = (user, bus,wallet,ticket) => async (dispatch) => {
     console.log(user, bus);
     try {
         dispatch(requestBus());
-      
-
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
 
             updateWallet(user,wallet,-1);
@@ -408,7 +396,6 @@ export const updateWallet = (user, wallet, token) => async (dispatch) => {
             }
 
             var newBal = wallet.tokenNo + token;
-            console.log(newBal);
             await walletRef.set({
                 tokenNo: newBal,
             }, { merge: true }
