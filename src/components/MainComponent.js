@@ -49,7 +49,7 @@ const mapDispatchToProps = (dispatch) => ({
   postSpecialBusRequest: (user, specialbusrequest) => dispatch(postSpecialBusRequest(user, specialbusrequest)),
 
   postBus: (user, bus) => dispatch(postBus(user, bus)),
-  bookBus: (user, bus) => dispatch(bookBus(user, bus)),
+  bookBus: (user, bus, wallet, ticket) => dispatch(bookBus(user, bus, wallet, ticket)),
 
   postStore: (user, store) => dispatch(postStore(user, store)),
   fetchStore: () => dispatch(fetchStore()),
@@ -86,6 +86,8 @@ class Main extends Component {
         (this.props.auth.user && (this.props.auth.user.role === "student" || this.props.auth.user.role === "faculty"))
           ?
           <SelectBusSeatComponent bus={this.props.bus.bus.filter((bus) => bus._id === match.params.busId)[0]}
+            ticket={this.props.ticket.ticket.filter((ticket) => (ticket.busId === match.params.busId && ticket.status !== "Cancelled"))[0]}
+            outpass = {this.props.outpass.outpass.filter((outpass) => outpass.status === "Approved")[0]}
             auth={this.props.auth} wallet={this.props.wallet} bookBus={this.props.bookBus} />
           :
           <div className="container pt-5 c-width">

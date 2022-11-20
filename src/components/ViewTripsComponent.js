@@ -88,7 +88,7 @@ class ViewTripsComponent extends Component {
             : this.props.ticket.ticket.filter((trip) => trip.status === "Upcoming")
             .map((trip) => {
               return (
-                <div className="col-12 col-md-10 offset-md-1 mt-5">
+                <div className="col-12 col-md-10 offset-md-1 my-3">
                   <RenderTripCard trip={trip} handleSubmit = {this.handleSubmit}/>
                 </div>
               );
@@ -102,7 +102,7 @@ class ViewTripsComponent extends Component {
             : this.props.ticket.ticket.filter((trip) => trip.status === "Past")
             .map((trip) => {
               return (
-                <div key={trip._id} className="col-12 col-md-10 offset-md-1 mt-5">
+                <div key={trip._id} className="col-12 col-md-10 offset-md-1 my-3">
                   <RenderTripCard trip={trip} />
                 </div>
               );

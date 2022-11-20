@@ -26,19 +26,37 @@ class SelectBusSeatComponent extends Component {
     if (this.props.wallet.wallet.tokenNo <= 1) {
       alert("Buy Tokens");
     }
+    // else if (this.props.auth.user.role === "student" && this.props.outpass === undefined) {
+    //   alert("No approved Outpass");
+    // }
     else {
       bus.seats[this.state.selectedSeat] = true;
-      bus.seatsAvailable--;
-      this.props.bookBus(this.props.auth.user, bus);
+      bus.seatsAvailable = String(bus.seatsAvailable-1);
+      var ticket = {
+        uid: this.props.auth.user.uid,
+        busId: this.props.bus._id,
+        busTime: this.props.bus.time,
+        source: this.props.bus.source,
+        destination: this.props.bus.destination,
+        busDate: this.props.bus.date,
+        seatNumber: this.state.selectedSeat,
+        status: "Upcoming"
+      };
+      this.props.bookBus(this.props.auth.user, bus, this.props.wallet.wallet, ticket);
     }
   }
 
   render() {
-    const hour = this.props.bus.time.split(":")[0];
-    const min = this.props.bus.time.split(":")[1];
-    const time = moment.utc().hour(hour).minute(min).second(0);
 
-    if (this.props.bus.isLoading) {
+    if (!this.props.auth || !this.props.bus) {
+      return (
+        <div className="container pt-5 c-width">
+          <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
+            <h6>ERROR: You are not authorized.</h6>
+          </div>
+        </div>
+      );
+    } else if (this.props.auth.isLoading) {
       return (
         <div className="container pt-5 c-width">
           <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
@@ -47,8 +65,7 @@ class SelectBusSeatComponent extends Component {
         </div>
       );
     }
-
-    else if (this.props.bus.errMess) {
+    else if (this.props.auth.errMess) {
       return (
         <div className="container pt-5 c-width">
           <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
@@ -57,18 +74,23 @@ class SelectBusSeatComponent extends Component {
         </div>
       );
     }
-
     else{
-
+      const hour = this.props.bus.time.split(":")[0];
+      const min = this.props.bus.time.split(":")[1];
+      const time = moment.utc().hour(hour).minute(min).second(0);
     const getSeatRow = (i) => {
       let content = [];
+      
       for(let j = 0; j<4; j++){
         content.push(
           <li className="seat">
-          { this.props.bus.seats[i+j] === false ?
-              <input type="radio" name="selectedSeat" onChange={this.handleInput} value={i+j} id={i+j}/>
-            :
-            <input type="radio" name="selectedSeat" onChange={this.handleInput} disabled id={i+j}/>
+            {this.props.bus.seats[i + j] === true ?
+              ((this.props.ticket && this.props.ticket.seatNumber === String(i + j)) ?
+                <input type="radio" name="selectedSeat" onChange={this.handleInput} className="booked" id={i + j}></input>
+                  :
+                  <input type="radio" name="selectedSeat" onChange={this.handleInput} disabled id={i+j}/>)
+              :
+              <input type="radio" name="selectedSeat" onChange={this.handleInput} value={i + j} id={i + j} />
           }
             <label htmlFor={i+j}>{i+j+1}</label>
           </li>
@@ -187,7 +209,7 @@ class SelectBusSeatComponent extends Component {
               <div className="row d-flex justify-content-center mb-4">
                 <div className="col-sm-4">
                   {
-                    this.state.selectedSeat === "" ? 
+                    (this.state.selectedSeat === "" || this.props.ticket !== undefined)? 
                         <button
                         type="button"
                         className="btn disabled btn-secondary text-white nav-link"

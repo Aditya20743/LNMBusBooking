@@ -1,3 +1,30 @@
+html, body {
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  margin-top: 5px;
+  margin-bottom: 200px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
 .c-width{
   min-height: 80vh;
 }
@@ -147,11 +174,30 @@ li>input{
   -webkit-appearance:none;
 }
 .seat input[type=radio]:checked + label {
-  background: #bada55;
+  background: #c6df97;
   -webkit-animation-name: rubberBand;
   animation-name: rubberBand;
   animation-duration: 300ms;
   animation-fill-mode: both;
+}
+
+.seat .booked + label {
+  background: rgb(240, 70, 70);
+  text-indent: -9999px;
+  overflow: hidden;
+}
+.seat .booked + label:after  {
+  content: "B";
+  text-indent: 0;
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translate(-50%, 0%);  
+}
+.seat .booked + label:hover {
+  box-shadow: none;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 .seat input[type=radio]:disabled + label {
   background: #ddd;
@@ -170,6 +216,7 @@ li>input{
   box-shadow: none;
   cursor: not-allowed;
 }
+
 .seat label {
   display: block;
   position: relative;

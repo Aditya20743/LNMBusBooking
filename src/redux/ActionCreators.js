@@ -183,14 +183,13 @@ export const deleteBus = (user, bus) => async (dispatch) => {
 }
 
 // Book Seat
-export const bookBus = (user, bus,wallet,ticket) => async (dispatch) => {
-    console.log(user, bus);
+export const bookBus = (user, bus, wallet, ticket) => async (dispatch) => {
     try {
         dispatch(requestBus());
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
 
-            updateWallet(user,wallet,-1);
-            postTicket(user,ticket);
+            dispatch(updateWallet(user,wallet,-1));
+            dispatch(postTicket(user,ticket));
 
             const busRef = firestore.doc(`bus/${bus._id}`)
             await busRef.set(bus, { merge: true });
@@ -380,7 +379,6 @@ export const fetchWallet = (user) => async (dispatch) => {
 }
 
 export const updateWallet = (user, wallet, token) => async (dispatch) => {
-
     try {
         dispatch(requestWallet());
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
@@ -394,8 +392,9 @@ export const updateWallet = (user, wallet, token) => async (dispatch) => {
             if (wallet.tokenNo + token < 0) {
                 throw Error("Insufficient Balance");
             }
-
+            
             var newBal = wallet.tokenNo + token;
+            
             await walletRef.set({
                 tokenNo: newBal,
             }, { merge: true }
