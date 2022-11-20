@@ -203,6 +203,22 @@ export const bookBus = (user, bus, wallet, ticket) => async (dispatch) => {
     }
 }
 
+export const updateBus = (user, bus) => async (dispatch) => {
+    try {
+        dispatch(requestBus());
+        if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
+            const busRef = firestore.doc(`bus/${bus._id}`)
+            await busRef.set(bus, { merge: true });
+            dispatch(fetchBus(user));
+        }
+        else {
+            throw Error("Error 401: Unauthorized");
+        }
+    } catch (error) {
+        dispatch(busError(error.message))
+    }
+}
+
 // Store functions
 export const postStore = (user, store) => async (dispatch) => {
     try {
@@ -302,11 +318,17 @@ export const updateTicket = (user, ticket) => async (dispatch) => {
 export const cancelTicket = (user, wallet,ticket) => async (dispatch) => {
     try {
         dispatch(requestTicket());
+        console.log("Atharvaaaa1");
+
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
             
             //get bus and Time
             const busRef = firestore.doc(`bus/${ticket.busId}`)
             const docBus = await getDoc(busRef);
+
+            console.log("Atha1");
+            console.log(ticket);
+
 
             const currentTime =new Date().toLocaleTimeString('it-IT', { hour12: false, 
                 hour: "numeric", 
@@ -322,6 +344,21 @@ export const cancelTicket = (user, wallet,ticket) => async (dispatch) => {
             if((busHour-curHour)*60 +(busMin-curMin)>120){
                 dispatch(updateWallet(user,wallet,0.5));
             }
+            console.log("Atharvaaaa3");
+            if(ticket.seatNumber !== undefined)
+            {
+                console.log("Atharvaaaa4");
+                var z = ticket.seatNumber;
+                console.log(z);
+                // console.log(docBus.data().seats);
+                docBus.data().seats[Number(ticket.seatNumber)]=false;
+                docBus.data().seatsAvailable=String( Number(docBus.data().seatsAvailable)+1);
+            }
+            else{
+                console.log("Atharvaaaa2");
+            }
+            
+            dispatch(updateBus(user, docBus));
             dispatch(updateTicket(user, ticket));
             dispatch(fetchTicket(user));
         }
