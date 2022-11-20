@@ -26,9 +26,9 @@ class SelectBusSeatComponent extends Component {
     if (this.props.wallet.wallet.tokenNo <= 1) {
       alert("Buy Tokens");
     }
-    // else if (this.props.auth.user.role === "student" && this.props.outpass === undefined) {
-    //   alert("No approved Outpass");
-    // }
+    else if (this.props.auth.user.role === "student" && this.props.outpass === undefined) {
+      alert("No approved Outpass");
+    }
     else {
       bus.seats[this.state.selectedSeat] = true;
       bus.seatsAvailable = String(bus.seatsAvailable-1);
@@ -156,7 +156,7 @@ class SelectBusSeatComponent extends Component {
                 <div className="row d-flex py-1 justify-content-center ">
                   <div className="col-sm-4 m-1">
                   {
-                    this.props.bus.seatsAvailable === 0 ? 
+                    this.props.bus.seatsAvailable !== 0 || this.props.ticket? 
                         <button
                         type="button"
                         className="btn disabled btn-secondary text-white nav-link"
@@ -207,26 +207,31 @@ class SelectBusSeatComponent extends Component {
                 </div>
               </div>
               <div className="row d-flex justify-content-center mb-4">
-                <div className="col-sm-4">
+                
                   {
-                    (this.state.selectedSeat === "" || this.props.ticket !== undefined)? 
-                        <button
+                    (this.state.selectedSeat === "" || this.props.ticket !== undefined) ? 
+                      <>
+                        <p className="text-danger">* One person is allowed to book only one seat.</p>
+                        <div className="col-sm-4">
+                            <button
+                            type="button"
+                            className="btn disabled btn-secondary text-white nav-link"
+                          >  
+                            Book Seat <ArrowForwardIcon />
+                          </button>
+                        </div>
+                      </>
+                    :
+                    <div className="col-sm-4">
+                      <button
                         type="button"
-                        className="btn disabled btn-secondary text-white nav-link"
-                      >
+                        className="btn btn-outline-primary nav-link"
+                        onClick={() => this.handleSubmit(this.props.bus)}>
                         Book Seat <ArrowForwardIcon />
                       </button>
-                      :
-                      <button
-                      type="button"
-                        className="btn btn-outline-primary nav-link"
-                        onClick={() => this.handleSubmit(this.props.bus)}
-                    >
-                      Book Seat <ArrowForwardIcon />
-                    </button>
+                    </div>
                   }
                     
-                  </div>
                 </div>
             </div>
           </div>

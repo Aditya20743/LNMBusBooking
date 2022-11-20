@@ -174,7 +174,7 @@ li>input{
   -webkit-appearance:none;
 }
 .seat input[type=radio]:checked + label {
-  background: #c6df97;
+  background: #bada55;
   -webkit-animation-name: rubberBand;
   animation-name: rubberBand;
   animation-duration: 300ms;
