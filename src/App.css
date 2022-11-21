@@ -105,11 +105,17 @@ footer {
 }
 
 .phone-bg-image{
+  position: relative;
   width: 100%;
 }
 .qrimage{
-  height: 30vh;
-  /* width: 40ph; */
+  height: 22vh;
+  position: absolute;
+  margin:auto;
+  left: 0;
+  top:0;
+  right:0;
+  bottom:0;
 }
 .plane {
   box-sizing: border-box;

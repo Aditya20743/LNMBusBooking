@@ -7,11 +7,17 @@ import moment from "moment";
 function RenderTripCard({ trip, handleSubmit}) {
   return (
     <div className="card ">
-      <div className="row row-fluid d-flex align-self-center justify-content-center">
-        <div className="col-12 p-3 ">
+      <div className="row ">
+        <div className="d-flex h5 justify-content-center pt-3 col-md-4 col-12 p-md-3 ">
+          Bus No. {trip.busNumber}
+        </div>
+        <div className=" d-flex justify-content-center col-md-4 col-12 p-md-3">
           <h5>
             {trip.source} <ArrowForwardIcon /> {trip.destination}
           </h5>
+        </div>
+        <div className="d-flex h5 justify-content-center pb-2 col-md-4 col-12 p-md-3">
+           Seat - {trip.seatNumber}
         </div>
       </div>
       <Divider />

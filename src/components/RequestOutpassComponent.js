@@ -11,7 +11,7 @@ class RequestOutpassComponent extends Component {
       departureDate: "",
       returnDate: "",
       purpose: "",
-      hostelName: "",
+      hostelName: "BH-1",
       roomNumber: "",
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -107,7 +107,6 @@ class RequestOutpassComponent extends Component {
                           name="hostelName"
                           onChange={this.handleInput}
                           value={this.state.hostelName}
-                          defaultValue={"BH-1"}
                         >
                           <option selected disabled>
                             Hostel Name
