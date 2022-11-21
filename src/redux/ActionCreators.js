@@ -58,8 +58,9 @@ export const fetchOutpass = (user) => async (dispatch) => {
                         var cur = moment(new Date()).format("YYYY-MM-DD");
                         var returnDate = doc.data().returnDate;
 
-                        if(moment(returnDate).isBefore(cur)){
-                            deleteOutpass(user,doc.data());
+                        if (moment(returnDate).isBefore(cur)) {
+                            const _id = doc.id;
+                            dispatch(deleteOutpass(user,{ _id, ...doc.data() }));
                         }
                         else{
                             const _id = doc.id;
@@ -92,8 +93,8 @@ export const fetchOutpass = (user) => async (dispatch) => {
 export const deleteOutpass = (user, outpass) => async (dispatch) => {
     try {
         dispatch(requestOutpass());
-            if (user !== undefined && user.role === "student") {
-                const outpassRef = doc(db, "outpass", outpass.uid);
+        if (user !== undefined && user.role === "student") {
+                const outpassRef = doc(db, "outpass", outpass._id);
                 await deleteDoc(outpassRef);
                 // dispatch(fetchOutpass(user));          // Removed because deleteOutpass function is already used in fetchOutpass -> avoiding loop
             }
@@ -167,11 +168,17 @@ export const fetchBus = () => async (dispatch) => {
             const busHour=parseInt(busDepartureTime.slice(0, 2));
             const busMin= parseInt(busDepartureTime.slice(3, 5));
 
-            if(((busHour-curHour)*60 +(busMin-curMin))>15){
+            var cur = moment(new Date()).format("YYYY-MM-DD");
+            var busDate = doc.data().date;
+           
+            if(moment(busDate).isSame(cur)  &&  ((busHour-curHour)*60 +(busMin-curMin))>15){
                 const _id = doc.id;
                 busArr.push({ _id, ...doc.data() });
             }
-            
+            else if(moment(busDate).isAfter(cur)){
+                const _id = doc.id;
+                busArr.push({ _id, ...doc.data() });
+            }
         })
         dispatch(receiveBus(busArr));
     }
@@ -356,22 +363,18 @@ export const cancelTicket = (user, wallet,ticket) => async (dispatch) => {
             if(((busHour-curHour)*60 +(busMin-curMin))>120){
                 dispatch(updateWallet(user,wallet,0.5));
             }
-
+            var new_seats= [...docBus.data().seats];
+            new_seats[ticket.seatNumber]=false;
+            console.log(new_seats);
+            if(ticket.seatNumber!==undefined)
             {
-                var new_seats= [...docBus.data().seats];
-                new_seats[ticket.seatNumber]=false;
-                console.log(new_seats);
-                if(ticket.seatNumber!==undefined)
-                {
-                    docBus.data().seats[ticket.seatNumber]=false;
-                }
-                await busRef.set({
-                    seats : new_seats,
-                    seatsAvailable : String(Number(docBus.data().seatsAvailable)+1),
-                }, { merge: true }
-                )
-
+                docBus.data().seats[ticket.seatNumber]=false;
             }
+            await busRef.set({
+                seats : new_seats,
+                seatsAvailable : String(Number(docBus.data().seatsAvailable)+1),
+            }, { merge: true }
+            )
             
             dispatch(updateTicket(user, ticket));
             dispatch(fetchTicket(user));

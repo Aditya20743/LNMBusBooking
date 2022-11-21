@@ -125,9 +125,9 @@ class Main extends Component {
                 component={() => <RequestSpecialBusComponent auth={this.props.auth}
                   postSpecialBusRequest={this.props.postSpecialBusRequest} />}
               />
-              <Route exact
+              <Route
                 path="/requestOutpass"
-                component={() => <RequestOutpassComponent auth={this.props.auth} postOutpass={this.props.postOutpass} />}
+                component={() => <RequestOutpassComponent auth={this.props.auth} outpass = {this.props.outpass} postOutpass={this.props.postOutpass} />}
               />
               <Route exact path="/addBus" component={() => <AddBusComponent auth={this.props.auth} postBus={this.props.postBus} />} />
               <Route exact
