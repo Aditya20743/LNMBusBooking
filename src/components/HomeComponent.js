@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOutlined";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import Divider from "@mui/material/Divider";
 import { Link } from "react-router-dom";
 import Login from "./LoginComponent";
 
@@ -25,6 +27,27 @@ class Home extends Component {
   }
 
   render() {
+
+    if (this.props.auth.isLoading||!this.props.trip) {
+      return (
+        <div className="container c-width pt-5">
+          <div className="row up-row d-flex justify-content-center align-self-center">
+            <h6>Loading...</h6>
+          </div>
+        </div>
+      );
+    }
+    else if (this.props.auth.errMess) {
+      return (
+        <div className="container c-width pt-5">
+          <div className="row up-row d-flex justify-content-center align-self-center">
+            <h6>Error: {this.props.auth.errMess}</h6>
+          </div>
+        </div>
+      );
+    }
+    else{
+
     if (
       this.props.auth.isAuthenticated &&
       this.props.auth.user.role === "admin"
@@ -152,21 +175,28 @@ class Home extends Component {
                     <div className="row">
                       <div className="d-flex col-flex justify-content-center token-count-circle offset-2">
                         <div className="align-self-center">
-                          <h1>{this.props.wallet.isLoading ? "Loading" : ( this.props.wallet.wallet ) ? this.props.wallet.wallet.tokenNo : "Loading"}</h1> Tokens
+                          <h1>
+                            {this.props.wallet.isLoading
+                              ? "Loading"
+                              : this.props.wallet.wallet
+                              ? this.props.wallet.wallet.tokenNo
+                              : "Loading"}
+                          </h1>{" "}
+                          Tokens
                         </div>
                       </div>
                     </div>
                     <Link to={`/wallet`}>
-                    <div className="row mt-3">
-                      <button
-                        type="button"
-                        className="cardBtn btn-primary btn d-flex p-2 mb-3 btn-block justify-content-center nav-link"
-                      >
-                        Purchase Tokens
-                        <div className="home-btn-icon ml-2">
-                          <ArrowCircleRightOutlinedIcon />
-                        </div>
-                      </button>
+                      <div className="row mt-3">
+                        <button
+                          type="button"
+                          className="cardBtn btn-primary btn d-flex p-2 mb-3 btn-block justify-content-center nav-link"
+                        >
+                          Purchase Tokens
+                          <div className="home-btn-icon ml-2">
+                            <ArrowCircleRightOutlinedIcon />
+                          </div>
+                        </button>
                       </div>
                     </Link>
                   </>
@@ -187,11 +217,45 @@ class Home extends Component {
 
                 <hr color="black" />
 
-                <div className="row-flex">
-                  <div className="col py-4 align-self-center">
-                    No Upcoming Trips
-                  </div>
-                </div>
+
+                  {!this.props.trip ? (
+                    <div>
+                      <div className="col d-flex justify-content-center align-self-center">
+                        <h4>Upcoming :</h4>
+                      </div>
+                      <div className="row ">
+                        <div className="d-flex h6 justify-content-start col-md-6 col-6 p-md-1 ">
+                          Bus No. {this.props.trip.busNumber}
+                        </div>
+                        <div className="d-flex h6 justify-content-end pb-2 col-md-6 col-6 p-md-1">
+                          
+                          Seat - {this.props.trip.seatNumber}
+                        </div>
+                      </div>
+                      <div className="row">
+                      <div className=" d-flex justify-content-center col-12 p-md-1">
+                          <h6>
+                            {this.props.trip.source} <ArrowForwardIcon /> {this.props.trip.destination}
+                          </h6>
+                        </div>
+                      </div>
+                      <div className="row">
+                      <div className="d-flex h6 justify-content-start pb-2 col-md-6 col-6 p-md-1">
+                          {this.props.trip.busDate}
+                        </div>
+                        <div className="d-flex h6 justify-content-end pb-2 col-md-6 col-6 p-md-1">
+                          
+                          {this.props.trip.busTime}
+                        </div>
+                      </div>
+                      </div>
+                   ) : (
+                    <div className="row mt-3 d-flex justify-content-center ">
+                      <div className="align-self-center">
+                        <h6>No Upcoming Trips</h6>
+                      </div>
+                    </div>
+                  ) }
               </div>
             </div>
           </div>
@@ -252,7 +316,7 @@ class Home extends Component {
       );
     }
   }
+  }
 }
 
 export default Home;
-
