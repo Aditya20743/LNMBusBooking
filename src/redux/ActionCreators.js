@@ -156,8 +156,22 @@ export const fetchBus = () => async (dispatch) => {
         const querySnapshot = await getDocs(collection(db, "bus"));
         let busArr = [];
         querySnapshot.forEach((doc) => {
-            const _id = doc.id;
-            busArr.push({ _id, ...doc.data() });
+            const currentTime =new Date().toLocaleTimeString('it-IT', { hour12: false, 
+                hour: "numeric", 
+                minute: "numeric",
+                timeZone: 'Asia/Kolkata'});
+            const busDepartureTime=doc.data().time;
+            const curHour = parseInt(currentTime.slice(0, 2));
+            const curMin=parseInt(currentTime.slice(3, 5));
+
+            const busHour=parseInt(busDepartureTime.slice(0, 2));
+            const busMin= parseInt(busDepartureTime.slice(3, 5));
+
+            if(((busHour-curHour)*60 +(busMin-curMin))>0){
+                const _id = doc.id;
+                busArr.push({ _id, ...doc.data() });
+            }
+            
         })
         dispatch(receiveBus(busArr));
     }
@@ -202,6 +216,22 @@ export const bookBus = (user, bus, wallet, ticket) => async (dispatch) => {
         dispatch(busError(error.message));
     }
 }
+
+// export const updateBus = (user, bus) => async (dispatch) => {
+//     try {
+//         dispatch(requestBus());
+//         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
+//             const busRef = firestore.doc(`bus/${bus._id}`)
+//             await busRef.set(bus, { merge: true });
+//             dispatch(fetchBus(user));
+//         }
+//         else {
+//             throw Error("Error 401: Unauthorized");
+//         }
+//     } catch (error) {
+//         dispatch(busError(error.message))
+//     }
+// }
 
 // Store functions
 export const postStore = (user, store) => async (dispatch) => {
@@ -302,11 +332,15 @@ export const updateTicket = (user, ticket) => async (dispatch) => {
 export const cancelTicket = (user, wallet,ticket) => async (dispatch) => {
     try {
         dispatch(requestTicket());
+        console.log("Atharvaaaa1");
+
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
             
             //get bus and Time
             const busRef = firestore.doc(`bus/${ticket.busId}`)
             const docBus = await getDoc(busRef);
+            console.log(ticket);
+
 
             const currentTime =new Date().toLocaleTimeString('it-IT', { hour12: false, 
                 hour: "numeric", 
@@ -319,9 +353,26 @@ export const cancelTicket = (user, wallet,ticket) => async (dispatch) => {
             const busHour=parseInt(busDepartureTime.slice(0, 2));
             const busMin= parseInt(busDepartureTime.slice(3, 5));
 
-            if((busHour-curHour)*60 +(busMin-curMin)>120){
+            if(((busHour-curHour)*60 +(busMin-curMin))>120){
                 dispatch(updateWallet(user,wallet,0.5));
             }
+
+            {
+                var new_seats= [...docBus.data().seats];
+                new_seats[ticket.seatNumber]=false;
+                console.log(new_seats);
+                if(ticket.seatNumber!==undefined)
+                {
+                    docBus.data().seats[ticket.seatNumber]=false;
+                }
+                await busRef.set({
+                    seats : new_seats,
+                    seatsAvailable : String(Number(docBus.data().seatsAvailable)+1),
+                }, { merge: true }
+                )
+
+            }
+            
             dispatch(updateTicket(user, ticket));
             dispatch(fetchTicket(user));
         }
@@ -389,7 +440,7 @@ export const updateWallet = (user, wallet, token) => async (dispatch) => {
                 throw Error("Token is not a Number");
             }
 
-            if (wallet.tokenNo + token < 0) {
+            if ((wallet.tokenNo + token )< 0) {
                 throw Error("Insufficient Balance");
             }
             
@@ -418,6 +469,8 @@ export const postSpecialBusRequest = (user, specialbusrequest) => async (dispatc
             specialbusrequest['uid'] = user.uid;
             specialbusrequest['name'] = user.name;
             specialbusrequest['email'] = user.email;
+            specialbusrequest['numOfRequest'] = 1;
+
             await addDoc(collection(db, 'specialBusRequest'), specialbusrequest);
             dispatch(fetchSpecialBusRequest(user));
         }
