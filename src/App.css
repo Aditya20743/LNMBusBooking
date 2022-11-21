@@ -45,6 +45,9 @@ footer {
   top: 24.5%;
   bottom: 24.02%;
 }
+.sch-bg{
+  background-image: url(../public/assests/images/Schedule2.jpg) ;
+}
 
 .home-bg {
   background-image: url(../public/assests/images/HomeBackground.png);
@@ -262,4 +265,51 @@ li>input{
 .rubberBand {
   -webkit-animation-name: rubberBand;
   animation-name: rubberBand;
+}
+
+.btn-grp {
+  border-radius: 1rem;
+  text-transform: capitalize;
+}
+.btn-grp-sch {
+  border: none;
+  /* min-width: 6rem; */
+  padding: 1.2rem 2rem;
+  background-color: #2371de9a;
+  cursor: pointer;
+  margin: 0;
+  font-size: 16px;
+  box-shadow: inset 0px 0px 0px -15px #d9faffcc;
+  transition: all 300ms ease-out;
+  text-transform: capitalize;
+}
+.btn-grp-sch:last-child {
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
+.btn-grp-sch:first-child {
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+}
+.btn-grp-sch:hover,
+.btn-grp-sch:focus {
+  color:  #07215add;
+  box-shadow: inset 0px -20px 0px -15px #d9faffcc;
+}
+.btn-grp-sch:focus {
+  outline: none;
+}
+.btn-grp-sch:after {
+  content: "✔️";
+  margin-left: 0.5rem;
+  display: inline-block;
+  color:#d9faffcc;
+  position: absolute;
+  transform: translatey(10px);
+  opacity: 0;
+  transition: all 200ms ease-out;
+}
+.btn-grp-sch--active:after {
+  opacity: 1;
+  transform: translatey(-2px);
 }
