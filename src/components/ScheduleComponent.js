@@ -17,47 +17,57 @@ class ScheduleComponent extends Component {
     return (
       <div className="container c-width pt-5">
         <div className="row up-row">
-          <div className="col-12 col-md-3 mt-4 ">
-            <div className="">
+          <div className="col-3 d-none d-lg-block mt-4">
               <img
-                src="assests/images/Schedule4.jpg"
+                src="assests/images/schedule.jpg"
                 alt="LNMBus"
                 width="110%"
               />
-            </div>
           </div>
-          <div className="col-12 col-md-9 mt-4">
-            <div className="row-12 ">
-              <div className="col-6 col-md-12">
-                <nav className="navbar-sch   navbar-dark">
+          <div className="col-12 col-lg-9 mt-4">
+            <div className="col-12 ml-3">
+                <nav className="navbar-sch navbar-dark">
                   <div className="btn-group">
-                    <button className="btn-grp-sch"
+                    <button className="btn-grp-sch px-2 px-sm-3 px-xl-4 pl-4"
                     onClick={() => this.handleDay("Monday")}>
-                    Monday
+                    <div className="d-none d-md-block">Monday</div>
+                    <div className="d-md-none d-block">Mon</div>
+                    
                     </button>
-                    <button className="btn-grp-sch"
+                    <button className="btn-grp-sch px-2 px-sm-3 px-xl-4"
                     onClick={() => this.handleDay("Tuesday")}>
-                    Tuesday</button>
-                    <button className="btn-grp-sch"
+                    <div className="d-none d-md-block">Tuesday</div>
+                    <div className="d-md-none d-block">Tue</div>
+                  </button>
+                    <button className="btn-grp-sch px-2 px-sm-3 px-xl-4"
                     onClick={() => this.handleDay("Wednesday")}>
-                    Wednesday</button>
-                    <button className="btn-grp-sch"
+                    <div className="d-none d-md-block">Wednesday</div>
+                    <div className="d-md-none d-block">Wed</div>
+                  </button>
+                    <button className="btn-grp-sch px-2 px-sm-3 px-xl-4"
                     onClick={() => this.handleDay("Thursday")}>
-                    Thursday</button>
-                    <button className="btn-grp-sch"
+                    <div className="d-none d-md-block">Thursday</div>
+                    <div className="d-md-none d-block">Thur</div>
+                  </button>
+                    <button className="btn-grp-sch px-2 px-sm-3 px-xl-4"
                     onClick={() => this.handleDay("Friday")}>
-                    Friday</button>
-                    <button className="btn-grp-sch"
+                    <div className="d-none d-md-block">Friday</div>
+                    <div className="d-md-none d-block">Fri</div>
+                  </button>
+                    <button className="btn-grp-sch px-2 px-sm-3 px-xl-4"
                     onClick={() => this.handleDay("Saturday")}>
-                    Saturday</button>
-                    <button className="btn-grp-sch"
+                    <div className="d-none d-md-block">Saturday</div>
+                    <div className="d-md-none d-block">Sat</div>
+                  </button>
+                    <button className="btn-grp-sch px-2 px-sm-3 px-xl-4 pr-4"
                     onClick={() => this.handleDay("Sunday")}>
-                    Sunday</button>
+                    <div className="d-none d-md-block">Sunday</div>
+                    <div className="d-md-none d-block">Sun</div>
+                  </button>
                   </div>
                 </nav>
-              </div>
             </div>
-            <div className="row-12 ">
+            <div className="col-12">
               <div className="card-12">
                 <div className="card-body p-4 ">
                   <table className="table table-hover table">
@@ -70,42 +80,18 @@ class ScheduleComponent extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Ajmeri Gate</td>
-                        <td>LNMIIT</td>
-                        <td>07:35 AM</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Ajmeri Gate</td>
-                        <td>LNMIIT</td>
-                        <td>07:35 AM</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Ajmeri Gate</td>
-                        <td>LNMIIT</td>
-                        <td>07:35 AM</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Ajmeri Gate</td>
-                        <td>LNMIIT</td>
-                        <td>07:35 AM</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Ajmeri Gate</td>
-                        <td>LNMIIT</td>
-                        <td>07:35 AM</td>
-                      </tr>
-                      <tr>
-                        <th scope="row">1</th>
-                        <td>Ajmeri Gate</td>
-                        <td>LNMIIT</td>
-                        <td>07:35 AM</td>
-                      </tr>
+                      {
+                        this.props.schedule.schedule.filter((trip) => (trip.day === this.state.day)).map((trip) => {
+                          return(
+                            <tr>
+                              <th scope="row">{trip.busNumber}</th>
+                              <td>{trip.source}</td>
+                              <td>{trip.destination}</td>
+                              <td>{trip.time}</td>
+                            </tr>
+                          );
+                        })
+                      }
                     </tbody>
                   </table>
                 </div>

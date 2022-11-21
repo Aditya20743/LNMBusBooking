@@ -175,7 +175,7 @@ class Main extends Component {
               />
               <Route exact
                 path="/schedule"
-                component={() => <ScheduleComponent />}
+                component={() => <ScheduleComponent schedule={this.props.schedule} />}
               />
               
               <Redirect to="/home" />

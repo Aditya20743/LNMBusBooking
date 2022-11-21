@@ -73,7 +73,7 @@ footer {
   bottom: 24.02%;
 }
 .sch-bg{
-  background-image: url(../public/assests/images/Schedule2.jpg) ;
+  background-image: url(../public/assests/images/schedule.jpg) ;
 }
 
 .home-bg {
@@ -323,7 +323,8 @@ li>input{
 .btn-grp-sch {
   border: none;
   /* min-width: 6rem; */
-  padding: 1.2rem 2rem;
+  padding-top: 1.0rem;
+  padding-bottom: 1.0rem;
   background-color: #2371de9a;
   cursor: pointer;
   margin: 0;
@@ -342,7 +343,7 @@ li>input{
 }
 .btn-grp-sch:hover,
 .btn-grp-sch:focus {
-  color:  #07215add;
+  color:  #ffffff;
   box-shadow: inset 0px -20px 0px -15px #d9faffcc;
 }
 .btn-grp-sch:focus {
