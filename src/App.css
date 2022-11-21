@@ -105,11 +105,7 @@ footer {
 }
 
 .phone-bg-image{
-  background-image: url(../public/assests/images/phonebg.png);
-  background-size: 50% 100%;
-  background-repeat: no-repeat;
-  /* background-position: center; */
-  /* background-attachment:fixed; */
+  width: 100%;
 }
 .qrimage{
   height: 30vh;

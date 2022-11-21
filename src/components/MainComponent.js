@@ -170,7 +170,7 @@ class Main extends Component {
               />
               <Route exact
                 path="/qrcode"
-                component={() => <QrcodeComponent  />}
+                component={() => <QrcodeComponent auth = {this.props.auth} />}
               />
               
               <Redirect to="/home" />

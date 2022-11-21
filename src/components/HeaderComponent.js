@@ -115,7 +115,7 @@ class Header extends Component {
                           </div>
                         </li>
                         <li className="nav-item pt-2">
-                          <NavLink className="nav-link" to="/">
+                          <NavLink className="nav-link" to="/qrcode">
                             <QrCodeScannerIcon /> QR-Code
                             <span className="sr-only">(current)</span>
                           </NavLink>
