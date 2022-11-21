@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
+import moment from "moment";
 
 class RemoveBusComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: "",
+      date: moment(new Date()).format("YYYY-MM-DD"),
       selectedBus: "",
     };
 

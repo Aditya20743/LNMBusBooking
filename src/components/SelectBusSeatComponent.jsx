@@ -3,6 +3,12 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import moment from "moment";
 import Divider from "@mui/material/Divider";
+// import ReactDOM from 'react-dom'
+//   import { library } from '@fortawesome/fontawesome-svg-core'
+//   import { fab } from '@fortawesome/free-brands-svg-icons'
+//   import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons'
+  // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import {steering} from '@react-icons/fa'
 
 class SelectBusSeatComponent extends Component {
   
@@ -39,6 +45,8 @@ class SelectBusSeatComponent extends Component {
         source: this.props.bus.source,
         destination: this.props.bus.destination,
         busDate: this.props.bus.date,
+        busNumber:this.props.bus.busNumber,
+
         seatNumber: this.state.selectedSeat,
         status: "Upcoming"
       };
@@ -179,20 +187,24 @@ class SelectBusSeatComponent extends Component {
             <div className="row">
               <div className="card col-10 mb-4 offset-1 offset-sm-1">
                 <div className="card-body p-3">
-                  <div className="row h4 d-flex justify-content-center">
+                  <div className="row h5 d-flex justify-content-center">
                     Seats Available: {this.props.bus.seatsAvailable}
                   </div>
-                  <div className="row h4 d-flex justify-content-center">
+                  <div className="row h5 d-flex justify-content-center">
                     Extra Bus Requests: 0
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="col-sm-8 col-12 col-lg-5 offset-sm-2 mb-5">
+          <div className="col-sm-10 col-12 col-md-8 col-lg-5 offset-sm-1 offset-md-2 mb-5">
             <div className="card">
               <div className="card-body">
-                <div className="row">wheel</div>
+                {/* <div className="row d-flex align-self-right justify-content-end"> */}
+                <div className="row d-flex align-self-right justify-content-end">
+                    <img src="/assests/images/steering.png" width="100px"
+                  className="py-2 pl-5" alt="" style={{marginRight:"20%"}}/>
+                </div>
                 <div className="col-12">
                   <div className="plane">
                   

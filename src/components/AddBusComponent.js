@@ -10,7 +10,7 @@ class AddBusComponent extends Component {
       destination: "",
       date: "",
       time: "",
-      busType: "",
+      busType: "Regular",
       totalSeats: "",
       busNumber: "",
       driverName: "",
