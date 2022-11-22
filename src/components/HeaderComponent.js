@@ -67,7 +67,7 @@ class Header extends Component {
                       </NavLink>
                     </li>
                     <li className="nav-item pt-2 ">
-                      <NavLink className="nav-link" to="/">
+                      <NavLink className="nav-link" to="/schedule">
                         View Schedule <span className="sr-only">(current)</span>
                       </NavLink>
                     </li>

@@ -20,7 +20,7 @@ const RenderBusCard = ({ bus }) => {
           <div className="col-sm-9 ">
             <h2>Bus No. {bus.busNumber}</h2>
           </div>
-          <div className="col-12 col-sm-3 ">
+          <div className="col-12 col-sm-3 d-flex justify-content-end">
             <h5>{bus.busType}</h5>
           </div>
         </div>
@@ -68,7 +68,7 @@ class SelectBusComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: "",
+      date: moment(new Date()).format("YYYY-MM-DD"),
     };
 
     this.handleInput = this.handleInput.bind(this);

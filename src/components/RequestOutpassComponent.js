@@ -11,7 +11,7 @@ class RequestOutpassComponent extends Component {
       departureDate: "",
       returnDate: "",
       purpose: "",
-      hostelName: "",
+      hostelName: "BH-1",
       roomNumber: "",
     };
     this.handleSubmit = this.handleSubmit.bind(this);

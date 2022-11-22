@@ -174,17 +174,14 @@ export const fetchBus = () => async (dispatch) => {
             var busDate = doc.data().date;
 
             if (moment(busDate).isSame(cur) && ((busHour - curHour) * 60 + (busMin - curMin)) > 15) {
-                const _id = doc.id;
-                busArr.push({ _id, ...doc.data() });
 
-            }
-
-            else if (moment(busDate).isAfter(cur)) {
                 const _id = doc.id;
                 busArr.push({ _id, ...doc.data() });
             }
-
-
+            else if(moment(busDate).isAfter(cur)){
+                const _id = doc.id;
+                busArr.push({ _id, ...doc.data() });
+            }
         })
         dispatch(receiveBus(busArr));
     }

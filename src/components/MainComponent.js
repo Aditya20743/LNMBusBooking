@@ -15,6 +15,7 @@ import WalletComponent from "./WalletComponent";
 import SelectBusSeatComponent from "./SelectBusSeatComponent";
 import OutpassComponent from "./OutpassComponent";
 import QrcodeComponent from "./QrcodeComponent";
+import ScheduleComponent from "./ScheduleComponent";
 
 import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
@@ -87,7 +88,7 @@ class Main extends Component {
           ?
           <SelectBusSeatComponent bus={this.props.bus.bus.filter((bus) => bus._id === match.params.busId)[0]}
             ticket={this.props.ticket.ticket.filter((ticket) => (ticket.busId === match.params.busId && ticket.status !== "Cancelled"))[0]}
-            outpass = {this.props.outpass.outpass.filter((outpass) => outpass.status === "Approved")[0]}
+            outpass = {this.props.outpass.outpass.filter((outpass) => outpass.status === "Approve")[0]}
             auth={this.props.auth} wallet={this.props.wallet} bookBus={this.props.bookBus} />
           :
           <div className="container pt-5 c-width">
@@ -171,6 +172,10 @@ class Main extends Component {
               <Route exact
                 path="/qrcode"
                 component={() => <QrcodeComponent auth = {this.props.auth} />}
+              />
+              <Route exact
+                path="/schedule"
+                component={() => <ScheduleComponent schedule={this.props.schedule} />}
               />
               
               <Redirect to="/home" />
