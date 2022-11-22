@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import moment from "moment";
 
 class ScheduleComponent extends Component {
   constructor(props) {
@@ -105,7 +106,7 @@ class ScheduleComponent extends Component {
                               <th scope="row">{trip.busNumber}</th>
                               <td>{trip.source}</td>
                               <td>{trip.destination}</td>
-                              <td>{trip.time}</td>
+                              <td>{moment(trip.time, "hh:mm").format("LT")}</td>
                             </tr>
                           );
                         })
