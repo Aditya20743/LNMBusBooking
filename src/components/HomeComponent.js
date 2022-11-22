@@ -105,11 +105,11 @@ class Home extends Component {
                 </Link>
               </div>
             </div>
-            <div className=" col-9 col-sm-6 mb-5 mt-2 offset-xl-2 offset-1 offset-sm-0">
+            <div className=" col-9 col-sm-6 mb-5 mt-4 offset-xl-2 offset-2 offset-sm-0">
               <img
                 src="assests/images/admin-home-bg.png"
                 alt="LNMBus"
-                width="100%"
+                width="80%"
               />
             </div>
           </div>
