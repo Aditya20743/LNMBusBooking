@@ -2,19 +2,23 @@ import React, { Component } from "react";
 import TextField from "@mui/material/TextField";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import Divider from "@mui/material/Divider";
+import moment from "moment";
 
 class UpdateScheduleComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      _id: "",
       busNumber: "",
       source: "",
       destination: "",
       time: "",
-      day: "",
+      day: "Monday",
       totalSeats: 0,
       selectDay: "Monday",
       selectedBus: "",
+      driverName: "Mohanlal",
+      driverContactNum: ""
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleInput = this.handleInput.bind(this);
@@ -22,81 +26,91 @@ class UpdateScheduleComponent extends Component {
     this.handleRemoveBus = this.handleRemoveBus.bind(this);
     this.handleBus = this.handleBus.bind(this);
   }
-  handleBus(){
-    const schedule = JSON.parse(this.state.selectedBus);
-    console.log(schedule);
+  handleBus(schedule){
+    const sch = JSON.parse(schedule);
+    
     this.setState({
       ...this.state,
-      busNumber: schedule.busNumber,
-      source: schedule.source,
-      destination: schedule.destination,
-      time: schedule.time,
-      day: schedule.day,
-      totalSeats: schedule.totalSeats,
+      _id: sch._id,
+      busNumber: sch.busNumber,
+      source: sch.source,
+      destination: sch.destination,
+      time: sch.time,
+      day: sch.day,
+      totalSeats: sch.totalSeats,
+      driverName: sch.driveName,
+      driverContactNum: sch.driverContactNum
     });
   }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    // this.props.postOutpass(this.props.auth.user, {...this.state, status:"pending"});
+  resetForm(){
     this.setState({
+      _id: "",
       busNumber: "",
       source: "",
       destination: "",
-      busType: "",
       time: "",
-      day: "",
-      totalSeats: "",
-      selectDay: "",
-      isBusSelected: "",
+      day: "Monday",
+      totalSeats: 0,
+      selectDay: "Monday",
+      selectedBus: "",
+      driverName: "Mohanlal",
+      driverContactNum: ""
     });
-    // window.location.href = "/outpass";
   }
-
+  handleSubmit(event) {
+    event.preventDefault();
+    const schedule = {
+      _id: this.state._id,
+      busNumber: this.state.busNumber,
+      source: this.state.source,
+      destination: this.state.destination,
+      time: this.state.time,
+      day: this.state.day,
+      totalSeats: this.state.totalSeats,
+      driverName: this.state.driverName,
+      driverContactNum: this.state.driverContactNum
+    }
+  
+    this.props.updateSchedule(this.props.auth.user, schedule);
+    this.resetForm();
+  }
   handleInput(event) {
     const name = event.target.name;
     const value = event.target.value;
-    if(name === "selectedBus" ){
-      this.setState({ ...this.state, [name]: value });
-      this.handleBus();
+    if(name === "selectedBus"){
+      this.setState({ ...this.state, [name]: value});
+      this.handleBus(value);
     }
     else
-    this.setState({ ...this.state, [name]: value });
-    console.log(this.state);
+      this.setState({ ...this.state, [name]: value });
   }
 
   handleAddBus(event) {
     event.preventDefault();
-    // this.props.postOutpass(this.props.auth.user, {...this.state, status:"pending"});
-    this.setState({
-      busNumber: "",
-      source: "",
-      destination: "",
-      busType: "",
-      time: "",
-      day: "",
-      totalSeats: "",
-      selectDay: "",
-      isBusSelected: "",
-    });
-    // window.location.href = "/outpass";
+    const schedule = {
+      busNumber: this.state.busNumber,
+      source: this.state.source,
+      destination: this.state.destination,
+      time: this.state.time,
+      day: this.state.day,
+      totalSeats: this.state.totalSeats,
+      driverName: this.state.driverName, 
+      driverContactNum: this.state.driverContactNum
+    }
+    this.props.postSchedule(this.props.auth.user, schedule);
+    this.resetForm();
   }
 
   handleRemoveBus(event) {
     event.preventDefault();
-    // this.props.postOutpass(this.props.auth.user, {...this.state, status:"pending"});
-    this.setState({
-      busNumber: "",
-      source: "",
-      destination: "",
-      busType: "",
-      time: "",
-      day: "",
-      totalSeats: "",
-      selectDay: "",
-      isBusSelected: "",
-    });
-    // window.location.href = "/outpass";
+    const schedule = {
+      _id: this.state._id,
+      busNumber: this.state.busNumber
+    };
+
+    this.props.deleteSchedule(this.props.auth.user, schedule);
+    
+    this.resetForm();
   }
   render() {
     if (this.props.schedule.isLoading) {
@@ -123,10 +137,10 @@ class UpdateScheduleComponent extends Component {
           </div>
           <div className="row-fluid mb-5 align-self-center mt-4">
             <div className="col">
-              <div className="card col-12 col-sm-8 col-md-6 col-xl-6 offset-auto offset-sm-3 align-self-center ">
+              <div className="card col-12 col-sm-10 col-xl-6 offset-auto offset-sm-1 offset-xl-3 align-self-center ">
                 <div className="card-body align-self-center p-4">
                   <div className="row ">
-                    <form onSubmit={this.handleSubmit}>
+                    <form>
                       <div className="input-group  mt-4 mb-4 ">
                         <div className="row ">
                           <div className="col p-2">
@@ -137,7 +151,7 @@ class UpdateScheduleComponent extends Component {
                               value={this.state.selectDay}
                               name="selectDay"
                             >
-                              <option selected disabled>
+                              <option disabled>
                                 Select the Day
                               </option>
                               <option value="Monday">Monday</option>
@@ -155,13 +169,12 @@ class UpdateScheduleComponent extends Component {
                               id="inputGroupSelect02"
                               onChange={this.handleInput}
                               name="selectedBus"
-                              value = {this.state.selectedBus}
                             >
-                              <option selected >
+                              <option value = "">
                                 Select the Bus
                               </option>
 
-                              {this.props.schedule.schedule.filter(
+                              {!this.props.schedule.schedule ? "Loading" :this.props.schedule.schedule.filter(
                                 (schedule) =>
                                   schedule.day === this.state.selectDay
                               ).length === 0 ? (
@@ -183,8 +196,8 @@ class UpdateScheduleComponent extends Component {
                                       >
                                         Bus No. {schedule.busNumber},{" "}
                                         {schedule.source} to{" "}
-                                        {schedule.destination}, {schedule.time},{" "}
-                                        {schedule.busType}
+                                        {schedule.destination},
+                                        {moment(schedule.time, "hh:mm").format("LT")}
                                       </option>
                                     );
                                   })
@@ -197,21 +210,33 @@ class UpdateScheduleComponent extends Component {
                   </div>
                   <div className="row p-1">
                     <div className="col p-2 ">
-                      <button type="button" className="btn btn-success">
+                      {this.state._id? 
+                        <button type="button" className="btn btn-success disabled" onClick={this.handleAddBus}>
+                          Add Bus
+                        </button> 
+                        :
+                      <button type="button" className="btn btn-success " onClick={this.handleAddBus}>
                         Add Bus
-                      </button>
+                      </button>}
+                      
                     </div>
                     <div className="col p-2">
-                      <button type="button" className="btn btn-danger">
-                        Remove Bus
-                      </button>
+                      {this.state._id
+                        ?<button type="button" className="btn btn-danger" onClick={this.handleRemoveBus}>
+                            Remove Bus
+                          </button>
+                        : <button type="button" className="btn btn-danger disabled">
+                            Remove Bus
+                          </button>
+                      }
+                      
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="row mb-5 align-self-center mt-4">
+          <div className="row mb-2 align-self-center mt-4">
             <div className="col d-flex  justify-content-center">
               <div className="card col-12 col-md-10   mb-4">
                 <div className="card-body  p-4 ">
@@ -311,17 +336,55 @@ class UpdateScheduleComponent extends Component {
                         </select>
                       </div>
                     </div>
-                    <div className="col-sm col-sm-2 mt-3">totalSeats:-</div>
+                    <div className="col-sm col-sm-2 mt-3">Total Seats:</div>
                     <div className="col-12 col-sm-4 col-md-2 mt-2">
+                      <div className="form-group">
+                        <input
+                          type="number"
+                          class="form-control"
+                          id="formGroupExampleInput"
+                          placeholder="Total seats in Bus"
+                          name="totalSeats"
+                          onChange={this.handleInput}
+                          value={this.state.totalSeats}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                    <div className="row pt-2">
+                    <div className="col-sm col-md-3">
+                      <div className=" ">
+                        Driver Name:
+                      </div>
+                    </div>
+                    <div className="col-sm col-sm-4">
+                      <div className="input-group mt-2 ">
+                        <select
+                          className="form-select p-2"
+                          id="inputGroupSelect02"
+                          onChange={this.handleInput}
+                          value={this.state.driverName}
+                          name="driverName"
+                          placeholder="Driver's Name"
+                        >
+                          <option selected value="Mohanlal">Mohanlal</option>
+                          <option value="Madanlal">Madanlal</option>
+                          <option value="Jethalal">Jethalal</option>
+                          <option value="Ghasitalal">Ghasitalal</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="col-sm col-sm-2 mt-2">Driver's Contact:</div>
+                    <div className="col-12 col-sm-4 col-md-3 mt-2">
                       <div className="form-group  ">
                         <input
                           type="number"
                           class="form-control"
                           id="formGroupExampleInput"
-                          placeholder="Total totalSeats in Bus"
-                          name="totalSeats"
+                          placeholder="Contact No."
+                          name="driverContactNum"
                           onChange={this.handleInput}
-                          value={this.state.totalSeats}
+                          value={this.state.driverContactNum}
                         />
                       </div>
                     </div>
@@ -330,15 +393,28 @@ class UpdateScheduleComponent extends Component {
               </div>
             </div>
           </div>
-          <div className="row mb-5 align-self-center mt-4">
+          <div className="row mb-4 align-self-center">
             <div className="col d-flex  justify-content-center">
-              <div className="row m-3 pt-2 pt-2 pd-2">
-                <button
+              <div className="row mx-3 pt-2 pd-2">
+                {
+                  this.state._id
+                  ?
+                  <button
                   type="submit"
-                  className="cardBtn btn-primary btn d-flex  mb-3 btn-block justify-content-center nav-link"
+                  className="cardBtn btn-primary btn d-flex mb-3 btn-block justify-content-center nav-link"
+                  onClick={this.handleSubmit}
                 >
                   Update Schedule
                 </button>
+                :
+                <button
+                  type="submit"
+                  className="cardBtn btn-primary btn d-flex disabled mb-3 btn-block justify-content-center text-white"
+                >
+                  Update Schedule
+                </button>
+                }
+                
               </div>
             </div>
           </div>
