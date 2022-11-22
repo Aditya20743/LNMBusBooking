@@ -4,6 +4,100 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import Divider from "@mui/material/Divider";
 
 class UpdateScheduleComponent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      busNumber: "",
+      source: "",
+      destination: "",
+      time: "",
+      day: "",
+      totalSeats: 0,
+      selectDay: "Monday",
+      selectedBus: "",
+    };
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleInput = this.handleInput.bind(this);
+    this.handleAddBus = this.handleAddBus.bind(this);
+    this.handleRemoveBus = this.handleRemoveBus.bind(this);
+    this.handleBus = this.handleBus.bind(this);
+  }
+  handleBus(){
+    const schedule = JSON.parse(this.state.selectedBus);
+    console.log(schedule);
+    this.setState({
+      ...this.state,
+      busNumber: schedule.busNumber,
+      source: schedule.source,
+      destination: schedule.destination,
+      time: schedule.time,
+      day: schedule.day,
+      totalSeats: schedule.totalSeats,
+    });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    // this.props.postOutpass(this.props.auth.user, {...this.state, status:"pending"});
+    this.setState({
+      busNumber: "",
+      source: "",
+      destination: "",
+      busType: "",
+      time: "",
+      day: "",
+      totalSeats: "",
+      selectDay: "",
+      isBusSelected: "",
+    });
+    // window.location.href = "/outpass";
+  }
+
+  handleInput(event) {
+    const name = event.target.name;
+    const value = event.target.value;
+    if(name === "selectedBus" ){
+      this.setState({ ...this.state, [name]: value });
+      this.handleBus();
+    }
+    else
+    this.setState({ ...this.state, [name]: value });
+    console.log(this.state);
+  }
+
+  handleAddBus(event) {
+    event.preventDefault();
+    // this.props.postOutpass(this.props.auth.user, {...this.state, status:"pending"});
+    this.setState({
+      busNumber: "",
+      source: "",
+      destination: "",
+      busType: "",
+      time: "",
+      day: "",
+      totalSeats: "",
+      selectDay: "",
+      isBusSelected: "",
+    });
+    // window.location.href = "/outpass";
+  }
+
+  handleRemoveBus(event) {
+    event.preventDefault();
+    // this.props.postOutpass(this.props.auth.user, {...this.state, status:"pending"});
+    this.setState({
+      busNumber: "",
+      source: "",
+      destination: "",
+      busType: "",
+      time: "",
+      day: "",
+      totalSeats: "",
+      selectDay: "",
+      isBusSelected: "",
+    });
+    // window.location.href = "/outpass";
+  }
   render() {
     if (this.props.schedule.isLoading) {
       return (
@@ -32,41 +126,69 @@ class UpdateScheduleComponent extends Component {
               <div className="card col-12 col-sm-8 col-md-6 col-xl-6 offset-auto offset-sm-3 align-self-center ">
                 <div className="card-body align-self-center p-4">
                   <div className="row ">
-                    <form>
+                    <form onSubmit={this.handleSubmit}>
                       <div className="input-group  mt-4 mb-4 ">
                         <div className="row ">
                           <div className="col p-2">
                             <select
                               className="form-select p-2"
                               id="inputGroupSelect02"
+                              onChange={this.handleInput}
+                              value={this.state.selectDay}
+                              name="selectDay"
                             >
                               <option selected disabled>
                                 Select the Day
                               </option>
-                              <option value="1">Monday</option>
-                              <option value="2">Tuesday</option>
-                              <option value="3">Wednesday</option>
-                              <option value="4">Thursday</option>
-                              <option value="5">Friday</option>
-                              <option value="6">Saturday</option>
-                              <option value="7">Sunday</option>
+                              <option value="Monday">Monday</option>
+                              <option value="Tuesday">Tuesday</option>
+                              <option value="Wednesday">Wednesday</option>
+                              <option value="Thursday">Thursday</option>
+                              <option value="Friday">Friday</option>
+                              <option value="Saturday">Saturday</option>
+                              <option value="Sunday">Sunday</option>
                             </select>
                           </div>
                           <div className="col p-2">
                             <select
                               className="form-select p-2 "
                               id="inputGroupSelect02"
+                              onChange={this.handleInput}
+                              name="selectedBus"
+                              value = {this.state.selectedBus}
                             >
-                              <option selected disabled>
+                              <option selected >
                                 Select the Bus
                               </option>
-                              <option value="1">Monday</option>
-                              <option value="2">Tuesday</option>
-                              <option value="3">Wednesday</option>
-                              <option value="4">Thursday</option>
-                              <option value="5">Friday</option>
-                              <option value="6">Saturday</option>
-                              <option value="7">Sunday</option>
+
+                              {this.props.schedule.schedule.filter(
+                                (schedule) =>
+                                  schedule.day === this.state.selectDay
+                              ).length === 0 ? (
+                                <div className="d-flex align-self-center justify-content-center my-4">
+                                  <h5>No Buses Available </h5>
+                                </div>
+                              ) : (
+                                this.props.schedule.schedule
+                                  .filter(
+                                    (schedule) =>
+                                      schedule.day ===
+                                      this.state.selectDay
+                                  )
+                                  .map((schedule) => {
+                                    return (
+                                      <option
+                                        value={JSON.stringify(schedule)}
+                                        key={schedule._id}
+                                      >
+                                        Bus No. {schedule.busNumber},{" "}
+                                        {schedule.source} to{" "}
+                                        {schedule.destination}, {schedule.time},{" "}
+                                        {schedule.busType}
+                                      </option>
+                                    );
+                                  })
+                              )}
                             </select>
                           </div>
                         </div>
@@ -101,22 +223,10 @@ class UpdateScheduleComponent extends Component {
                           className="form-control"
                           id="formGroupExampleInput"
                           placeholder="Bus No."
+                          name="busNumber"
+                          onChange={this.handleInput}
+                          value={this.state.busNumber}
                         />
-                      </div>
-                    </div>
-
-                    <div className="col-6 col-md-9 ">
-                      <div className="input-group justify-content-end  ">
-                        <select
-                          className="form-select p-2"
-                          id="inputGroupSelect02"
-                        >
-                          <option selected disabled>
-                            Select Bus Type
-                          </option>
-                          <option value="1">Regular</option>
-                          <option value="2">Special</option>
-                        </select>
                       </div>
                     </div>
                   </div>
@@ -129,6 +239,9 @@ class UpdateScheduleComponent extends Component {
                           class="form-control"
                           id="formGroupExampleInput"
                           placeholder="Source"
+                          name="source"
+                          onChange={this.handleInput}
+                          value={this.state.source}
                         />
                       </div>
                     </div>
@@ -140,6 +253,9 @@ class UpdateScheduleComponent extends Component {
                           class="form-control"
                           id="formGroupExampleInput"
                           placeholder="Destination"
+                          name="destination"
+                          onChange={this.handleInput}
+                          value={this.state.destination}
                         />
                       </div>
                     </div>
@@ -157,6 +273,9 @@ class UpdateScheduleComponent extends Component {
                         label="Select Time"
                         type="time"
                         defaultValue="06:00"
+                        onChange={this.handleInput}
+                        value={this.state.time}
+                        name="time"
                         InputLabelProps={{
                           shrink: true,
                         }}
@@ -178,25 +297,31 @@ class UpdateScheduleComponent extends Component {
                         <select
                           className="form-select p-2"
                           id="inputGroupSelect02"
+                          onChange={this.handleInput}
+                          value={this.state.day}
+                          name="day"
                         >
-                          <option selected>Monday</option>
-                          <option value="1">Tuesday</option>
-                          <option value="2">Wednesday</option>
-                          <option value="3">Thursday</option>
-                          <option value="4">Friday</option>
-                          <option value="5">Saturday</option>
-                          <option value="6">Sunday</option>
+                          <option selected value="Monday">Monday</option>
+                          <option value="Tuesday">Tuesday</option>
+                          <option value="Wednesday">Wednesday</option>
+                          <option value="Thursday">Thursday</option>
+                          <option value="Friday">Friday</option>
+                          <option value="Saturday">Saturday</option>
+                          <option value="Sunday">Sunday</option>
                         </select>
                       </div>
                     </div>
-                    <div className="col-sm col-sm-2 mt-3">Seats:-</div>
+                    <div className="col-sm col-sm-2 mt-3">totalSeats:-</div>
                     <div className="col-12 col-sm-4 col-md-2 mt-2">
                       <div className="form-group  ">
                         <input
                           type="number"
                           class="form-control"
                           id="formGroupExampleInput"
-                          placeholder="Total Seats in Bus"
+                          placeholder="Total totalSeats in Bus"
+                          name="totalSeats"
+                          onChange={this.handleInput}
+                          value={this.state.totalSeats}
                         />
                       </div>
                     </div>
@@ -209,7 +334,7 @@ class UpdateScheduleComponent extends Component {
             <div className="col d-flex  justify-content-center">
               <div className="row m-3 pt-2 pt-2 pd-2">
                 <button
-                  type="button"
+                  type="submit"
                   className="cardBtn btn-primary btn d-flex  mb-3 btn-block justify-content-center nav-link"
                 >
                   Update Schedule
