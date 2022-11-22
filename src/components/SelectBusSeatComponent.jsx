@@ -3,12 +3,6 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import moment from "moment";
 import Divider from "@mui/material/Divider";
-// import ReactDOM from 'react-dom'
-//   import { library } from '@fortawesome/fontawesome-svg-core'
-//   import { fab } from '@fortawesome/free-brands-svg-icons'
-//   import { faCheckSquare, faCoffee } from '@fortawesome/free-solid-svg-icons'
-  // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-// import {steering} from '@react-icons/fa'
 
 class SelectBusSeatComponent extends Component {
   

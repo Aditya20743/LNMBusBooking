@@ -166,18 +166,18 @@ class RequestOutpassComponent extends Component {
                         placeholder="Purpose"
                       ></textarea>
                     </div>
-                    {this.props.outpass.outpass.length === 0 ? (
+                    {!this.props.outpass.outpass || this.props.outpass.outpass.length !== 0 ? (
                       <button
                         type="submit"
-                        className="cardBtn btn-primary btn d-flex mb-3 btn-block justify-content-center nav-link"
+                        disabled
+                        className="cardBtn btn-primary btn d-flex mb-3 btn-block justify-content-center"
                       >
                         Request Outpass
                       </button>
                     ) : (
                       <button
                         type="submit"
-                        disabled
-                        className="cardBtn btn-primary btn d-flex mb-3 btn-block justify-content-center"
+                        className="cardBtn btn-primary btn d-flex mb-3 btn-block justify-content-center nav-link"
                       >
                         Request Outpass
                       </button>
