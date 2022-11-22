@@ -17,7 +17,7 @@ function RenderTripCard({ trip, handleSubmit}) {
           </h5>
         </div>
         <div className="d-flex h5 justify-content-center pb-2 col-md-4 col-12 p-md-3">
-           Seat - {trip.seatNumber}
+           Seat - {Number(trip.seatNumber)+1}
         </div>
       </div>
       <Divider />

@@ -43,7 +43,7 @@ class Header extends Component {
                   />
                 </NavLink>
               </div>
-              <div className="col-xl-10 col-md-8 col-sm-8 offset-md-1 offset-xl-0 offset-xxl-0 col-7 mt-2 pr-3">
+              <div className="col-xl-10 col-md-8 col-sm-8 offset-md-1 offset-xl-0 offset-xxl-0 col-7 mt-2 pr-5">
                 <button
                   className="navbar-toggler float-right"
                   type="button "
