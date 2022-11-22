@@ -334,21 +334,48 @@ export const fetchTicket = (user) => async (dispatch) => {
                 var cur = moment(new Date()).format("YYYY-MM-DD");
                 var busDate = doc.data().date;
 
-                if ((moment(busDate).isSame(cur) && ((busHour - curHour) * 60 + (busMin - curMin)) > 0) || (moment(busDate).isAfter(cur))) {
+                console.log(busHour +" "+busMin);
+                console.log((busHour - curHour) * 60 + (busMin - curMin));
 
+                if(doc.data().uid===user.uid){
+                if ( doc.data().status=== "Upcoming" && moment(busDate).isBefore(cur) ) {
+                    
                     const _id = doc.id;
-                    ticketArr.push({ _id, ...doc.data() });
-                }
-                else if ((moment(busDate).isSame(cur) && ((busHour - curHour) * 60 + (busMin - curMin)) <= 0) || (moment(busDate).isBefore(cur))) {
-                    const _id = doc.id;
-                    //const docRef = doc(db, "ticket", _id);
-                    const ticketRef = doc(db, "ticket", _id);
+                    
+                    const ticketRef = firestore.doc(`ticket/${_id}`);
+
+                    console.log("sdd");
                     await ticketRef.set({
                         status: 'Past'
                     }, { merge: true }
                     )
-            ticketArr.push({ _id, ...doc.data() });
+
+                    const docTicket = await getDoc(ticketRef);
+                    ticketArr.push({ _id, ...docTicket.data() });
+                   
+                }
+                else if( doc.data().status=== "Upcoming" && ((busHour - curHour) * 60 + (busMin - curMin) <0))
+                {
+                    const _id = doc.id;
+                    
+                    const ticketRef = firestore.doc(`ticket/${_id}`);
+
+                    console.log("sdd");
+                    await ticketRef.set({
+                        status: 'Past'
+                    }, { merge: true }
+                    )
+                    const docTicket = await getDoc(ticketRef.data());
+            ticketArr.push({ _id, ...docTicket });
+
+                }
+
+                else {
+                    const _id = doc.id;
+                    ticketArr.push({ _id, ...doc.data() });
+            
         }
+    }
         dispatch(receiveBus(ticketArr));
     });
     dispatch(receiveTicket(ticketArr));
