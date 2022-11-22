@@ -14,6 +14,24 @@ class ScheduleComponent extends Component {
     this.setState({ ...this.state, day: inputDay });
   }
   render() {
+    if (this.props.schedule.isLoading) {
+      return (
+        <div className="container pt-5 c-width">
+          <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
+            <h6>Loading...</h6>
+          </div>
+        </div>
+      );
+    } else if (this.props.schedule.errMess) {
+      return (
+        <div className="container pt-5 c-width">
+          <div className="up-row d-flex justify-content-center row-fluid pt-5 align-self-center ">
+            <h6>ERROR: {this.props.schedule.errMess}</h6>
+          </div>
+        </div>
+      );
+    }
+    else{
     return (
       <div className="container c-width pt-5">
         <div className="row up-row">
@@ -80,7 +98,7 @@ class ScheduleComponent extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {
+                      {this.props.schedule.schedule ?
                         this.props.schedule.schedule.filter((trip) => (trip.day === this.state.day)).map((trip) => {
                           return(
                             <tr>
@@ -91,6 +109,8 @@ class ScheduleComponent extends Component {
                             </tr>
                           );
                         })
+                        :
+                        "Loading"
                       }
                     </tbody>
                   </table>
@@ -102,6 +122,7 @@ class ScheduleComponent extends Component {
       </div>
     );
   }
+}
 }
 
 export default ScheduleComponent;

@@ -3,6 +3,7 @@ import ArrowCircleRightOutlinedIcon from "@mui/icons-material/ArrowCircleRightOu
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Link } from "react-router-dom";
 import Login from "./LoginComponent";
+import moment from "moment";
 
 class Home extends Component {
   constructor(props) {
@@ -162,7 +163,7 @@ class Home extends Component {
                 {this.props.auth.isAuthenticated ? (
                   <>
                     <div className="row">
-                      <div className="d-flex col-flex justify-content-center token-count-circle offset-2">
+                      <div className="d-flex justify-content-center token-count-circle offset-3">
                         <div className="align-self-center">
                           <h1>
                             {this.props.wallet.isLoading
@@ -206,41 +207,44 @@ class Home extends Component {
 
                 <hr color="black" />
                   {this.props.trip ? (
-                    <div>
+                    <>
+                    <div className="row">
                       <div className="col d-flex justify-content-center align-self-center">
-                        <h4>Upcoming :</h4>
+                        <h5>Upcoming :</h5>
                       </div>
-                      <div className="row ">
-                        <div className="d-flex h6 justify-content-start col-md-6 col-6 p-md-1 ">
+                    </div>
+                    <div className="container card p-3 m-1 ">
+                      
+                      <div className="d-flex justify-content-center col-12">
+                          <h5>
+                            {this.props.trip.source} <ArrowForwardIcon /> {this.props.trip.destination}
+                          </h5>
+                        </div>
+                        <div className="row ">
+                        <div className="d-flex h6 justify-content-start col-6 p-1">
                           Bus No. {this.props.trip.busNumber}
                         </div>
-                        <div className="d-flex h6 justify-content-end pb-2 col-md-6 col-6 p-md-1">
+                        <div className="d-flex h6 justify-content-end col-6 p-1">
                           Seat - {Number(this.props.trip.seatNumber) + 1}
                         </div>
                       </div>
                       <div className="row">
-                      <div className=" d-flex justify-content-center col-12 p-md-1">
-                          <h6>
-                            {this.props.trip.source} <ArrowForwardIcon /> {this.props.trip.destination}
-                          </h6>
+                        <div className="h6 mr-5 offset-sm-0 offset-2">
+                            {this.props.trip.busDate}
+                          </div>
+                          <div className="h6 offset-sm-0 offset-2">
+                            {moment(this.props.trip.busTime, "hh:mm").format("LT")}
+                          </div>
                         </div>
                       </div>
-                      <div className="row">
-                      <div className="d-flex h6 justify-content-start pb-2 col-md-6 col-6 p-md-1">
-                          {this.props.trip.busDate}
-                        </div>
-                        <div className="d-flex h6 justify-content-end pb-2 col-md-6 col-6 p-md-1">
-                          
-                          {this.props.trip.busTime}
-                        </div>
-                      </div>
-                      </div>
+                      </>
                    ) : (
                     <div className="row mt-3 d-flex justify-content-center ">
                       <div className="align-self-center">
                         <h6>No Upcoming Trips</h6>
                       </div>
                     </div>
+
                   ) }
               </div>
             </div>
