@@ -118,6 +118,7 @@ class Main extends Component {
                     loginUser={this.props.loginUser}
                     googleLogin={this.props.googleLogin}
                     wallet={this.props.wallet}
+                    trip = {this.props.ticket ? this.props.ticket.ticket.filter((trip) => trip.status === "Upcoming")[0] : null}
                   />
                 )}
               />

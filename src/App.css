@@ -29,7 +29,7 @@ html, body {
   min-height: 80vh;
 }
 .nav-link {
-  font-size: calc(0.7rem + 0.6vw);
+  font-size: calc(0.6rem + 0.6vw);
 }
 
 .nav-item>a{

@@ -29,7 +29,7 @@ class SelectBusSeatComponent extends Component {
   }
 
   handleSubmit(bus) {
-    if (this.props.wallet.wallet.tokenNo <= 1) {
+    if (this.props.wallet.wallet.tokenNo < 1) {
       alert("Buy Tokens");
     }
     else if (this.props.auth.user.role === "student" && this.props.outpass === undefined) {

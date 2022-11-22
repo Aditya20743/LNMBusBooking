@@ -30,15 +30,15 @@ class Header extends Component {
     return (
       <React.Fragment>
         <nav className="navbar navbar-expand-lg navbar-light">
-          <div className="container-fluid" style={{width: "97vw"}}>
+          <div className="container-fluid" style={{width: "99vw"}}>
             <div className="row">
               <div className="col-xl-2 col-md-3 col-sm-4 col-5 pl-3">
                 <NavLink className="navbar-brand" to="/">
                   <img
                     src="assests/images/logo.png"
                     alt="LNMBus"
-                    height="70%"
-                    width="70%"
+                    height="60%"
+                    width="60%"
                     className=" align-self-center"
                   />
                 </NavLink>

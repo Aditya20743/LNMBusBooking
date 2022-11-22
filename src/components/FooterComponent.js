@@ -14,8 +14,8 @@ class Footer extends Component {
                 <img
                   src="assests/images/footer-logo.png"
                   alt="LNMBus"
-                  width="90%"
-                  height="90%"
+                  width="80%"
+                  height="80%"
                   className="mt-1 py-4 pl-5 align-self-center"
                 />
               </a>
