@@ -84,6 +84,7 @@ class RequestSpecialBusComponent extends Component {
                         name = "time"
                         label="Select Time"
                         type="time"
+                        model = ".time"
                         className=""
                         defaultValue="06:00"
                         onChange={this.handleInput}

@@ -55,7 +55,7 @@ class RemoveBusComponent extends Component {
           </div>
           <div className="row-fluid mb-5 align-self-center mt-4">
             <div className="col">
-              <div className="card col-12 col-sm-10 col-md-8 col-xl-4 offset-xl-4 offset-md-2 offset-sm-1 align-self-center">
+              <div className="card col-12 col-md-8 col-xl-6 offset-xl-3 offset-md-2  align-self-center">
                 <div className="card-body align-self-center p-4">
                   <form>
                     <div className="pt-3 d-flex justify-content-center">
@@ -76,13 +76,14 @@ class RemoveBusComponent extends Component {
                       </Stack>
                     </div>
 
-                    <div className="input-group justify-content-center mt-4 mb-4">
+                    <div className="input-group justify-content-center mt-4 mb-4 ">
                       <select
-                        className="form-select p-2"
+                        className="form-select p-1"
                         id="inputGroupSelect02"
                         name="selectedBus"
                         onChange={this.handleInput}
                         value = {this.state.selectedBus}
+                        
                       >
                         <option selected disabled value="">
                           Select the Bus
@@ -99,8 +100,10 @@ class RemoveBusComponent extends Component {
                             .map((bus) => {
                               return (
                                 <option value= {JSON.stringify(bus)} key={bus._id}>
+                                  <div style={{"word-wrap": "break-word"}}>
                                   Bus No. {bus.busNumber}, {bus.source} to{" "}
-                                  {bus.destination}, {bus.time}, {bus.busType}
+                                  {bus.destination}, {moment(bus.time, "hh:mm").format("LT")}, {bus.busType}
+                                  </div>
                                 </option>
                               );
                             })
