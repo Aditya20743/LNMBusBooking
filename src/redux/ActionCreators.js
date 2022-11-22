@@ -178,7 +178,7 @@ export const fetchBus = () => async (dispatch) => {
                 const _id = doc.id;
                 busArr.push({ _id, ...doc.data() });
             }
-            else if(moment(busDate).isAfter(cur)){
+            else if (moment(busDate).isAfter(cur)) {
                 const _id = doc.id;
                 busArr.push({ _id, ...doc.data() });
             }
@@ -306,28 +306,67 @@ export const fetchTicket = (user) => async (dispatch) => {
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
             const querySnapshot = await getDocs(collection(db, "ticket"));
             let ticketArr = [];
-            const userid = user.uid;
-            querySnapshot.forEach((doc) => {
-                if (doc.data().uid === userid) {
+            // const userid = user.uid;
+            // querySnapshot.forEach((doc) => {
+            //     if (doc.data().uid === userid) {
+            //         const _id = doc.id;
+            //         ticketArr.push({ _id, ...doc.data() });
+            //     }
+
+            //new code
+
+
+            querySnapshot.forEach(async (doc) => {
+                const currentTime = new Date().toLocaleTimeString('it-IT', {
+                    hour12: false,
+                    hour: "numeric",
+                    minute: "numeric",
+                    timeZone: 'Asia/Kolkata'
+                });
+
+                const curHour = parseInt(currentTime.slice(0, 2));
+                const curMin = parseInt(currentTime.slice(3, 5));
+
+                const busDepartureTime = doc.data().busTime;
+                const busHour = parseInt(busDepartureTime.slice(0, 2));
+                const busMin = parseInt(busDepartureTime.slice(3, 5));
+
+                var cur = moment(new Date()).format("YYYY-MM-DD");
+                var busDate = doc.data().date;
+
+                if ((moment(busDate).isSame(cur) && ((busHour - curHour) * 60 + (busMin - curMin)) > 0) || (moment(busDate).isAfter(cur))) {
+
                     const _id = doc.id;
                     ticketArr.push({ _id, ...doc.data() });
                 }
-            });
-            dispatch(receiveTicket(ticketArr));
+                else if ((moment(busDate).isSame(cur) && ((busHour - curHour) * 60 + (busMin - curMin)) <= 0) || (moment(busDate).isBefore(cur))) {
+                    const _id = doc.id;
+                    //const docRef = doc(db, "ticket", _id);
+                    const ticketRef = doc(db, "ticket", _id);
+                    await ticketRef.set({
+                        status: 'Past'
+                    }, { merge: true }
+                    )
+            ticketArr.push({ _id, ...doc.data() });
         }
+        dispatch(receiveBus(ticketArr));
+    });
+    dispatch(receiveTicket(ticketArr));
+}
         else {
-            throw Error("Error 401: Unauthorized");
-        }
+    throw Error("Error 401: Unauthorized");
+}
     }
     catch (error) {
-        dispatch(ticketError(error.message))
-    }
+    dispatch(ticketError(error.message))
+}
 }
 
 export const updateTicket = (user, ticket) => async (dispatch) => {
     try {
         dispatch(requestTicket());
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
+
             const ticketRef = firestore.doc(`ticket/${ticket._id}`)
             await ticketRef.set(ticket, { merge: true });
             dispatch(fetchTicket(user));
