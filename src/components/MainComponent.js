@@ -141,7 +141,7 @@ class Main extends Component {
               <Route exact
                 path="/updateSchedule"
                 component={() => <UpdateScheduleComponent auth={this.props.auth} schedule={this.props.schedule} updateSchedule={this.props.updateSchedule}
-                  postSchedule={this.props.postSchedule}
+                  postSchedule={this.props.postSchedule} deleteSchedule={this.props.deleteSchedule}
                 />}
               />
               <Route exact
