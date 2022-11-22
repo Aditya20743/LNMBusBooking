@@ -164,17 +164,19 @@ class SelectBusSeatComponent extends Component {
                 <div className="row d-flex py-1 justify-content-center ">
                   <div className="col-sm-4 m-1">
                   {
-                    this.props.bus.seatsAvailable !== 0 || this.props.ticket? 
+                    (this.props.bus.seatsAvailable !== "0" || this.props.ticket !== undefined)? 
                         <button
                         type="button"
-                        className="btn disabled btn-secondary text-white nav-link"
-                      >
+                          className="btn disabled btn-secondary text-white nav-link"
+                        >
+                          {console.log(this.props.bus.seatsAvailable !== "0" )}
                         Request Bus <ArrowForwardIcon />
                       </button>
                       :
                       <button
                       type="button"
-                        className="btn btn-outline-primary nav-link"
+                          className="btn btn-outline-primary nav-link"
+                          onClick={() => this.props.increaseBusRequest(this.props.auth.user, this.props.bus)}
                     >
                       Request Bus <ArrowForwardIcon />
                     </button>
@@ -200,7 +202,6 @@ class SelectBusSeatComponent extends Component {
           <div className="col-sm-10 col-12 col-md-8 col-lg-5 offset-sm-1 offset-md-2 mb-5">
             <div className="card">
               <div className="card-body">
-                {/* <div className="row d-flex align-self-right justify-content-end"> */}
                 <div className="row d-flex align-self-right justify-content-end">
                     <img src="/assests/images/steering.png" width="100px"
                   className="py-2 pl-5" alt="" style={{marginRight:"20%"}}/>

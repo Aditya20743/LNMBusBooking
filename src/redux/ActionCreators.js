@@ -136,6 +136,7 @@ export const postBus = (user, bus) => async (dispatch) => {
 
             bus['seatsAvailable'] = bus.totalSeats;
             bus['seats'] = seatsArr;
+            bus['numOfRequest'] = 0;
             await addDoc(collection(db, 'bus'), bus);
             dispatch(fetchBus());
         }
@@ -226,8 +227,6 @@ export const bookBus = (user, bus, wallet, ticket) => async (dispatch) => {
         dispatch(busError(error.message));
     }
 }
-
-
 
 export const updateBus = (user, bus) => async (dispatch) => {
     try {
@@ -324,9 +323,6 @@ export const fetchTicket = (user) => async (dispatch) => {
                 var cur = moment(new Date()).format("YYYY-MM-DD");
                 var busDate = doc.data().date;
 
-                console.log(busHour +" "+busMin);
-                console.log((busHour - curHour) * 60 + (busMin - curMin));
-
                 if(doc.data().uid===user.uid){
                     if ( doc.data().status=== "Upcoming" && moment(busDate).isBefore(cur) ) {
                         
@@ -341,7 +337,7 @@ export const fetchTicket = (user) => async (dispatch) => {
                         ticketArr.push({ _id, ...docTicket.data() });
                     
                     }
-                    else if( doc.data().status=== "Upcoming" && ((busHour - curHour) * 60 + (busMin - curMin) <0)){
+                    else if( doc.data().status === "Upcoming" && ((busHour - curHour) * 60 + (busMin - curMin) <0)){
                         const _id = doc.id;
                         const ticketRef = firestore.doc(`ticket/${_id}`);
                         await ticketRef.set({
@@ -727,8 +723,6 @@ export const loginUser = (creds) => (dispatch) => {
 
             query.get().then((querySnapshot) => {
                 querySnapshot.forEach((doc) => {
-                    // doc.data() is never undefined for query doc snapshots
-                    console.log(doc.id, " => ", doc.data());
 
                     dispatch(receiveLogin(doc.data()));
 

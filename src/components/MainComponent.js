@@ -21,7 +21,7 @@ import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import {
-  loginUser, googleLogin, logoutUser, postBus, postOutpass, postStore, postTicket, postWallet, fetchStore, deleteBus, postSpecialBusRequest,
+  loginUser, googleLogin, logoutUser, postBus, postOutpass, postStore, postTicket, postWallet, fetchStore, deleteBus, postSpecialBusRequest, increaseBusRequest,
   deleteSpecialBusRequest, postSchedule, fetchSchedule, updateSchedule, updateTicket, updateOutpass, bookBus, updateWallet, updateSpecialBus, checkUser, cancelTicket, deleteSchedule
 } from "../redux/ActionCreators";
 
@@ -60,6 +60,7 @@ const mapDispatchToProps = (dispatch) => ({
   updateTicket: (user, ticket) => dispatch(updateTicket(user, ticket)),
   updateWallet: (user, wallet, token) => dispatch(updateWallet(user, wallet, token)),
 
+  increaseBusRequest: (user, bus) => dispatch(increaseBusRequest(user, bus)),
   postSchedule: (user, schedule) => dispatch(postSchedule(user, schedule)),
   fetchSchedule: () => dispatch(fetchSchedule()),
   updateSchedule: (user, schedule) => dispatch(updateSchedule(user, schedule)),
@@ -88,7 +89,8 @@ class Main extends Component {
           ?
           <SelectBusSeatComponent bus={this.props.bus.bus.filter((bus) => bus._id === match.params.busId)[0]}
             ticket={this.props.ticket.ticket.filter((ticket) => (ticket.busId === match.params.busId && ticket.status !== "Cancelled"))[0]}
-            outpass = {this.props.outpass.outpass.filter((outpass) => outpass.status === "Approve")[0]}
+            outpass={this.props.outpass.outpass.filter((outpass) => outpass.status === "Approve")[0]}
+            increaseBusRequest={this.props.increaseBusRequest}
             auth={this.props.auth} wallet={this.props.wallet} bookBus={this.props.bookBus} />
           :
           <div className="container pt-5 c-width">
