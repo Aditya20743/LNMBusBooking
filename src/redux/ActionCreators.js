@@ -1,6 +1,6 @@
 import * as ActionTypes from './ActionTypes';
 import { auth, firestore, fireauth } from '../firebase/firebase';
-import { doc, getDoc, getDocs, collection, addDoc, deleteDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, getDocs, collection, addDoc, deleteDoc } from "firebase/firestore";
 import { db } from '../firebase/firebase';
 import moment from "moment";
 
@@ -54,15 +54,15 @@ export const fetchOutpass = (user) => async (dispatch) => {
 
                 const userid = user.uid;
                 querySnapshot.forEach((doc) => {
-                    if (doc.data().uid === userid ) {
+                    if (doc.data().uid === userid) {
                         var cur = moment(new Date()).format("YYYY-MM-DD");
                         var returnDate = doc.data().returnDate;
 
                         if (moment(returnDate).isBefore(cur)) {
                             const _id = doc.id;
-                            dispatch(deleteOutpass(user,{ _id, ...doc.data() }));
+                            dispatch(deleteOutpass(user, { _id, ...doc.data() }));
                         }
-                        else{
+                        else {
                             const _id = doc.id;
                             outpassArr.push({ _id, ...doc.data() });
                         }
@@ -73,7 +73,7 @@ export const fetchOutpass = (user) => async (dispatch) => {
                 const hostel = user.hostelName;
 
                 querySnapshot.forEach((doc) => {
-                    if (doc.data().hostelName === hostel && doc.data().status === "pending"){
+                    if (doc.data().hostelName === hostel && doc.data().status === "pending") {
                         const _id = doc.id;
                         outpassArr.push({ _id, ...doc.data() });
                     }
@@ -94,13 +94,13 @@ export const deleteOutpass = (user, outpass) => async (dispatch) => {
     try {
         dispatch(requestOutpass());
         if (user !== undefined && user.role === "student") {
-                const outpassRef = doc(db, "outpass", outpass._id);
-                await deleteDoc(outpassRef);
-                // dispatch(fetchOutpass(user));          // Removed because deleteOutpass function is already used in fetchOutpass -> avoiding loop
-            }
-            else {
-                throw Error("Error 401: Unauthorized");
-            }
+            const outpassRef = doc(db, "outpass", outpass._id);
+            await deleteDoc(outpassRef);
+            // dispatch(fetchOutpass(user));          // Removed because deleteOutpass function is already used in fetchOutpass -> avoiding loop
+        }
+        else {
+            throw Error("Error 401: Unauthorized");
+        }
     } catch (error) {
         dispatch(outpassError(error.message));
     }
@@ -109,7 +109,7 @@ export const deleteOutpass = (user, outpass) => async (dispatch) => {
 export const updateOutpass = (user, outpass) => async (dispatch) => {
     try {
         dispatch(requestOutpass());
-        
+
         if (user !== undefined && user.role === "caretaker") {
             const outpassRef = firestore.doc(`outpass/${outpass._id}`)
             await outpassRef.set(outpass, { merge: true });
@@ -131,11 +131,11 @@ export const postBus = (user, bus) => async (dispatch) => {
 
             const seatsArr = new Array(bus.totalSeats);
 
-            for(let i=0;i<bus.totalSeats;i++)
-                    seatsArr[i]=false;
-                    
+            for (let i = 0; i < bus.totalSeats; i++)
+                seatsArr[i] = false;
+
             bus['seatsAvailable'] = bus.totalSeats;
-            bus['seats']=seatsArr;
+            bus['seats'] = seatsArr;
             await addDoc(collection(db, 'bus'), bus);
             dispatch(fetchBus());
         }
@@ -157,21 +157,24 @@ export const fetchBus = () => async (dispatch) => {
         const querySnapshot = await getDocs(collection(db, "bus"));
         let busArr = [];
         querySnapshot.forEach((doc) => {
-            const currentTime =new Date().toLocaleTimeString('it-IT', { hour12: false, 
-                hour: "numeric", 
+            const currentTime = new Date().toLocaleTimeString('it-IT', {
+                hour12: false,
+                hour: "numeric",
                 minute: "numeric",
-                timeZone: 'Asia/Kolkata'});
-            const busDepartureTime=doc.data().time;
+                timeZone: 'Asia/Kolkata'
+            });
+            const busDepartureTime = doc.data().time;
             const curHour = parseInt(currentTime.slice(0, 2));
-            const curMin=parseInt(currentTime.slice(3, 5));
+            const curMin = parseInt(currentTime.slice(3, 5));
 
-            const busHour=parseInt(busDepartureTime.slice(0, 2));
-            const busMin= parseInt(busDepartureTime.slice(3, 5));
+            const busHour = parseInt(busDepartureTime.slice(0, 2));
+            const busMin = parseInt(busDepartureTime.slice(3, 5));
 
             var cur = moment(new Date()).format("YYYY-MM-DD");
             var busDate = doc.data().date;
-           
-            if(moment(busDate).isSame(cur)  &&  ((busHour-curHour)*60 +(busMin-curMin))>15){
+
+            if (moment(busDate).isSame(cur) && ((busHour - curHour) * 60 + (busMin - curMin)) > 15) {
+
                 const _id = doc.id;
                 busArr.push({ _id, ...doc.data() });
             }
@@ -209,8 +212,8 @@ export const bookBus = (user, bus, wallet, ticket) => async (dispatch) => {
         dispatch(requestBus());
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
 
-            dispatch(updateWallet(user,wallet,-1));
-            dispatch(postTicket(user,ticket));
+            dispatch(updateWallet(user, wallet, -1));
+            dispatch(postTicket(user, ticket));
 
             const busRef = firestore.doc(`bus/${bus._id}`)
             await busRef.set(bus, { merge: true });
@@ -224,21 +227,23 @@ export const bookBus = (user, bus, wallet, ticket) => async (dispatch) => {
     }
 }
 
-// export const updateBus = (user, bus) => async (dispatch) => {
-//     try {
-//         dispatch(requestBus());
-//         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
-//             const busRef = firestore.doc(`bus/${bus._id}`)
-//             await busRef.set(bus, { merge: true });
-//             dispatch(fetchBus(user));
-//         }
-//         else {
-//             throw Error("Error 401: Unauthorized");
-//         }
-//     } catch (error) {
-//         dispatch(busError(error.message))
-//     }
-// }
+
+
+export const updateBus = (user, bus) => async (dispatch) => {
+    try {
+        dispatch(requestBus());
+        if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
+            const busRef = firestore.doc(`bus/${bus._id}`)
+            await busRef.set(bus, { merge: true });
+            dispatch(fetchBus(user));
+        }
+        else {
+            throw Error("Error 401: Unauthorized");
+        }
+    } catch (error) {
+        dispatch(busError(error.message))
+    }
+}
 
 // Store functions
 export const postStore = (user, store) => async (dispatch) => {
@@ -336,46 +341,44 @@ export const updateTicket = (user, ticket) => async (dispatch) => {
 }
 
 
-export const cancelTicket = (user, wallet,ticket) => async (dispatch) => {
+export const cancelTicket = (user, wallet, ticket) => async (dispatch) => {
     try {
         dispatch(requestTicket());
-        console.log("Atharvaaaa1");
 
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
-            
+
             //get bus and Time
             const busRef = firestore.doc(`bus/${ticket.busId}`)
             const docBus = await getDoc(busRef);
-            console.log(ticket);
 
 
-            const currentTime =new Date().toLocaleTimeString('it-IT', { hour12: false, 
-                hour: "numeric", 
+            const currentTime = new Date().toLocaleTimeString('it-IT', {
+                hour12: false,
+                hour: "numeric",
                 minute: "numeric",
-                timeZone: 'Asia/Kolkata'});
-            const busDepartureTime=docBus.data().time;
+                timeZone: 'Asia/Kolkata'
+            });
+            const busDepartureTime = docBus.data().time;
             const curHour = parseInt(currentTime.slice(0, 2));
-            const curMin=parseInt(currentTime.slice(3, 5));
+            const curMin = parseInt(currentTime.slice(3, 5));
 
-            const busHour=parseInt(busDepartureTime.slice(0, 2));
-            const busMin= parseInt(busDepartureTime.slice(3, 5));
+            const busHour = parseInt(busDepartureTime.slice(0, 2));
+            const busMin = parseInt(busDepartureTime.slice(3, 5));
 
-            if(((busHour-curHour)*60 +(busMin-curMin))>120){
-                dispatch(updateWallet(user,wallet,0.5));
+            if (((busHour - curHour) * 60 + (busMin - curMin)) > 120) {
+                dispatch(updateWallet(user, wallet, 0.5));
             }
-            var new_seats= [...docBus.data().seats];
-            new_seats[ticket.seatNumber]=false;
-            console.log(new_seats);
-            if(ticket.seatNumber!==undefined)
-            {
-                docBus.data().seats[ticket.seatNumber]=false;
+            var new_seats = [...docBus.data().seats];
+            new_seats[ticket.seatNumber] = false;
+            if (ticket.seatNumber !== undefined) {
+                docBus.data().seats[ticket.seatNumber] = false;
             }
             await busRef.set({
-                seats : new_seats,
-                seatsAvailable : String(Number(docBus.data().seatsAvailable)+1),
+                seats: new_seats,
+                seatsAvailable: String(Number(docBus.data().seatsAvailable) + 1),
             }, { merge: true }
             )
-            
+
             dispatch(updateTicket(user, ticket));
             dispatch(fetchTicket(user));
         }
@@ -439,16 +442,16 @@ export const updateWallet = (user, wallet, token) => async (dispatch) => {
             const walletRef = firestore.doc(`wallet/${wallet.uid}`)
 
             //Check If token Is Int
-            if (typeof(token)!== 'number'|| typeof(wallet.tokenNo)!== 'number'){
+            if (typeof (token) !== 'number' || typeof (wallet.tokenNo) !== 'number') {
                 throw Error("Token is not a Number");
             }
 
-            if ((wallet.tokenNo + token )< 0) {
+            if ((wallet.tokenNo + token) < 0) {
                 throw Error("Insufficient Balance");
             }
-            
+
             var newBal = wallet.tokenNo + token;
-            
+
             await walletRef.set({
                 tokenNo: newBal,
             }, { merge: true }
@@ -494,7 +497,7 @@ export const fetchSpecialBusRequest = (user) => async (dispatch) => {
             const querySnapshot = await getDocs(collection(db, "specialBusRequest"));
             let specialBusArr = [];
             querySnapshot.forEach((doc) => {
-                if(doc.data().status === "pending" ){
+                if (doc.data().status === "pending") {
                     const _id = doc.id;
                     specialBusArr.push({ _id, ...doc.data() });
                 }
@@ -538,6 +541,60 @@ export const updateSpecialBus = (user, specialbus) => async (dispatch) => {
             throw Error("Error 401: Unauthorized");
         }
     } catch (error) {
+        dispatch(specialBusRequestError(error.message));
+    }
+}
+
+export const increaseBusRequest = (user, bus) => async (dispatch) => {
+    //dispatch(requestSchedule());
+    try {
+        dispatch(requestBus());
+        if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
+
+            const querySnapshot = await getDocs(collection(db, "specialBusRequest"));
+            let specialBusArr = [];
+            querySnapshot.forEach((doc) => {
+                const _id = doc.id;
+                specialBusArr.push({ _id, ...doc.data() });
+            })
+
+            const busRef = firestore.doc(`bus/${bus._id}`)
+            await busRef.set({
+                numOfRequest: bus.numOfRequest + 1,
+            }, { merge: true }
+            );
+
+            let index;
+            for (index = 0; index < specialBusArr.length; index++) {
+                if (specialBusArr[index].busId === bus._id) {
+                    await setDoc(doc(db, "specialBusRequest"), {
+                        numOfRequest: bus.numOfRequest + 1,
+                    }, { merge: true }
+                    );
+                    dispatch(fetchSpecialBusRequest(user));
+                    dispatch(fetchBus());
+                    return;
+                }
+            }
+            if (index === specialBusArr.length) {
+                await setDoc(doc(db, "specialBusRequest"), {
+                    source: bus.source,
+                    destination: bus.destination,
+                    date: bus.date,
+                    time: bus.time,
+                    busType: "Regular",
+                    status: "pending",
+                    numOfRequest: 1
+                });
+                dispatch(fetchBus());
+            }
+        }
+        else {
+            throw Error("Error 401: Unauthorized");
+        }
+
+    }
+    catch (error) {
         dispatch(specialBusRequestError(error.message));
     }
 }
@@ -606,6 +663,8 @@ export const deleteSchedule = (user, schedule) => async (dispatch) => {
         dispatch(scheduleError(error.message));
     }
 }
+
+
 ///////////////////////////////////////////////////////////////////////////////////
 
 export const loginUser = (creds) => (dispatch) => {
@@ -674,15 +733,15 @@ export const logoutUser = () => (dispatch) => {
 
     } catch (error) {
         throw Error("Error 401: Unauthorized");
-    }   
+    }
 }
 
 export const checkUser = () => (dispatch) => {
     try {
-        if( localStorage.getItem('user') === null){
+        if (localStorage.getItem('user') === null) {
             throw Error("Error 401: Unauthorized");
         }
-        else{
+        else {
             const user = JSON.parse(localStorage.getItem('user'));
 
             dispatch(receiveLogin(user));
@@ -693,7 +752,7 @@ export const checkUser = () => (dispatch) => {
                 dispatch(fetchBus(user));
                 dispatch(fetchSpecialBusRequest(user));
             }
-            else{
+            else {
                 dispatch(fetchWallet(user));
                 dispatch(fetchTicket(user));
                 dispatch(fetchBus(user));
@@ -703,14 +762,14 @@ export const checkUser = () => (dispatch) => {
                 }
             }
         }
-    }catch(error){
+    } catch (error) {
         dispatch(loginError(error.message));
     }
 }
 
 export const fetchUser = (user) => async (dispatch) => {
     try {
-        if( user === undefined || user === null){
+        if (user === undefined || user === null) {
             throw Error("Error 401: Unauthorized");
         }
         const uid = user.uid;
@@ -744,9 +803,9 @@ export const fetchUser = (user) => async (dispatch) => {
                 image: photoURL,
                 role: "faculty",
             }, { merge: true })
-            .catch((error) => {
-                dispatch(loginError(error.message));
-            });
+                .catch((error) => {
+                    dispatch(loginError(error.message));
+                });
         }
 
         const docUser = await getDoc(userRef);
