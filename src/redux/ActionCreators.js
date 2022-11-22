@@ -306,16 +306,6 @@ export const fetchTicket = (user) => async (dispatch) => {
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
             const querySnapshot = await getDocs(collection(db, "ticket"));
             let ticketArr = [];
-            // const userid = user.uid;
-            // querySnapshot.forEach((doc) => {
-            //     if (doc.data().uid === userid) {
-            //         const _id = doc.id;
-            //         ticketArr.push({ _id, ...doc.data() });
-            //     }
-
-            //new code
-
-
             querySnapshot.forEach(async (doc) => {
                 const currentTime = new Date().toLocaleTimeString('it-IT', {
                     hour12: false,
@@ -338,55 +328,46 @@ export const fetchTicket = (user) => async (dispatch) => {
                 console.log((busHour - curHour) * 60 + (busMin - curMin));
 
                 if(doc.data().uid===user.uid){
-                if ( doc.data().status=== "Upcoming" && moment(busDate).isBefore(cur) ) {
-                    
-                    const _id = doc.id;
-                    
-                    const ticketRef = firestore.doc(`ticket/${_id}`);
+                    if ( doc.data().status=== "Upcoming" && moment(busDate).isBefore(cur) ) {
+                        
+                        const _id = doc.id;
+                        const ticketRef = firestore.doc(`ticket/${_id}`);
+                        await ticketRef.set({
+                            status: 'Past'
+                        }, { merge: true }
+                        )
 
-                    console.log("sdd");
-                    await ticketRef.set({
-                        status: 'Past'
-                    }, { merge: true }
-                    )
+                        const docTicket = await getDoc(ticketRef);
+                        ticketArr.push({ _id, ...docTicket.data() });
+                    
+                    }
+                    else if( doc.data().status=== "Upcoming" && ((busHour - curHour) * 60 + (busMin - curMin) <0)){
+                        const _id = doc.id;
+                        const ticketRef = firestore.doc(`ticket/${_id}`);
+                        await ticketRef.set({
+                            status: 'Past'
+                        }, { merge: true }
+                        )
+                        const docTicket = await getDoc(ticketRef.data());
+                        ticketArr.push({ _id, ...docTicket });
+                    }
 
-                    const docTicket = await getDoc(ticketRef);
-                    ticketArr.push({ _id, ...docTicket.data() });
-                   
+                    else {
+                        const _id = doc.id;
+                        ticketArr.push({ _id, ...doc.data() });
+                    }
                 }
-                else if( doc.data().status=== "Upcoming" && ((busHour - curHour) * 60 + (busMin - curMin) <0))
-                {
-                    const _id = doc.id;
-                    
-                    const ticketRef = firestore.doc(`ticket/${_id}`);
-
-                    console.log("sdd");
-                    await ticketRef.set({
-                        status: 'Past'
-                    }, { merge: true }
-                    )
-                    const docTicket = await getDoc(ticketRef.data());
-            ticketArr.push({ _id, ...docTicket });
-
-                }
-
-                else {
-                    const _id = doc.id;
-                    ticketArr.push({ _id, ...doc.data() });
-            
+                dispatch(receiveBus(ticketArr));
+            });
+            dispatch(receiveTicket(ticketArr));
+        }
+        else {
+            throw Error("Error 401: Unauthorized");
         }
     }
-        dispatch(receiveBus(ticketArr));
-    });
-    dispatch(receiveTicket(ticketArr));
-}
-        else {
-    throw Error("Error 401: Unauthorized");
-}
-    }
     catch (error) {
-    dispatch(ticketError(error.message))
-}
+        dispatch(ticketError(error.message))
+    }
 }
 
 export const updateTicket = (user, ticket) => async (dispatch) => {
