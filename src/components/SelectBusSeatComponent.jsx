@@ -169,7 +169,6 @@ class SelectBusSeatComponent extends Component {
                         type="button"
                           className="btn disabled btn-secondary text-white nav-link"
                         >
-                          {console.log(this.props.bus.seatsAvailable !== "0" )}
                         Request Bus <ArrowForwardIcon />
                       </button>
                       :
