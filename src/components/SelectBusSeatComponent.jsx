@@ -4,8 +4,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import moment from "moment";
 import Divider from "@mui/material/Divider";
 
-class SelectBusSeatComponent extends Component {
-  
+class SelectBusSeatComponent extends Component {  
   constructor(props) {
     super(props);
     this.state = {
@@ -80,17 +79,17 @@ class SelectBusSeatComponent extends Component {
       const hour = this.props.bus.time.split(":")[0];
       const min = this.props.bus.time.split(":")[1];
       const time = moment.utc().hour(hour).minute(min).second(0);
-    const getSeatRow = (i) => {
+    const getSeatRow = (i, seatLength) => {
       let content = [];
       
       for(let j = 0; j<4; j++){
         content.push(
           <li className="seat">
-            {this.props.bus.seats[i + j] === true ?
+            {this.props.bus.seats[i + j] === true || i+j >= seatLength?
               ((this.props.ticket && this.props.ticket.seatNumber === String(i + j)) ?
-                <input type="radio" name="selectedSeat" onChange={this.handleInput} className="booked" id={i + j}></input>
+                <input type="radio" name="selectedSeat" onChange={this.handleInput} value = "" className="booked" id={i + j}></input>
                   :
-                  <input type="radio" name="selectedSeat" onChange={this.handleInput} disabled id={i+j}/>)
+                  <input type="radio" name="selectedSeat" onChange={this.handleInput} value = "" disabled id={i+j}/>)
               :
               <input type="radio" name="selectedSeat" onChange={this.handleInput} value={i + j} id={i + j} />
           }
@@ -101,13 +100,13 @@ class SelectBusSeatComponent extends Component {
 
       return content;
     }
-    const getSeatLayout = seatNumber => {
+    const getSeatLayout = seatLength => {
       let content = [];
-      for(let i = 0; i<seatNumber; i+=4){
+      for(let i = 0; i<seatLength; i+=4){
         content.push(<ol className="cabin fuselage">
           <li className="row ml-1">
             <ol className="seats">
-              {getSeatRow(i)}
+              {getSeatRow(i, seatLength)}
             </ol>
           </li>
         </ol>);
@@ -158,7 +157,7 @@ class SelectBusSeatComponent extends Component {
                 <div className="row d-flex py-1 justify-content-center ">
                   <div className="col-sm-4 m-1">
                   {
-                    (this.props.bus.seatsAvailable !== "0" || this.props.ticket !== undefined)? 
+                    (this.props.bus.seatsAvailable !== "0" )? 
                         <button
                         type="button"
                           className="btn disabled btn-secondary text-white nav-link"
@@ -186,7 +185,7 @@ class SelectBusSeatComponent extends Component {
                     Seats Available: {this.props.bus.seatsAvailable}
                   </div>
                   <div className="row h5 d-flex justify-content-center">
-                    Extra Bus Requests: 0
+                    Extra Bus Requests: {this.props.bus.numOfRequest}
                   </div>
                 </div>
               </div>

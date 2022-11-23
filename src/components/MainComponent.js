@@ -21,7 +21,7 @@ import { Switch, Route, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
 import {
-  loginUser, googleLogin, logoutUser, postBus, postOutpass, postStore, postTicket, postWallet, fetchStore, deleteBus, postSpecialBusRequest, increaseBusRequest,
+  loginUser, googleLogin, logoutUser, postBus, postOutpass, postStore, postTicket, postWallet, fetchStore, deleteBus, postSpecialBusRequest, increaseBusRequest, fetchBus,
   deleteSpecialBusRequest, postSchedule, fetchSchedule, updateSchedule, updateTicket, updateOutpass, bookBus, updateWallet, updateSpecialBus, checkUser, cancelTicket, deleteSchedule
 } from "../redux/ActionCreators";
 
@@ -54,6 +54,7 @@ const mapDispatchToProps = (dispatch) => ({
 
   postStore: (user, store) => dispatch(postStore(user, store)),
   fetchStore: () => dispatch(fetchStore()),
+  fetchBus: () => dispatch(fetchBus()),
 
   updateOutpass: (user, outpass) => dispatch(updateOutpass(user, outpass)),
   updateSpecialBus: (user, specialbus) => dispatch(updateSpecialBus(user, specialbus)),
@@ -129,6 +130,10 @@ class Main extends Component {
                 component={() => <RequestSpecialBusComponent auth={this.props.auth}
                   postSpecialBusRequest={this.props.postSpecialBusRequest} />}
               />
+              <Route exact
+                path="/schedule"
+                component={() => <ScheduleComponent schedule={this.props.schedule} />}
+              />
               <Route
                 path="/requestOutpass"
                 component={() => <RequestOutpassComponent auth={this.props.auth} outpass = {this.props.outpass} postOutpass={this.props.postOutpass} />}
@@ -150,7 +155,7 @@ class Main extends Component {
               />
               <Route exact
                 path="/bus"
-                component={() => <SelectBusComponent bus={this.props.bus} />}
+                component={() => <SelectBusComponent bus={this.props.bus} fetchBus={this.props.fetchBus} />}
               />
               <Route exact
                 path="/viewTrips"
@@ -176,10 +181,7 @@ class Main extends Component {
                 path="/qrcode"
                 component={() => <QrcodeComponent auth = {this.props.auth} />}
               />
-              <Route exact
-                path="/schedule"
-                component={() => <ScheduleComponent schedule={this.props.schedule} />}
-              />
+              
               
               <Redirect to="/home" />
               

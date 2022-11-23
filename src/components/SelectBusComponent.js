@@ -73,7 +73,6 @@ class SelectBusComponent extends Component {
 
     this.handleInput = this.handleInput.bind(this);
   }
-
   handleInput(event) {
     const name = event.target.name;
     const value = event.target.value;

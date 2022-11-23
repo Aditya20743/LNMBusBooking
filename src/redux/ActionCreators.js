@@ -1,6 +1,6 @@
 import * as ActionTypes from './ActionTypes';
 import { auth, firestore, fireauth } from '../firebase/firebase';
-import { doc, getDoc, setDoc, getDocs, collection, addDoc, deleteDoc } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, addDoc, deleteDoc } from "firebase/firestore";
 import { db } from '../firebase/firebase';
 import moment from "moment";
 
@@ -344,8 +344,8 @@ export const fetchTicket = (user) => async (dispatch) => {
                             status: 'Past'
                         }, { merge: true }
                         )
-                        const docTicket = await getDoc(ticketRef.data());
-                        ticketArr.push({ _id, ...docTicket });
+                        const docTicket = await getDoc(ticketRef);
+                        ticketArr.push({ _id, ...docTicket.data() });
                     }
 
                     else {
@@ -589,7 +589,6 @@ export const updateSpecialBus = (user, specialbus) => async (dispatch) => {
 }
 
 export const increaseBusRequest = (user, bus) => async (dispatch) => {
-    //dispatch(requestSchedule());
     try {
         dispatch(requestBus());
         if (user !== undefined && (user.role === 'student' || user.role === 'faculty')) {
@@ -610,24 +609,24 @@ export const increaseBusRequest = (user, bus) => async (dispatch) => {
             let index;
             for (index = 0; index < specialBusArr.length; index++) {
                 if (specialBusArr[index].busId === bus._id) {
-                    await setDoc(doc(db, "specialBusRequest"), {
-                        numOfRequest: bus.numOfRequest + 1,
-                    }, { merge: true }
-                    );
-                    dispatch(fetchSpecialBusRequest(user));
+                    const requestRef = firestore.doc(`specialBusRequest/${specialBusArr[index]._id}`)
+                    specialBusArr[index].numOfRequest = bus.numOfRequest + 1;
+                    await requestRef.set(specialBusArr[index], { merge: true } );
                     dispatch(fetchBus());
                     return;
                 }
             }
             if (index === specialBusArr.length) {
-                await setDoc(doc(db, "specialBusRequest"), {
+                await addDoc(collection(db, "specialBusRequest"), {
+                    busId: bus._id,
+                    busNumber: bus.busNumber,
                     source: bus.source,
                     destination: bus.destination,
                     date: bus.date,
                     time: bus.time,
                     busType: "Regular",
                     status: "pending",
-                    numOfRequest: 1
+                    numOfRequest: bus.numOfRequest + 1
                 });
                 dispatch(fetchBus());
             }
@@ -635,7 +634,6 @@ export const increaseBusRequest = (user, bus) => async (dispatch) => {
         else {
             throw Error("Error 401: Unauthorized");
         }
-
     }
     catch (error) {
         dispatch(specialBusRequestError(error.message));
