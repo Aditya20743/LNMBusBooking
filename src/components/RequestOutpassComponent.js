@@ -21,7 +21,6 @@ class RequestOutpassComponent extends Component {
     event.preventDefault();
     this.props.postOutpass(this.props.auth.user, {...this.state, status:"pending"});
     this.setState({ guardianName: "", guardianContactNo: "", departureDate: "", returnDate: "", purpose: "", hostelName: "", roomNumber: "" });
-    window.location.href = '/outpass';
   }
   handleInput(event) {
     const name = event.target.name;
